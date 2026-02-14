@@ -17,7 +17,7 @@ public class Kicker extends SubsystemBase {
     private DutyCycleOut dutyControl = new DutyCycleOut(0.0);
 
     public Kicker() {
-        motor = new TalonFX(Constants.Kicker.FRONT_KICKER_PORT);
+        motor = new TalonFX(Constants.Kicker.MOTOR_PORT);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
