@@ -16,4 +16,10 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static final class Kicker {
+    public static final int FRONT_KICKER_PORT = 4;
+    public static final int REAR_KICKER_PORT = 5;
+    public static final double KICKER_POWER = 0.2;
+  }
 }
