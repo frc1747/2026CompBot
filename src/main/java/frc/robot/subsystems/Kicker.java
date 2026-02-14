@@ -40,7 +40,7 @@ public class Kicker extends SubsystemBase {
     }
 
     public Command run() {
-        return runOnce(() -> setPower(Constants.Kicker.KICKER_POWER));
+        return runOnce(() -> setPower(Constants.Kicker.MOTOR_POWER));
     }
 
     public Command stop() {
