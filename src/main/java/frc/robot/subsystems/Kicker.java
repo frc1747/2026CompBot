@@ -14,12 +14,10 @@ import frc.robot.Constants;
 public class Kicker extends SubsystemBase {
 
     private TalonFX motor;
-    private TalonFX follower;
     private DutyCycleOut dutyControl = new DutyCycleOut(0.0);
 
     public Kicker() {
         motor = new TalonFX(Constants.Kicker.FRONT_KICKER_PORT);
-        Follower followerRequest = new Follower(motor.getDeviceID(), MotorAlignmentValue.Aligned);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
@@ -30,10 +28,7 @@ public class Kicker extends SubsystemBase {
             .withSupplyCurrentLowerLimit(40)
             .withSupplyCurrentLimitEnable(true);
         
-        follower.getConfigurator().apply(config);
-
         motor.getConfigurator().apply(config);
-        follower.setControl(followerRequest);
         motor.getStatorCurrent().setUpdateFrequency(50);
         motor.getSupplyVoltage().setUpdateFrequency(50);
         motor.getVelocity().setUpdateFrequency(50);
