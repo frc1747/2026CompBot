@@ -17,4 +17,8 @@ public final class Constants {
     public static final int DRIVER_PORT = 0;
     public static final int OPERATOR_PORT = 1;
   }
+  public static final class Hopper {
+    public static final int MOTOR_PORT = 0;
+    public static final double MOTOR_POWER = 0.2;
+  }
 }
