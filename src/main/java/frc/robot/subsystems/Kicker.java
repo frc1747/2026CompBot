@@ -34,7 +34,6 @@ public class Kicker extends SubsystemBase {
         motor.getMotorVoltage().setUpdateFrequency(50);
         motor.getSupplyCurrent().setUpdateFrequency(50);
         motor.optimizeBusUtilization();
-
     }
 
     public Command run() {
