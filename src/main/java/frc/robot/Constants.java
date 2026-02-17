@@ -18,11 +18,6 @@ public final class Constants {
     public static final int OPERATOR_PORT = 1;
   }
 
-  public static final class Kicker {
-    public static final int MOTOR_PORT = 4;
-    public static final double MOTOR_POWER = 0.2;
-  }
-
   public static final class Drivetrain {
     public static final double MAX_SPEED = 4.1 * 0.5;  // Max speed in m/s  half-speed for now
     public static final double MAX_ACCEL = 4.1;  // Max acceleration in m/s
