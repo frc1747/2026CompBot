@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Kicker;
 
 public class RobotContainer {
@@ -50,6 +51,7 @@ public class RobotContainer {
     private final DoubleSupplier rotationSup = () -> driver.getRawAxis(XboxController.Axis.kRightX.value); // right/left on right stick 
 
     public static final Kicker kicker = new Kicker();
+    public static final Hood hood = new Hood();
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
@@ -98,6 +100,15 @@ public class RobotContainer {
         driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         operator.a().onTrue(kicker.run());
+
+        operator.x().whileTrue(hood.setPowerCommand(true))
+                    .onFalse(hood.stopCommand());
+        operator.y().whileTrue(hood.setPowerCommand(false))
+                    .onFalse(hood.stopCommand());
+
+        // safe middle angle
+        operator.rightBumper().whileTrue(hood.goToAngleCommand(10.0))
+                              .onFalse(hood.stopCommand());
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
