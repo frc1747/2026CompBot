@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -58,12 +59,12 @@ public class Hood extends SubsystemBase {
 
 
   public double countsToDegrees(double counts) {
-    return counts / Constants.Hood.COUNTS_PER_DEGREE;
+    return counts / (Constants.Hood.COUNTS_PER_DEGREE + Constants.Hood.STARTING_ANGLE);
   }
 
 
   public double degreesToCounts(double degrees) {
-    return degrees * Constants.Hood.COUNTS_PER_DEGREE;
+    return (degrees + Constants.Hood.STARTING_ANGLE) * Constants.Hood.COUNTS_PER_DEGREE;
   }
 
 
