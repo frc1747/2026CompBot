@@ -84,7 +84,7 @@ public final class Constants {
     public static final double PID_D = 0;
   }
      public static final class Intake {
-        public static final int MOTOR_PORT = 51;
+        public static final int MOTOR_PORT = 46;
         public static final double POWER = 0.5;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
         public static final double kP = 0.2; //TODO: VERIFY
@@ -94,11 +94,11 @@ public final class Constants {
     }
 
     public static final class IntakePivot {
-        public static final int MOTOR_PORT = 50;
+        public static final int MOTOR_PORT = 45;
     }
 
     public static final class Kicker {
-        public static final int MOTOR_PORT = 4;
+        public static final int MOTOR_PORT = 43;
         public static final double MOTOR_POWER = 0.2;
     }
 }
