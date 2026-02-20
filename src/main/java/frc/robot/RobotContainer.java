@@ -112,9 +112,11 @@ public class RobotContainer {
         driver.povDown().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         // intake commands
+        // this is broken cause no encoder
         driver.rightTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK).alongWith(new IntakeSpin(intake, Constants.Intake.POWER)));
 
-        driver.leftTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK));
+        // this is on operator for now
+        operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER));
 
         operator.a().onTrue(kicker.run())
                     .onFalse(kicker.stop());
