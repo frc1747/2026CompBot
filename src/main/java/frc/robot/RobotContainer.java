@@ -53,7 +53,7 @@ public class RobotContainer {
     public static final Kicker kicker = new Kicker();
     public static final Hood hood = new Hood();
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
