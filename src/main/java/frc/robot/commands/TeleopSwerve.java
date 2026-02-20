@@ -35,9 +35,9 @@ public class TeleopSwerve extends Command {
   public void execute() {
     drivetrain.setControl(
       swerveRequest
-        .withVelocityX(-translationSup.getAsDouble() * Constants.Drivetrain.MAX_SPEED)
-        .withVelocityY(-strafeSup.getAsDouble() * Constants.Drivetrain.MAX_SPEED)
-        .withRotationalRate(-rotationSup.getAsDouble() * Constants.Drivetrain.MAX_ANGULAR_VELOCITY)
+        .withVelocityX(translationSup.getAsDouble() * Constants.Drivetrain.MAX_SPEED)
+        .withVelocityY(strafeSup.getAsDouble() * Constants.Drivetrain.MAX_SPEED)
+        .withRotationalRate(rotationSup.getAsDouble() * Constants.Drivetrain.MAX_ANGULAR_VELOCITY)
     );
   }
 
