@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,7 +27,9 @@ public class Kicker extends SubsystemBase {
             .withSupplyCurrentLimit(40)
             .withSupplyCurrentLowerLimit(40)
             .withSupplyCurrentLimitEnable(true);
-        
+
+        config.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
+                
         motor.getConfigurator().apply(config);
         motor.getStatorCurrent().setUpdateFrequency(50);
         motor.getSupplyVoltage().setUpdateFrequency(50);
