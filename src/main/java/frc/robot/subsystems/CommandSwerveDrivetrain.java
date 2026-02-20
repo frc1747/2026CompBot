@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.Drivetrain;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -289,7 +290,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
 
         addLimelightMeasurement();
+        SmartDashboard.putNumber("Distance To Hub", distanceToPose(
+            new Pose2d(new Translation2d(Constants.Vision.FIELD_CENTER_X, Constants.Vision.FIELD_CENTER_Y), new Rotation2d(0.0))));
+    }
 
+    public double distanceToPose(Pose2d targetPose) {
+        return getState().Pose.getTranslation().getDistance(targetPose.getTranslation());
     }
 
     private void startSimThread() {
