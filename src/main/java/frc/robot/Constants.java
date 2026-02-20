@@ -24,7 +24,7 @@ public final class Constants {
     public static final double MAX_ANGULAR_VELOCITY = 10.0;  // Rad/s
   }
   public static final class Hopper {
-    public static final int MOTOR_PORT = 47;
+    public static final int MOTOR_PORT = 44;
     public static final double MOTOR_POWER = 0.2;
   }
 
