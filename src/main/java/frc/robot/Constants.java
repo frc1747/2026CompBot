@@ -23,6 +23,10 @@ public final class Constants {
     public static final double MAX_ACCEL = 4.1;  // Max acceleration in m/s
     public static final double MAX_ANGULAR_VELOCITY = 10.0;  // Rad/s
   }
+  public static final class Hopper {
+    public static final int MOTOR_PORT = 47;
+    public static final double MOTOR_POWER = 0.2;
+  }
 
   public static final class Hood {
     public static final int MOTOR_PORT = 40;
