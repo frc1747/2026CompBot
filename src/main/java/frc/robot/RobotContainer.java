@@ -33,6 +33,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakePivot;
 import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
 
@@ -67,6 +68,7 @@ public class RobotContainer {
     public static final Intake intake = new Intake();
     public static final IntakePivot intakePivot = new IntakePivot();
     public static final Shooter shooter = new Shooter();
+    public static final Hopper hopper = new Hopper();
 
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
@@ -128,6 +130,9 @@ public class RobotContainer {
 
         operator.rightTrigger().whileTrue(shooter.setPowerCommand(0.15))
                                .onFalse(shooter.stopCommand());
+
+        operator.leftTrigger().whileTrue(hopper.run())
+                              .onFalse(hopper.stop());
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
