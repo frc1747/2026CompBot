@@ -98,7 +98,7 @@ public final class Constants {
     }
 
     public static final class Kicker {
-        public static final int MOTOR_PORT = 4;
+        public static final int MOTOR_PORT = 43;
         public static final double MOTOR_POWER = 0.2;
     }
 }
