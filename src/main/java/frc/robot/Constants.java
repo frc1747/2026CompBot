@@ -18,13 +18,49 @@ public final class Constants {
         public static final int OPERATOR_PORT = 1;
     }
 
-    public static final class Drivetrain {
-        public static final double MAX_SPEED = 4.1 * 0.5;  // Max speed in m/s  half-speed for now
-        public static final double MAX_ACCEL = 4.1;  // Max acceleration in m/s
-        public static final double MAX_ANGULAR_VELOCITY = 10.0;  // Rad/s
-    }
+  public static final class Drivetrain {
+    public static final double MAX_SPEED = 4.1 * 0.5;  // Max speed in m/s  half-speed for now
+    public static final double MAX_ACCEL = 4.1;  // Max acceleration in m/s
+    public static final double MAX_ANGULAR_VELOCITY = 10.0;  // Rad/s
+  }
 
-    public static final class Intake {
+  public static final class Hood {
+    public static final int MOTOR_PORT = 40;
+    public static final int ENCODER_PORT_A = 1;
+    public static final int ENCODER_PORT_B = 2;
+    public static final int COUNTS_PER_REV = 2048;
+    public static final double GEAR_RATIO = 17.0;  // 170 tooth rack / 10 tooth pinion
+    public static final double TOTAL_HOOD_DEGREES = 19.25;  // 19.25 degrees of hood rotation
+    public static final double COUNTS_PER_HOOD_SWEEP = COUNTS_PER_REV * GEAR_RATIO;
+    public static final double COUNTS_PER_DEGREE = COUNTS_PER_HOOD_SWEEP / TOTAL_HOOD_DEGREES;
+    public static final double STARTING_ANGLE = 25.0;  // Angle that the hood starts at
+
+    public static final double kP = 0.2;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+
+    public static final double MANUAL_MOTOR_POWER = 0.2;
+
+  }
+
+  public static final class Turret {
+    public static final int MOTOR_PORT = 59;
+    public static final int ENCODER_PORT_A = 6;
+    public static final int ENCODER_PORT_B = 5;
+    // gear ratio of 396 to 1 here probably but needs to be tested
+    public static final double TURRETRATIO = 11; // the number of teeth on the turret's gear is 110 and the motor has a gear with 10 teeth
+    public static final int encoderLimit = 5771 / 2; // temporary encoder value limit
+    public static final double PID_P = 0;
+    public static final double PID_I = 0; // needs tuning
+    public static final double PID_D = 0;
+    public static final double GO_TO_ANGLE_LOWER_SAFETY = -1;
+    public static final double GO_TO_ANGLE_HIGHER_SAFETY = 1;
+    public static final double UPPER_LIMIT = 90;
+    public static final double LOWER_LIMIT = -90;
+    public static final double DIST_TO_BOT_CENTER = 0.1529842; // meters
+  }
+
+     public static final class Intake {
         public static final int MOTOR_PORT = 51;
         public static final double INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
         public static final double kP = 0.2; //TODO: VERIFY
@@ -42,4 +78,5 @@ public final class Constants {
         public static final double MOTOR_POWER = 0.2;
     }
 }
+
 

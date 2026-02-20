@@ -32,6 +32,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakePivot;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Kicker;
 
 public class RobotContainer {
@@ -55,8 +56,9 @@ public class RobotContainer {
     private final DoubleSupplier rotationSup = () -> driver.getRawAxis(XboxController.Axis.kRightX.value); // right/left on right stick 
 
     public static final Kicker kicker = new Kicker();
+    public static final Hood hood = new Hood();
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
@@ -111,6 +113,15 @@ public class RobotContainer {
         driver.leftTrigger().toggleOnTrue(new IntakeOut(intakePivot, -0.5));
 
         operator.a().onTrue(kicker.run());
+
+        operator.x().whileTrue(hood.setPowerCommand(true))
+                    .onFalse(hood.stopCommand());
+        operator.y().whileTrue(hood.setPowerCommand(false))
+                    .onFalse(hood.stopCommand());
+
+        // safe middle angle
+        operator.rightBumper().whileTrue(hood.goToAngleCommand(10.0))
+                              .onFalse(hood.stopCommand());
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
