@@ -63,6 +63,10 @@ public final class Constants {
     public static final double MAX_ACCEL = 4.1;  // Max acceleration in m/s
     public static final double MAX_ANGULAR_VELOCITY = 10.0;  // Rad/s
   }
+  public static final class Hopper {
+    public static final int MOTOR_PORT = 44;
+    public static final double MOTOR_POWER = 0.2;
+  }
 
   public static final class Hood {
     public static final int MOTOR_PORT = 40;
@@ -120,8 +124,8 @@ public final class Constants {
     public static final double PID_D = 0;
   }
      public static final class Intake {
-        public static final int MOTOR_PORT = 51;
-        public static final double POWER = 0.5;
+        public static final int MOTOR_PORT = 46;
+        public static final double POWER = 0.2;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
         public static final double kP = 0.2; //TODO: VERIFY
         public static final double kI = 0.0; //TODO: VERIFY
@@ -130,12 +134,12 @@ public final class Constants {
     }
 
     public static final class IntakePivot {
-        public static final int MOTOR_PORT = 50;
+        public static final int MOTOR_PORT = 45;
     }
 
     public static final class Kicker {
-        public static final int MOTOR_PORT = 4;
-        public static final double MOTOR_POWER = 0.2;
+        public static final int MOTOR_PORT = 43;
+        public static final double MOTOR_POWER = 0.35;
     }
 }
 

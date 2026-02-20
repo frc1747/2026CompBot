@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -21,6 +22,8 @@ public class Intake extends SubsystemBase {
         config.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);
+
+        config.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
 
         motor.getConfigurator().apply(config);
 

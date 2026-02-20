@@ -33,7 +33,9 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakePivot;
 import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Kicker;
+import frc.robot.subsystems.Shooter;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -65,6 +67,8 @@ public class RobotContainer {
 
     public static final Intake intake = new Intake();
     public static final IntakePivot intakePivot = new IntakePivot();
+    public static final Shooter shooter = new Shooter();
+    public static final Hopper hopper = new Hopper();
 
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
@@ -108,20 +112,29 @@ public class RobotContainer {
         driver.povDown().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         // intake commands
+        // this is broken cause no encoder
         driver.rightTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK).alongWith(new IntakeSpin(intake, Constants.Intake.POWER)));
 
-        driver.leftTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK));
+        // this is on operator for now
+        operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER));
 
-        operator.a().onTrue(kicker.run());
+        operator.a().onTrue(kicker.run())
+                    .onFalse(kicker.stop());
 
-        operator.x().whileTrue(hood.setPowerCommand(true))
+        operator.x().whileTrue(hood.setPowerCommand(true))  // down
                     .onFalse(hood.stopCommand());
-        operator.y().whileTrue(hood.setPowerCommand(false))
+        operator.y().whileTrue(hood.setPowerCommand(false))  // up
                     .onFalse(hood.stopCommand());
 
         // safe middle angle
         operator.rightBumper().whileTrue(hood.goToAngleCommand(10.0))
                               .onFalse(hood.stopCommand());
+
+        operator.rightTrigger().whileTrue(shooter.setPowerCommand(0.15))
+                               .onFalse(shooter.stopCommand());
+
+        operator.leftTrigger().whileTrue(hopper.run())
+                              .onFalse(hopper.stop());
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

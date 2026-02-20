@@ -9,12 +9,14 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -30,25 +32,46 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     motorLeft = new TalonFX(Constants.Shooter.MOTOR_LEFT_PORT);
     motorRight = new TalonFX(Constants.Shooter.MOTOR_RIGHT_PORT);
+
+    /*
+    TalonFXConfiguration configFollower = new TalonFXConfiguration();
+    configFollower.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
+    motorRight.getConfigurator().apply(configFollower);
+
     // this is use to set the control to follow master motor
     motorLeft.setControl(new Follower(Constants.Shooter.MOTOR_RIGHT_PORT, MotorAlignmentValue.Opposed));
+    */
 
     // config for the shooter motors
     TalonFXConfiguration configShooter = new TalonFXConfiguration();
+
+    TalonFXConfiguration configRight = new TalonFXConfiguration();
+    configRight.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
+
 
     configShooter.Voltage
       .withPeakForwardVoltage(12)
       .withPeakReverseVoltage(-12);
     
-
-    // the config for all the motors we should do differnt ones
-    TalonFXConfiguration configHood = new TalonFXConfiguration();
-    
     motorLeft.getConfigurator().apply(configShooter);
-    motorRight.getConfigurator().apply(configShooter);
+    motorRight.getConfigurator().apply(configRight);  // temp till follower is working
 
     pid.enableContinuousInput(0.0, 360.0);
     pid.setTolerance(1.0);
+  }
+
+  public Command setPowerCommand(double power){
+    return runOnce(() -> setPower(power));
+  }
+
+  public Command stopCommand() {
+    return runOnce(() -> setPower(0.0));
+  }
+
+  public void setPower(double power) {
+    dutyCycleShooter.Output = power;
+    motorLeft.setControl(dutyCycleShooter);
+    motorRight.setControl(dutyCycleShooter);
   }
 
 
