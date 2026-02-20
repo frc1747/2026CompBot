@@ -14,6 +14,7 @@ import com.ctre.phoenix6.signals.MotorArrangementValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -29,7 +30,6 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     motorLeft = new TalonFX(Constants.Shooter.MOTOR_LEFT_PORT);
     motorRight = new TalonFX(Constants.Shooter.MOTOR_RIGHT_PORT);
-    encoder = new DutyCycleEncoder(Constants.Shooter.ENCODER_PORT);
     // this is use to set the control to follow master motor
     motorLeft.setControl(new Follower(Constants.Shooter.MOTOR_RIGHT_PORT, MotorAlignmentValue.Opposed));
 
@@ -104,8 +104,9 @@ public class Shooter extends SubsystemBase {
   }
 
 
-
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Shooter/Left Motor RPM", motorLeft.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Right Motor RPM", motorRight.getVelocity().getValueAsDouble());
   }
 }
