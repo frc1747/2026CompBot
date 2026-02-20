@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -102,13 +103,13 @@ public class RobotContainer {
         driver.start().and(driver.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        driver.povDown().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        driver.leftTrigger().whileTrue(new IntakeSpin(intake, .5));
-        driver.x().whileTrue(new IntakeSpin(intake, -.5));
-        
-        driver.rightTrigger().toggleOnTrue(new IntakeOut(intakePivot, .5));
-        driver.rightTrigger().toggleOnTrue(new IntakeSpin(intake, .5));
+        // intake commands
+        driver.rightTrigger().toggleOnTrue(new IntakeOut((intakePivot), .5).alongWith(new IntakeSpin(intake, 0.5)));
+
+        driver.leftTrigger().toggleOnTrue(new IntakeOut(intakePivot, -0.5));
+
         operator.a().onTrue(kicker.run());
 
         drivetrain.registerTelemetry(logger::telemeterize);

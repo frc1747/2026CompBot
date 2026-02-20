@@ -15,7 +15,7 @@ public class IntakeOut extends Command {
 
     @Override
     public void execute() {
-        intakePivot.intakepivot(0.5);
+        intakePivot.intakePivot(power);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class IntakeOut extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        intakePivot.intakepivot(0.0);
+        intakePivot.intakePivot(0.0);
     } 
 
 }

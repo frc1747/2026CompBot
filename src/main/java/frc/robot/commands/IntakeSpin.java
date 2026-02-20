@@ -15,7 +15,7 @@ public class IntakeSpin extends Command {
 
     @Override
     public void execute() {
-        intake.intakespin(power);
+        intake.intakeSpin(power);
     }
 
     @Override
@@ -25,6 +25,6 @@ public class IntakeSpin extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        intake.intakespin(0.0);
+        intake.intakeSpin(0.0);
     }
 }

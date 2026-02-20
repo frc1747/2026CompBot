@@ -12,23 +12,24 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
     private TalonFXS motorWheels;
-    private DutyCycleOut dutyCycle = new DutyCycleOut(0);
+    private DutyCycleOut dutyCycle = new DutyCycleOut(0.0);
 
     public Intake() {
-        this.motorWheels = new TalonFXS(Constants.Intake.MOTOR_WHEELS_PORT);
+        this.motorWheels = new TalonFXS(Constants.Intake.MOTOR_PORT);
         
         TalonFXSConfiguration config = new TalonFXSConfiguration();
         
         config.Voltage
-            .withPeakForwardVoltage(12);
+            .withPeakForwardVoltage(12)
+            .withPeakReverseVoltage(-12);
 
         config.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
         motorWheels.getConfigurator().apply(config);
 
     }
-    public void intakespin(double power) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'intakespin'");
+    public void intakeSpin(double power) {
+        dutyCycle.Output = power;
+        motorWheels.setControl(dutyCycle);
     }
 
     public void SetIntakePower(double armPower, double wheelsPower) {
