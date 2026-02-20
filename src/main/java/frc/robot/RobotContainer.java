@@ -112,11 +112,12 @@ public class RobotContainer {
 
         driver.leftTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK));
 
-        operator.a().onTrue(kicker.run());
+        operator.a().onTrue(kicker.run())
+                    .onFalse(kicker.stop());
 
-        operator.x().whileTrue(hood.setPowerCommand(true))
+        operator.x().whileTrue(hood.setPowerCommand(true))  // down
                     .onFalse(hood.stopCommand());
-        operator.y().whileTrue(hood.setPowerCommand(false))
+        operator.y().whileTrue(hood.setPowerCommand(false))  // up
                     .onFalse(hood.stopCommand());
 
         // safe middle angle
