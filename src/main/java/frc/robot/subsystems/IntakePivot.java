@@ -44,7 +44,7 @@ public class IntakePivot extends SubsystemBase {
         motor.setControl(dutyCycle);
     }
 
-    public void setIntakePower(double armPower, double wheelsPower) {
+    public void setIntakePower(double armPower) {
         this.motor.set(armPower);
     }
 }

@@ -63,8 +63,8 @@ public class RobotContainer {
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
 
-    public static Intake intake = new Intake();
-    public static IntakePivot intakePivot = new IntakePivot();
+    public static final Intake intake = new Intake();
+    public static final IntakePivot intakePivot = new IntakePivot();
 
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
@@ -108,9 +108,9 @@ public class RobotContainer {
         driver.povDown().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         // intake commands
-        driver.rightTrigger().toggleOnTrue(new IntakeOut((intakePivot), .5).alongWith(new IntakeSpin(intake, 0.5)));
+        driver.rightTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK).alongWith(new IntakeSpin(intake, Constants.Intake.POWER)));
 
-        driver.leftTrigger().toggleOnTrue(new IntakeOut(intakePivot, -0.5));
+        driver.leftTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK));
 
         operator.a().onTrue(kicker.run());
 

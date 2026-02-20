@@ -5,17 +5,12 @@ import frc.robot.subsystems.IntakePivot;
 
 public class IntakeOut extends Command {
     private IntakePivot intakePivot;
-    private double power;
+    private int tick;
 
-    public IntakeOut(IntakePivot intakePivot, double power) {
+    public IntakeOut(IntakePivot intakePivot, int tick) {
         this.intakePivot = intakePivot;
-        this.power = power;
+        this.tick = tick;
         addRequirements(intakePivot);
-    }
-
-    @Override
-    public void execute() {
-        intakePivot.intakePivot(power);
     }
 
     @Override
@@ -24,8 +19,12 @@ public class IntakeOut extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {
-        intakePivot.intakePivot(0.0);
-    } 
+    public void execute() {
+        intakePivot.intakePivot(tick);
+    }
 
+    @Override
+    public void end(boolean interrupted) {
+        intakePivot.intakePivot(0);
+    } 
 }

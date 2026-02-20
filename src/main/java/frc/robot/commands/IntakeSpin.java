@@ -14,13 +14,13 @@ public class IntakeSpin extends Command {
     }
 
     @Override
-    public void execute() {
-        intake.intakeSpin(power);
+    public void initialize() {
+
     }
 
     @Override
-    public void initialize() {
-
+    public void execute() {
+        intake.intakeSpin(power);
     }
 
     @Override
