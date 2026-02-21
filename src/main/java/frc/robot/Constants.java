@@ -36,6 +36,16 @@ public final class Constants {
       LIMELIGHT_RIGHT
     );
 
+        // Limelight horizontal Field of view in degrees
+        public static final double FOV_HORIZONTAL = 62.5;
+
+        // AprilLock2 rotation compensation pid values
+        public static final double APRIL_LOCK_P = 1.4;
+        public static final double APRIL_LOCK_I = 1.0;
+        public static final double APRIL_LOCK_D = 0.05;
+        // maximum magnitude of PID output
+        public static final double APRIL_LOCK_PID_CLAMP = 0.5;
+
     // VISION_STDDEVS allows us to control how much we trust the values coming from the Limelight(s).
     // The higher the value (distance standard deviations), the less we trust it.
     // 
@@ -52,6 +62,9 @@ public final class Constants {
 
     public static final double FIELD_CENTER_X = 8.7741252;
     public static final double FIELD_CENTER_Y = 4.0259508;
+
+    public static final double HUB_CENTER_X = 3.4219016;
+    public static final double HUB_CENTER_Y = 0;
   }
 
   public static final class Controller {
@@ -87,6 +100,8 @@ public final class Constants {
     public static final double MANUAL_MOTOR_POWER = 0.2;
 
   }
+
+  
 
   public static final class Turret {
     public static final int MOTOR_PORT = 59;

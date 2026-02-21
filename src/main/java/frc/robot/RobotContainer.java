@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.AprilLock;
 import frc.robot.commands.IntakeOut;
 import frc.robot.commands.IntakeSpin;
 import frc.robot.commands.TeleopSwerve;
@@ -36,6 +37,7 @@ import frc.robot.subsystems.IntakePivot;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Kicker;
+import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
@@ -144,6 +146,8 @@ public class RobotContainer {
                               .onFalse(hopper.stop());
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        operator.b().whileTrue(new AprilLock(turret));
     }
 
     public Command getAutonomousCommand() {

@@ -150,6 +150,19 @@ public class Turret extends SubsystemBase {
     return absoluteTurretPose;
   }
 
+    public double getYawOffset(Translation2d targetLoc) {
+    Pose2d turretPose = getAbsTurretPose();
+      
+    // difference between robot and april tag poses
+    Translation2d diff = turretPose.getTranslation().minus(targetLoc);
+        
+    // yaw offset between target and robot vector pointing directly out from robot-front
+    double phi = Math.atan2(diff.getY(), diff.getX());
+    double yawOffset = phi - turretPose.getRotation().getRadians() - Math.PI;
+    double wrappedYaw = Math.atan2(Math.sin(yawOffset), Math.cos(yawOffset));
+    return wrappedYaw;
+  }
+
 
   // TODO: Tune PID
   public void goToAngle(double targetAngle) {
