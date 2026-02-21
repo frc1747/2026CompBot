@@ -74,6 +74,10 @@ public class Shooter extends SubsystemBase {
     motorRight.setControl(dutyCycleShooter);
   }
 
+  public double getRPM() {
+    return (motorLeft.getVelocity().getValueAsDouble() + motorRight.getVelocity().getValueAsDouble()) / 2 / 60;
+  }
+
 
   public double getPowerNeededFromDistanceAndAngle(double x, double y){
     // Z = A + BX + CY + DX^2 + FY^2 + EXY is the quady E Z is power, X is distance, Y is hood angle
@@ -129,7 +133,6 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter/Left Motor RPS", motorLeft.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("Shooter/Right Motor RPS", motorRight.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Average RPM", getRPM());
   }
 }

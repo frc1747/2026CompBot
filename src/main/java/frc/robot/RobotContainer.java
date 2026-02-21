@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.IntakeOut;
 import frc.robot.commands.IntakeSpin;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TurretRotate;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
@@ -116,6 +117,9 @@ public class RobotContainer {
         // intake commands
         // this is broken cause no encoder
         driver.rightTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK).alongWith(new IntakeSpin(intake, Constants.Intake.POWER)));
+
+        driver.rightBumper().whileTrue(new TurretRotate(turret, 0.1));
+        driver.leftBumper().whileTrue(new TurretRotate(turret, -0.1));
 
         // this is on operator for now
         operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER));
