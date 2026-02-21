@@ -137,7 +137,7 @@ public class RobotContainer {
                     .onFalse(hood.stopCommand());
 
         // safe middle angle
-        operator.rightBumper().whileTrue(hood.goToAngleCommand(10.0))
+        operator.rightBumper().whileTrue(hood.goToDesiredAngleCommand())
                               .onFalse(hood.stopCommand());
 
         operator.rightTrigger().whileTrue(shooter.setPowerCommand(0.2))

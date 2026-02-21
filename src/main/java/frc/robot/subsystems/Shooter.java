@@ -107,7 +107,7 @@ public class Shooter extends SubsystemBase {
     double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative
     if (aws > 0) return aws;
     return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A;
-    // slove with the good old quady for
+    // slove with the good old quady form
   }
 
   public double getAngleNeededFromDistanceAndPower(double x, double z ){
@@ -117,7 +117,7 @@ public class Shooter extends SubsystemBase {
     double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative
     if (aws > 0) return aws;
     return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A;
-    // slove with the good old quady for
+    // slove with the good old quady form
   }
 
   public double[] findSpeedAndAngleFromDistance(double Distance){
