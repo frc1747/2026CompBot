@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,6 +25,9 @@ import frc.robot.RobotContainer;
 public class Turret extends SubsystemBase {
   private TalonFXS motor;
   private Encoder encoder;
+  // left from perspective of someone facing the turret sie of bot
+  private DigitalInput leftLimitSwitch;
+  private DigitalInput rightLimitSwitch;
 
   // optimization for not creating new control object 50/sec
   private DutyCycleOut dutyCycle = new DutyCycleOut(0);
@@ -45,6 +49,9 @@ public class Turret extends SubsystemBase {
     
     encoder = new Encoder(Constants.Turret.ENCODER_PORT_A, Constants.Turret.ENCODER_PORT_B);
 
+    leftLimitSwitch = new DigitalInput(Constants.Turret.LEFT_LIMIT_PORT);
+    rightLimitSwitch = new DigitalInput(Constants.Turret.RIGHT_LIMIT_PORT);
+
     pid.enableContinuousInput(0.0, 360.0);
     pid.setTolerance(1.0);
   }
@@ -53,6 +60,19 @@ public class Turret extends SubsystemBase {
     // supplies power to spin turret but stops at encoder limit
   public void basicSpin(double power) {
     dutyCycle.Output = power;
+    if (leftLimitSwitch.get()) {
+      if (power > 0) { // > or <
+        dutyCycle.Output = power;
+      } else {
+        dutyCycle.Output = 0.0;
+      }
+    } else if (rightLimitSwitch.get()) {
+      if (power < 0) { // > or <
+        dutyCycle.Output = power;
+      } else {
+        dutyCycle.Output = 0.0;
+      }
+    }
     motor.setControl(dutyCycle);
     return;
   }
