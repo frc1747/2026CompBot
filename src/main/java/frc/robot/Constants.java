@@ -73,8 +73,8 @@ public final class Constants {
 
   public static final class Hood {
     public static final int MOTOR_PORT = 40;
-    public static final int ENCODER_PORT_A = 1;
-    public static final int ENCODER_PORT_B = 2;
+    public static final int ENCODER_PORT_A = 5;
+    public static final int ENCODER_PORT_B = 6;
     public static final int COUNTS_PER_REV = 2048;
     public static final double GEAR_RATIO = 17.0;  // 170 tooth rack / 10 tooth pinion
     public static final double TOTAL_HOOD_DEGREES = 19.25;  // 19.25 degrees of hood rotation
