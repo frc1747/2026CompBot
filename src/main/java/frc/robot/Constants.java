@@ -40,9 +40,9 @@ public final class Constants {
         public static final double FOV_HORIZONTAL = 62.5;
 
         // AprilLock2 rotation compensation pid values
-        public static final double APRIL_LOCK_P = 0.3;
-        public static final double APRIL_LOCK_I = 0.001;
-        public static final double APRIL_LOCK_D = 0.001;
+        public static final double APRIL_LOCK_P = 0.5;
+        public static final double APRIL_LOCK_I = 0.003;
+        public static final double APRIL_LOCK_D = 0.003;
         // maximum magnitude of PID output
         public static final double APRIL_LOCK_PID_CLAMP = 0.1;
 
@@ -63,7 +63,7 @@ public final class Constants {
     public static final double FIELD_CENTER_X = 8.7741252;
     public static final double FIELD_CENTER_Y = 4.0259508;
 
-    public static final double RED_HUB_CENTER_X = 12.9182504;
+    public static final double RED_HUB_CENTER_X = 11.88;
     public static final double RED_HUB_CENTER_Y = 4.0259508;
 
     public static final double RED_RIGHT_CORNER_X = 17.5482504;
@@ -82,7 +82,7 @@ public final class Constants {
   }
   public static final class Hopper {
     public static final int MOTOR_PORT = 44;
-    public static final double MOTOR_POWER = 0.7;
+    public static final double MOTOR_POWER = 0.5;
   }
 
   public static final class Hood {
@@ -149,7 +149,7 @@ public final class Constants {
   }
      public static final class Intake {
         public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.2;
+        public static final double POWER = 0.3;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
         public static final double kP = 0.2; //TODO: VERIFY
         public static final double kI = 0.0; //TODO: VERIFY
