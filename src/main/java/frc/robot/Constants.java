@@ -44,7 +44,7 @@ public final class Constants {
         public static final double APRIL_LOCK_I = 1.0;
         public static final double APRIL_LOCK_D = 0.05;
         // maximum magnitude of PID output
-        public static final double APRIL_LOCK_PID_CLAMP = 0.5;
+        public static final double APRIL_LOCK_PID_CLAMP = 0.05;
 
     // VISION_STDDEVS allows us to control how much we trust the values coming from the Limelight(s).
     // The higher the value (distance standard deviations), the less we trust it.
