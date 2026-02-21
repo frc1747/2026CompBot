@@ -92,8 +92,7 @@ public class Turret extends SubsystemBase {
     dutyCycle.Output = power;
   }
 
-  // currently incorrect because of gear ratio and absolute encoder degrees
-  // also rename to getRelativeTurretAngle
+  // TODO: also rename and refactor to getRelativeTurretAngle
   public double getTurretAngle() {
     // gear ratio 15 to 110, 110/15 ~= 7.333
     // 8196 pulses from encoder per rotation
@@ -154,6 +153,7 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // soft limits and limit switches
     if (getLeftLimitSwitchPressed() && dutyCycle.Output < 0) {
       dutyCycle.Output = 0.0;
     } 
