@@ -14,6 +14,7 @@ import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -44,9 +45,10 @@ public class Shooter extends SubsystemBase {
       .withPeakForwardVoltage(12)
       .withPeakReverseVoltage(-12);
     
-    configShooter.Slot0.kP = 1.0;
+    configShooter.Slot0.kP = 0.5;
     configShooter.Slot0.kI = 0.0;
     configShooter.Slot0.kD = 0.0;
+    configShooter.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
 
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
