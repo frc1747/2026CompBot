@@ -36,6 +36,7 @@ import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -69,6 +70,7 @@ public class RobotContainer {
     public static final IntakePivot intakePivot = new IntakePivot();
     public static final Shooter shooter = new Shooter();
     public static final Hopper hopper = new Hopper();
+    public static final Turret turret = new Turret();
 
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));

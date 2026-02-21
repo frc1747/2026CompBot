@@ -92,10 +92,11 @@ public final class Constants {
 
   public static final class Turret {
     public static final int MOTOR_PORT = 59;
-    public static final int ENCODER_PORT_A = 6;
-    public static final int ENCODER_PORT_B = 5;
+    public static final int ENCODER_PORT_A = 0;
+    public static final int ENCODER_PORT_B = 1;
     // gear ratio of 396 to 1 here probably but needs to be tested
-    public static final double TURRETRATIO = 11; // the number of teeth on the turret's gear is 110 and the motor has a gear with 10 teeth
+    //public static final double TURRETRATIO = 7.33333333333333333333333; 
+    public static final double TURRET_RATIO = 166.9;
     public static final int encoderLimit = 5771 / 2; // temporary encoder value limit
     public static final double PID_P = 0;
     public static final double PID_I = 0; // needs tuning
