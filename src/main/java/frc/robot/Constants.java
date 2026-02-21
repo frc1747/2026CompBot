@@ -63,8 +63,8 @@ public final class Constants {
     public static final double FIELD_CENTER_X = 8.7741252;
     public static final double FIELD_CENTER_Y = 4.0259508;
 
-    public static final double HUB_CENTER_X = 3.4219016;
-    public static final double HUB_CENTER_Y = 0;
+    public static final double HUB_CENTER_X = 12.9182504;
+    public static final double HUB_CENTER_Y = 4.0259508;
   }
 
   public static final class Controller {

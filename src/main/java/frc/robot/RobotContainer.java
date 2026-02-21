@@ -124,8 +124,8 @@ public class RobotContainer {
         driver.rightTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK).alongWith(new IntakeSpin(intake, Constants.Intake.POWER)));
 
         // much slower for the moment
-        driver.rightBumper().whileTrue(new TurretRotate(turret, 0.05));
-        driver.leftBumper().whileTrue(new TurretRotate(turret, -0.05));
+        driver.rightBumper().whileTrue(new TurretRotate(turret, 0.025));
+        driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
 
         // this is on operator for now
         operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER));
