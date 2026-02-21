@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -24,40 +26,45 @@ import frc.robot.RobotContainer;
 public class Shooter extends SubsystemBase {
   // shooting dir is froward.
   private TalonFX motorLeft;
-  private TalonFX motorRight;
+  private TalonFX follower;
   private DutyCycleOut dutyCycleShooter = new DutyCycleOut(0);
+  private VelocityVoltage velocityShooter = new VelocityVoltage(0.0).withSlot(0);
   private DutyCycleEncoder encoder;
   private final PIDController pid = new PIDController(Constants.Shooter.PID_P, Constants.Shooter.PID_I, Constants.Shooter.PID_D);
+  private double desiredRPM = 0.0;
 
   public Shooter() {
     motorLeft = new TalonFX(Constants.Shooter.MOTOR_LEFT_PORT);
-    motorRight = new TalonFX(Constants.Shooter.MOTOR_RIGHT_PORT);
-
-    /*
-    TalonFXConfiguration configFollower = new TalonFXConfiguration();
-    configFollower.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
-    motorRight.getConfigurator().apply(configFollower);
-
-    // this is use to set the control to follow master motor
-    motorLeft.setControl(new Follower(Constants.Shooter.MOTOR_RIGHT_PORT, MotorAlignmentValue.Opposed));
-    */
+    follower = new TalonFX(Constants.Shooter.MOTOR_RIGHT_PORT);
 
     // config for the shooter motors
     TalonFXConfiguration configShooter = new TalonFXConfiguration();
-
-    TalonFXConfiguration configRight = new TalonFXConfiguration();
-    configRight.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
-
 
     configShooter.Voltage
       .withPeakForwardVoltage(12)
       .withPeakReverseVoltage(-12);
     
-    motorLeft.getConfigurator().apply(configShooter);
-    motorRight.getConfigurator().apply(configRight);  // temp till follower is working
+    configShooter.Slot0.kP = 1.0;
+    configShooter.Slot0.kI = 0.0;
+    configShooter.Slot0.kD = 0.0;
 
-    pid.enableContinuousInput(0.0, 360.0);
-    pid.setTolerance(1.0);
+    /* Retry config apply up to 5 times, report if failure */
+    StatusCode status = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status = motorLeft.getConfigurator().apply(configShooter);
+      if (status.isOK()) break;
+    }
+    if (!status.isOK()) {
+      System.out.println("Could not apply configs, error code: " + status.toString());
+    }
+    
+    //motorLeft.getConfigurator().apply(configShooter);
+
+    //pid.enableContinuousInput(0.0, 360.0);
+    //pid.setTolerance(1.0);
+
+    follower.setControl(new Follower(motorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+    SmartDashboard.putNumber("Shooter/Desired RPM", 0.0);
   }
 
   public Command setPowerCommand(double power){
@@ -68,14 +75,23 @@ public class Shooter extends SubsystemBase {
     return runOnce(() -> setPower(0.0));
   }
 
+  public Command setSpeedToDesired() {
+    return runOnce(() -> setRPM(desiredRPM));
+  }
+
   public void setPower(double power) {
     dutyCycleShooter.Output = power;
     motorLeft.setControl(dutyCycleShooter);
-    motorRight.setControl(dutyCycleShooter);
+  }
+
+  // in RPM
+  public void setRPM(double rpm) {
+    System.out.println("I am being commanded to " + rpm);
+    motorLeft.setControl(velocityShooter.withVelocity(rpm / 60.0));
   }
 
   public double getRPM() {
-    return (motorLeft.getVelocity().getValueAsDouble() + motorRight.getVelocity().getValueAsDouble()) / 2 / 60;
+    return (motorLeft.getVelocity().getValueAsDouble() + follower.getVelocity().getValueAsDouble()) / 2 * 60;
   }
 
 
@@ -134,5 +150,8 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Shooter/Average RPM", getRPM());
+    desiredRPM = SmartDashboard.getNumber("Shooter/Desired RPM", 0.0);
+    SmartDashboard.putNumber("number I am putting on smartdashbard", desiredRPM);
+    //setRPM(desiredRPM);
   }
 }
