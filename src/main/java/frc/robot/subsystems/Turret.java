@@ -90,19 +90,6 @@ public class Turret extends SubsystemBase {
 
   public void basicSpin(double power) {
     dutyCycle.Output = power;
-    if (getLeftLimitSwitchPressed() && power < 0) {
-      dutyCycle.Output = 0.0;
-    } 
-    if (getRightLimitSwitchPressed() && power > 0) {
-      dutyCycle.Output = 0.0;
-    }
-    if (getTurretAngle() < -20 && power < 0) {
-      dutyCycle.Output = 0.0;
-    }
-    if (getTurretAngle() > 20 && power > 0) {
-      dutyCycle.Output = 0.0;
-    }
-    motor.setControl(dutyCycle);
   }
 
   // currently incorrect because of gear ratio and absolute encoder degrees
@@ -167,6 +154,20 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (getLeftLimitSwitchPressed() && dutyCycle.Output < 0) {
+      dutyCycle.Output = 0.0;
+    } 
+    if (getRightLimitSwitchPressed() && dutyCycle.Output > 0) {
+      dutyCycle.Output = 0.0;
+    }
+    if (getTurretAngle() < -20 && dutyCycle.Output < 0) {
+      dutyCycle.Output = 0.0;
+    }
+    if (getTurretAngle() > 20 && dutyCycle.Output > 0) {
+      dutyCycle.Output = 0.0;
+    }
+    motor.setControl(dutyCycle);
+
     // SmartDashboard
     SmartDashboard.putNumber("Turret/encoder value", encoder.get());
     SmartDashboard.putNumber("Turret/encoder angle", getTurretAngle());
