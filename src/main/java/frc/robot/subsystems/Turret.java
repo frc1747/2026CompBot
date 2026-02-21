@@ -28,6 +28,7 @@ public class Turret extends SubsystemBase {
   // left from perspective of someone facing the turret sie of bot
   private DigitalInput leftLimitSwitch;
   private DigitalInput rightLimitSwitch;
+  private double targetPower;
 
   // optimization for not creating new control object 50/sec
   private DutyCycleOut dutyCycle = new DutyCycleOut(0);
@@ -51,6 +52,8 @@ public class Turret extends SubsystemBase {
 
     leftLimitSwitch = new DigitalInput(Constants.Turret.LEFT_LIMIT_PORT);
     rightLimitSwitch = new DigitalInput(Constants.Turret.RIGHT_LIMIT_PORT);
+
+    targetPower = 0.0;
 
     pid.enableContinuousInput(0.0, 360.0);
     pid.setTolerance(1.0);
@@ -89,7 +92,8 @@ public class Turret extends SubsystemBase {
   // }
 
   public void basicSpin(double power) {
-    dutyCycle.Output = power;
+    // dutyCycle.Output = power;
+    targetPower = power;
   }
 
   // TODO: also rename and refactor to getRelativeTurretAngle
@@ -100,7 +104,7 @@ public class Turret extends SubsystemBase {
     // 8196 / 4 = 2048
     // 2048 * 7.333 ~= 15018.667 resulting pulses per full turret rotation
     // 15018.667 / 360 degrees ~= 41.719
-    return encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
+    return -encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
   }
 
   // returns pose of turret relative to field (absolute)
@@ -153,17 +157,18 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
+    dutyCycle.Output = targetPower;
     // soft limits and limit switches
-    if (getLeftLimitSwitchPressed() && dutyCycle.Output < 0) {
+    if (getLeftLimitSwitchPressed() && targetPower < 0) {
       dutyCycle.Output = 0.0;
     } 
-    if (getRightLimitSwitchPressed() && dutyCycle.Output > 0) {
+    if (getRightLimitSwitchPressed() && targetPower > 0) {
       dutyCycle.Output = 0.0;
     }
-    if (getTurretAngle() < -20 && dutyCycle.Output < 0) {
+    if (getTurretAngle() > Constants.Turret.TURRET_YAW_LIMIT && targetPower < 0) {
       dutyCycle.Output = 0.0;
     }
-    if (getTurretAngle() > 20 && dutyCycle.Output > 0) {
+    if (getTurretAngle() < -Constants.Turret.TURRET_YAW_LIMIT && targetPower > 0) {
       dutyCycle.Output = 0.0;
     }
     motor.setControl(dutyCycle);
