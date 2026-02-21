@@ -289,6 +289,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
+        RobotContainer.field.setRobotPose(getState().Pose);
+        SmartDashboard.putData(RobotContainer.field);
         addLimelightMeasurement();
         SmartDashboard.putNumber("Distance To Hub", distanceToPose(
             new Pose2d(new Translation2d(Constants.Vision.FIELD_CENTER_X, Constants.Vision.FIELD_CENTER_Y), new Rotation2d(0.0))));
