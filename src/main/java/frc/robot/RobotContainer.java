@@ -30,6 +30,7 @@ import frc.robot.commands.IntakeOut;
 import frc.robot.commands.IntakeSpin;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TurretRotate;
+import frc.robot.commands.autoAim;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
@@ -147,6 +148,8 @@ public class RobotContainer {
                               .onFalse(hopper.stop());
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        //operator.b().whileTrue(new autoAim(shooter, hood, drivetrain.getState().Pose ,  ));
     }
 
     public Command getAutonomousCommand() {

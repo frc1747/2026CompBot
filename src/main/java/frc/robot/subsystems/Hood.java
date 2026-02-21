@@ -84,7 +84,7 @@ public class Hood extends SubsystemBase {
   }
 
 
-  private void goToAngle(double targetDegrees) {
+  public void goToAngle(double targetDegrees) {
     // don't go to an un-obtainable angle
    // targetDegrees = MathUtil.clamp(targetDegrees, 0.0, Constants.Hood.TOTAL_HOOD_DEGREES);
 
