@@ -129,7 +129,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter/Left Motor RPM", motorLeft.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("Shooter/Right Motor RPM", motorRight.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Left Motor RPS", motorLeft.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Right Motor RPS", motorRight.getVelocity().getValueAsDouble());
   }
 }
