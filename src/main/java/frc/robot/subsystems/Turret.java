@@ -60,7 +60,13 @@ public class Turret extends SubsystemBase {
   // currently incorrect because of gear ratio and absolute encoder degrees
   // also rename to getRelativeTurretAngle
   public double getTurretAngle() {
-    return encoder.get() / 93.867;//Constants.Turret.TURRET_RATIO;
+    // gear ratio 15 to 110, 110/15 ~= 7.333
+    // 8196 pulses from encoder per rotation
+    // 4x quadrature
+    // 8196 / 4 = 2048
+    // 2048 * 7.333 ~= 15018.667 resulting pulses per full turret rotation
+    // 15018.667 / 360 degrees ~= 41.719
+    return encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
   }
 
   // returns pose of turret relative to field (absolute)
