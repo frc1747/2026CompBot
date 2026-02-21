@@ -93,11 +93,11 @@ public final class Constants {
     public static final int ENCODER_PORT_A = 0;
     public static final int ENCODER_PORT_B = 1;
     // left from the perspective of someone facing towards the turret side of bot
-    public static final int LEFT_LIMIT_PORT = 2; 
+    public static final int LEFT_LIMIT_PORT = 2;
     public static final int RIGHT_LIMIT_PORT = 3;
     // gear ratio of 396 to 1 here probably but needs to be tested
-    //public static final double TURRETRATIO = 7.33333333333333333333333; 
-    public static final double TURRET_RATIO = 166.9;
+    // value to divide encoder value by in order to get 360 degress per turret rotation
+    public static final double TURRET_RATIO = 41.719;
     public static final int encoderLimit = 5771 / 2; // temporary encoder value limit
     public static final double PID_P = 0;
     public static final double PID_I = 0; // needs tuning

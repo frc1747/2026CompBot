@@ -56,6 +56,17 @@ public class Turret extends SubsystemBase {
     pid.setTolerance(1.0);
   }
 
+  // left from perspective of a person facing turret side of robot
+  public boolean getLeftLimitSwitchPressed() {
+    // not (!) operator used because limit switch is normally open
+    return !leftLimitSwitch.get();
+  }
+
+  // right from perspective of a person facing turret side of robot
+  public boolean getRightLimitSwitchPressed() {
+    // not (!) operator used because limit switch is normally open
+    return !rightLimitSwitch.get();
+  }
 
   // supplies power to spin turret but stops at limit switches
   // public void basicSpin(double power) {
@@ -78,11 +89,11 @@ public class Turret extends SubsystemBase {
   // }
 
   public void basicSpin(double power) {
-    if (leftLimitSwitch.get()) {
+    if (getLeftLimitSwitchPressed()) {
       dutyCycle.Output = 0.0;
       motor.setControl(dutyCycle);
       return;
-    } else if (rightLimitSwitch.get()) {
+    } else if (getRightLimitSwitchPressed()) {
       dutyCycle.Output = 0.0;
       motor.setControl(dutyCycle);
       return;
@@ -97,7 +108,7 @@ public class Turret extends SubsystemBase {
           motor.setControl(dutyCycle);
           return;
         }
-      } else if (getTurretAngle() > 80) {
+      } else if (getTurretAngle() > 20) {
         if (power < 0) {
           dutyCycle.Output = power;
           motor.setControl(dutyCycle);
@@ -108,6 +119,7 @@ public class Turret extends SubsystemBase {
           return;
         }
       }
+      dutyCycle.Output = power;
       motor.setControl(dutyCycle);
       return;
     }
@@ -159,6 +171,8 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putNumber("Turret/encoder value", encoder.get());
     SmartDashboard.putNumber("Turret/encoder angle", getTurretAngle());
     SmartDashboard.putNumber("Turret/turret degrees", getAbsTurretPose().getRotation().getDegrees());
+    SmartDashboard.putBoolean("Left Limit Switch", getLeftLimitSwitchPressed());
+    SmartDashboard.putBoolean("Right Limit Switch", getRightLimitSwitchPressed());
     //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
   }
 }
