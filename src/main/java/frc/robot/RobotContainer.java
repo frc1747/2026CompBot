@@ -136,7 +136,7 @@ public class RobotContainer {
         operator.rightBumper().whileTrue(hood.goToAngleCommand(10.0))
                               .onFalse(hood.stopCommand());
 
-        operator.rightTrigger().whileTrue(shooter.setPowerCommand(0.15))
+        operator.rightTrigger().whileTrue(shooter.setPowerCommand(0.5))
                                .onFalse(shooter.stopCommand());
 
         operator.leftTrigger().whileTrue(hopper.run())
