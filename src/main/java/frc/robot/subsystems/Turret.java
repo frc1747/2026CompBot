@@ -57,30 +57,66 @@ public class Turret extends SubsystemBase {
   }
 
 
-    // supplies power to spin turret but stops at encoder limit
+  // supplies power to spin turret but stops at limit switches
+  // public void basicSpin(double power) {
+  //  dutyCycle.Output = power;
+  //  if (leftLimitSwitch.get()) {
+  //    if (power > 0) { // > or <
+  //      dutyCycle.Output = power;
+  //    } else {
+  //      dutyCycle.Output = 0.0;
+  //    }
+  //  } else if (rightLimitSwitch.get()) {
+  //    if (power < 0) { // > or <
+  //      dutyCycle.Output = power;
+  //    } else {
+  //      dutyCycle.Output = 0.0;
+  //    }
+  //  }
+  //  motor.setControl(dutyCycle);
+  //  return;
+  // }
+
   public void basicSpin(double power) {
-    dutyCycle.Output = power;
     if (leftLimitSwitch.get()) {
-      if (power > 0) { // > or <
-        dutyCycle.Output = power;
-      } else {
-        dutyCycle.Output = 0.0;
-      }
+      dutyCycle.Output = 0.0;
+      motor.setControl(dutyCycle);
+      return;
     } else if (rightLimitSwitch.get()) {
-      if (power < 0) { // > or <
-        dutyCycle.Output = power;
-      } else {
-        dutyCycle.Output = 0.0;
+      dutyCycle.Output = 0.0;
+      motor.setControl(dutyCycle);
+      return;
+    } else {
+      if (getTurretAngle() < -20) {
+        if (power > 0) {
+          dutyCycle.Output = power;
+          motor.setControl(dutyCycle);
+          return;
+        } else {
+          dutyCycle.Output = 0.0;
+          motor.setControl(dutyCycle);
+          return;
+        }
+      } else if (getTurretAngle() > 80) {
+        if (power < 0) {
+          dutyCycle.Output = power;
+          motor.setControl(dutyCycle);
+          return;
+        } else {
+          dutyCycle.Output = 0.0;
+          motor.setControl(dutyCycle);
+          return;
+        }
       }
+      motor.setControl(dutyCycle);
+      return;
     }
-    motor.setControl(dutyCycle);
-    return;
   }
 
   // currently incorrect because of gear ratio and absolute encoder degrees
   // also rename to getRelativeTurretAngle
   public double getTurretAngle() {
-    return encoder.get() / 93.867;//Constants.Turret.TURRET_RATIO;
+    return encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
   }
 
   // returns pose of turret relative to field (absolute)
