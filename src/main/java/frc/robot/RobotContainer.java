@@ -123,6 +123,8 @@ public class RobotContainer {
         // intake commands
         // this is broken cause no encoder
         driver.rightTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK).alongWith(new IntakeSpin(intake, Constants.Intake.POWER)));
+        
+        driver.leftTrigger().onTrue(hood.goToAngleCommand(0.0));
 
         // much slower for the moment
         driver.rightBumper().whileTrue(new TurretRotate(turret, 0.025));
@@ -134,9 +136,9 @@ public class RobotContainer {
         operator.a().onTrue(kicker.run())
                     .onFalse(kicker.stop());
 
-        operator.x().whileTrue(hood.setPowerCommand(true))  // down
+        operator.x().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(true))  // down
                     .onFalse(hood.stopCommand());
-        operator.y().whileTrue(hood.setPowerCommand(false))  // up
+        operator.y().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(false))  // up
                     .onFalse(hood.stopCommand());
 
         // safe middle angle
@@ -145,6 +147,8 @@ public class RobotContainer {
 
         operator.rightTrigger().whileTrue(shooter.setPowerCommand(0.5))
                                .onFalse(shooter.stopCommand());
+                
+        
 
         operator.leftTrigger().whileTrue(hopper.run())
                               .onFalse(hopper.stop());
