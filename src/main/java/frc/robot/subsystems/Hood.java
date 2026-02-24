@@ -49,7 +49,7 @@ public class Hood extends SubsystemBase {
   }
 
   public Command goToAngleCommand(double angle) {
-    return runOnce(() -> goToAngle(angle));
+    return run(() -> goToAngle(angle));
   }
 
   private void setPower(double power) {
