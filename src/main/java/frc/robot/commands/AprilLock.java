@@ -42,7 +42,6 @@ public class AprilLock extends Command {
   @Override
   public void initialize() {}
 
-  // TODO: reformat to make more readable
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {

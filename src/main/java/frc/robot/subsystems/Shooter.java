@@ -119,8 +119,8 @@ public class Shooter extends SubsystemBase {
     return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A;
     // slove with the good old quady for
   }
-
-  public double[] findSpeedAndAngleFromDistance(double Distance){
+  // plz change name old name bad
+  public double[] getPowerAndAngleFromDistance(double Distance){
     double currentAngle = RobotContainer.hood.getCurrentAngle();
     double wantedPower = getPowerNeededFromDistanceAndAngle(Distance, currentAngle);
     double[] array = {-1,-1};

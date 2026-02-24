@@ -418,8 +418,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         );
 
         SmartDashboard.putNumber("Yaw Degrees", yawDeg);
+    }
 
-
+    public Translation2d getVelocity() {
+        double xVel = getState().Speeds.vxMetersPerSecond;
+        double yVel = getState().Speeds.vyMetersPerSecond;
+        return new Translation2d(xVel, yVel);
     }
 
     // Helper Method to use for the min method to select the lowest abiguity AprilTag.

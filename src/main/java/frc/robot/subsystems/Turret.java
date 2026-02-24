@@ -126,7 +126,7 @@ public class Turret extends SubsystemBase {
     return absoluteTurretPose;
   }
 
-    public double getYawOffset(Translation2d targetLoc) {
+  public double getYawOffset(Translation2d targetLoc) {
     Pose2d turretPose = getAbsTurretPose();
       
     // difference between robot and april tag poses
@@ -139,6 +139,19 @@ public class Turret extends SubsystemBase {
     return wrappedYaw;
   }
 
+  // returns turret tangential velocity of turret relative to bot center
+  // rotated to field space
+  public Translation2d getTangentialVelocity() {
+    // rotational speed in radians per second
+    double robotOmega = RobotContainer.drivetrain.getState().Speeds.omegaRadiansPerSecond;
+    double robotRotationRadians = RobotContainer.drivetrain.getState().Pose.getRotation().getRadians();
+    // 90 degrees from bot forward vector
+    double tangentialDirRadians = robotRotationRadians - Math.PI / 2;
+    double speed = robotOmega * Constants.Turret.DIST_TO_BOT_CENTER;
+    // may need to switch x and y
+    Translation2d tangentialVelocity = new Translation2d(Math.cos(tangentialDirRadians), Math.sin(tangentialDirRadians)).times(speed);
+    return tangentialVelocity;
+  }
 
   // TODO: Tune PID
   public void goToAngle(double targetAngle) {
