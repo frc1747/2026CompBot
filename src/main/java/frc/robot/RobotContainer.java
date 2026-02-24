@@ -127,11 +127,13 @@ public class RobotContainer {
         driver.rightBumper().whileTrue(new TurretRotate(turret, 0.025));
         driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
 
-        // this is on operator for now
-        operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER));
+        //this is on operator for now
+        operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER).alongWith(hopper.run()))
+                            .onTrue(kicker.run())
+                            .onFalse(kicker.stop().alongWith(hopper.stop()));
 
-        operator.a().onTrue(kicker.run())
-                    .onFalse(kicker.stop());
+        // operator.a().onTrue(kicker.run())
+        //             .onFalse(kicker.stop());
 
         operator.x().whileTrue(hood.setPowerCommand(true))  // down
                     .onFalse(hood.stopCommand());
@@ -145,8 +147,8 @@ public class RobotContainer {
         operator.rightTrigger().whileTrue(shooter.setPowerCommand(0.5))
                                .onFalse(shooter.stopCommand());
 
-        operator.leftTrigger().whileTrue(hopper.run())
-                              .onFalse(hopper.stop());
+        // operator.leftTrigger().whileTrue(hopper.run())
+        //                       .onFalse(hopper.stop());
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
