@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.AprilLock;
 import frc.robot.commands.IntakeOut;
 import frc.robot.commands.IntakeSpin;
 import frc.robot.commands.TeleopSwerve;
@@ -38,6 +39,7 @@ import frc.robot.subsystems.IntakePivot;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Kicker;
+import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
@@ -123,8 +125,8 @@ public class RobotContainer {
         driver.rightTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK).alongWith(new IntakeSpin(intake, Constants.Intake.POWER)));
 
         // much slower for the moment
-        driver.rightBumper().whileTrue(new TurretRotate(turret, 0.05));
-        driver.leftBumper().whileTrue(new TurretRotate(turret, -0.05));
+        driver.rightBumper().whileTrue(new TurretRotate(turret, 0.025));
+        driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
 
         // this is on operator for now
         operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER));
@@ -141,7 +143,7 @@ public class RobotContainer {
         operator.rightBumper().whileTrue(hood.goToDesiredAngleCommand())
                               .onFalse(hood.stopCommand());
 
-        operator.rightTrigger().whileTrue(shooter.setPowerCommand(0.2))
+        operator.rightTrigger().whileTrue(shooter.setPowerCommand(0.5))
                                .onFalse(shooter.stopCommand());
 
         operator.leftTrigger().whileTrue(hopper.run())
@@ -149,7 +151,7 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        //operator.b().whileTrue(new autoAim(shooter, hood, drivetrain.getState().Pose ,  ));
+        operator.b().whileTrue(new AprilLock(turret));
     }
 
     public Command getAutonomousCommand() {

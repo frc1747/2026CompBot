@@ -33,7 +33,7 @@ public class Intake extends SubsystemBase {
         motor.setControl(dutyCycle);
     }
 
-    public void setIntakePower(double armPower, double wheelsPower) {
+    public void setIntakePower(double wheelsPower) {
         this.motor.set(wheelsPower);
     }
 }

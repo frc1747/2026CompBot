@@ -36,6 +36,16 @@ public final class Constants {
       LIMELIGHT_RIGHT
     );
 
+        // Limelight horizontal Field of view in degrees
+        public static final double FOV_HORIZONTAL = 62.5;
+
+        // AprilLock2 rotation compensation pid values
+        public static final double APRIL_LOCK_P = 0.5;
+        public static final double APRIL_LOCK_I = 0.003;
+        public static final double APRIL_LOCK_D = 0.003;
+        // maximum magnitude of PID output
+        public static final double APRIL_LOCK_PID_CLAMP = 0.1;
+
     // VISION_STDDEVS allows us to control how much we trust the values coming from the Limelight(s).
     // The higher the value (distance standard deviations), the less we trust it.
     // 
@@ -52,6 +62,12 @@ public final class Constants {
 
     public static final double FIELD_CENTER_X = 8.7741252;
     public static final double FIELD_CENTER_Y = 4.0259508;
+
+    public static final double RED_HUB_CENTER_X = 11.88;
+    public static final double RED_HUB_CENTER_Y = 4.0259508;
+
+    public static final double RED_RIGHT_CORNER_X = 17.5482504;
+    public static final double RED_RIGHT_CORNER_Y = 8.0519016;
   }
 
   public static final class Controller {
@@ -66,7 +82,7 @@ public final class Constants {
   }
   public static final class Hopper {
     public static final int MOTOR_PORT = 44;
-    public static final double MOTOR_POWER = 0.7;
+    public static final double MOTOR_POWER = 0.5;
   }
 
   public static final class Hood {
@@ -90,6 +106,8 @@ public final class Constants {
 
   }
 
+  
+
   public static final class Turret {
     public static final int MOTOR_PORT = 59;
     public static final int ENCODER_PORT_A = 0;
@@ -109,6 +127,7 @@ public final class Constants {
     public static final double UPPER_LIMIT = 90;
     public static final double LOWER_LIMIT = -90;
     public static final double DIST_TO_BOT_CENTER = 0.1529842; // meters
+    public static final double TURRET_YAW_LIMIT = 45; // deg
   }
 
   public static final class Shooter {
@@ -132,7 +151,7 @@ public final class Constants {
   }
      public static final class Intake {
         public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.2;
+        public static final double POWER = 0.3;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
         public static final double kP = 0.2; //TODO: VERIFY
         public static final double kI = 0.0; //TODO: VERIFY

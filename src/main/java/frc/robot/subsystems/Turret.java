@@ -28,6 +28,7 @@ public class Turret extends SubsystemBase {
   // left from perspective of someone facing the turret sie of bot
   private DigitalInput leftLimitSwitch;
   private DigitalInput rightLimitSwitch;
+  private double targetPower;
 
   // optimization for not creating new control object 50/sec
   private DutyCycleOut dutyCycle = new DutyCycleOut(0);
@@ -51,6 +52,8 @@ public class Turret extends SubsystemBase {
 
     leftLimitSwitch = new DigitalInput(Constants.Turret.LEFT_LIMIT_PORT);
     rightLimitSwitch = new DigitalInput(Constants.Turret.RIGHT_LIMIT_PORT);
+
+    targetPower = 0.0;
 
     pid.enableContinuousInput(0.0, 360.0);
     pid.setTolerance(1.0);
@@ -89,44 +92,11 @@ public class Turret extends SubsystemBase {
   // }
 
   public void basicSpin(double power) {
-    if (getLeftLimitSwitchPressed()) {
-      dutyCycle.Output = 0.0;
-      motor.setControl(dutyCycle);
-      return;
-    } else if (getRightLimitSwitchPressed()) {
-      dutyCycle.Output = 0.0;
-      motor.setControl(dutyCycle);
-      return;
-    } else {
-      if (getTurretAngle() < -20) {
-        if (power > 0) {
-          dutyCycle.Output = power;
-          motor.setControl(dutyCycle);
-          return;
-        } else {
-          dutyCycle.Output = 0.0;
-          motor.setControl(dutyCycle);
-          return;
-        }
-      } else if (getTurretAngle() > 20) {
-        if (power < 0) {
-          dutyCycle.Output = power;
-          motor.setControl(dutyCycle);
-          return;
-        } else {
-          dutyCycle.Output = 0.0;
-          motor.setControl(dutyCycle);
-          return;
-        }
-      }
-      dutyCycle.Output = power;
-      motor.setControl(dutyCycle);
-      return;
-    }
+    // dutyCycle.Output = power;
+    targetPower = power;
   }
 
-  // currently incorrect because of gear ratio and absolute encoder degrees
-  // also rename to getRelativeTurretAngle
+  // TODO: also rename and refactor to getRelativeTurretAngle
   public double getTurretAngle() {
     // gear ratio 15 to 110, 110/15 ~= 7.333
     // 8196 pulses from encoder per rotation
@@ -134,7 +104,7 @@ public class Turret extends SubsystemBase {
     // 8196 / 4 = 2048
     // 2048 * 7.333 ~= 15018.667 resulting pulses per full turret rotation
     // 15018.667 / 360 degrees ~= 41.719
-    return encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
+    return -encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
   }
 
   // returns pose of turret relative to field (absolute)
@@ -156,6 +126,19 @@ public class Turret extends SubsystemBase {
     return absoluteTurretPose;
   }
 
+    public double getYawOffset(Translation2d targetLoc) {
+    Pose2d turretPose = getAbsTurretPose();
+      
+    // difference between robot and april tag poses
+    Translation2d diff = turretPose.getTranslation().minus(targetLoc);
+        
+    // yaw offset between target and robot vector pointing directly out from robot-front
+    double phi = Math.atan2(diff.getY(), diff.getX());
+    double yawOffset = phi - turretPose.getRotation().getRadians() - Math.PI;
+    double wrappedYaw = Math.atan2(Math.sin(yawOffset), Math.cos(yawOffset));
+    return wrappedYaw;
+  }
+
 
   // TODO: Tune PID
   public void goToAngle(double targetAngle) {
@@ -174,6 +157,23 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
+    dutyCycle.Output = targetPower;
+    // soft limits and limit switches
+    if (getLeftLimitSwitchPressed() && targetPower < 0) {
+      dutyCycle.Output = 0.0;
+    } 
+    if (getRightLimitSwitchPressed() && targetPower > 0) {
+      dutyCycle.Output = 0.0;
+    }
+    if (getTurretAngle() > Constants.Turret.TURRET_YAW_LIMIT && targetPower < 0) {
+      dutyCycle.Output = 0.0;
+    }
+    if (getTurretAngle() < -Constants.Turret.TURRET_YAW_LIMIT && targetPower > 0) {
+      dutyCycle.Output = 0.0;
+    }
+    motor.setControl(dutyCycle);
+
+    // SmartDashboard
     SmartDashboard.putNumber("Turret/encoder value", encoder.get());
     SmartDashboard.putNumber("Turret/encoder angle", getTurretAngle());
     SmartDashboard.putNumber("Turret/turret degrees", getAbsTurretPose().getRotation().getDegrees());
