@@ -84,7 +84,7 @@ public class AprilLockLeading extends Command {
     // should ensure that never happens
     // must check for null before use in final code
     Double travelTime = turret.getFuelTravelTime(hoodAngle, shooterSpeed);
-    if (travelTime == null) return;
+    if (travelTime == null) return null;
 
     // next iteration adjusted targetting location
     Translation2d nextApprox = totalTurretVelocity.times(-1 * travelTime).plus(targetLoc);
