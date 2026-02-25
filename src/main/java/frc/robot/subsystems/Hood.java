@@ -38,6 +38,8 @@ public class Hood extends SubsystemBase {
     config.Commutation.MotorArrangement = MotorArrangementValue.Brushed_DC;
 
     motor.getConfigurator().apply(config);
+
+    SmartDashboard.putNumber("Hood Slider", 0.0);
   }
 
   public Command setPowerCommand(boolean reverse) {
@@ -56,7 +58,6 @@ public class Hood extends SubsystemBase {
     dutyCycle.Output = power;
     motor.setControl(dutyCycle);
   }
-
 
   public double countsToDegrees(double counts) {
     return counts / (Constants.Hood.COUNTS_PER_DEGREE + Constants.Hood.STARTING_ANGLE);
@@ -89,6 +90,7 @@ public class Hood extends SubsystemBase {
 
     motor.setControl(dutyCycle);
   }
+
 
 
   @Override

@@ -93,6 +93,7 @@ public class RobotContainer {
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
+
         drivetrain.setDefaultCommand(
             new TeleopSwerve(drivetrain, translationSup, strafeSup, rotationSup)
         );
@@ -103,6 +104,10 @@ public class RobotContainer {
         RobotModeTriggers.disabled().whileTrue(
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
+
+        driver.rightBumper().and(driver.leftBumper()).and(operator.b()).whileFalse(turret.goToAngleCommand(SmartDashboard.getNumber("Turret Slider", 0.0)));
+
+        operator.x().and(operator.y()).and(operator.rightBumper()).whileFalse(hood.goToAngleCommand(SmartDashboard.getNumber("Hood Slider", 0.0)));
 
         driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
         driver.b().whileTrue(drivetrain.applyRequest(() ->

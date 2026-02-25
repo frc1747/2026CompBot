@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -29,6 +30,7 @@ public class Turret extends SubsystemBase {
   private DigitalInput leftLimitSwitch;
   private DigitalInput rightLimitSwitch;
   private double targetPower;
+  private double elasticAngle;
 
   // optimization for not creating new control object 50/sec
   private DutyCycleOut dutyCycle = new DutyCycleOut(0);
@@ -57,6 +59,8 @@ public class Turret extends SubsystemBase {
 
     pid.enableContinuousInput(0.0, 360.0);
     pid.setTolerance(1.0);
+
+    SmartDashboard.putNumber("Turret Slider", 0.0);
   }
 
   // left from perspective of a person facing turret side of robot
@@ -153,6 +157,10 @@ public class Turret extends SubsystemBase {
       dutyCycle.Output = 0;
     }
     motor.setControl(dutyCycle);
+  }
+
+  public Command goToAngleCommand(double targetAngle) {
+    return run(() -> goToAngle(targetAngle));
   }
 
   @Override
