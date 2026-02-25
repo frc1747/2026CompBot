@@ -74,7 +74,7 @@ public class AprilLockLeading extends Command {
     double[] hoodAngleAndShooterSpeed = RobotContainer.shooter.getPowerAndAngleFromDistance(dist);
     double hoodAngle = hoodAngleAndShooterSpeed[0];
     double shooterSpeed = hoodAngleAndShooterSpeed[1];
-    if (hoodAngle == -1 || shooterSpeed == -1) return;
+    if (hoodAngle == -1 || shooterSpeed == -1) return null;
     
     // predicted amount of time between when the fuel leaves the
     // turret and when it reaches the height of the fuel hub 
@@ -100,42 +100,21 @@ public class AprilLockLeading extends Command {
   // code is repeated to avoid loop usage, perhaps a better method
   // is available taking advantage of the scheduer, but that
   // may cause too much latency
+  // TODO: Add null handling
   private Translation2d getTargetApprox(Translation2d startApprox, double travelTimeTolerance) {
-    // 1st iteration of the approximation
-    Pair<Translation2d, Double> iter = getNextTargetApprox(startApprox);
-    Pair<Translation2d, Double> nextIter = getNextTargetApprox(iter.getFirst());
-    double travelTimeDiff = Math.abs(iter.getSecond() - nextIter.getSecond());
-    if (travelTimeDiff <= travelTimeTolerance) return nextIter.getFirst();
-    
-    // 2nd iteration
-    iter = nextIter;
-    nextIter = getNextTargetApprox(iter.getFirst());
-    travelTimeDiff = Math.abs(iter.getSecond() - nextIter.getSecond());
-    if (travelTimeDiff <= travelTimeTolerance) return nextIter.getFirst();
-    
-    // 3rd 
-    iter = nextIter;
-    nextIter = getNextTargetApprox(iter.getFirst());
-    travelTimeDiff = Math.abs(iter.getSecond() - nextIter.getSecond());
-    if (travelTimeDiff <= travelTimeTolerance) return nextIter.getFirst();
-
-    // 4th
-    iter = nextIter;
-    nextIter = getNextTargetApprox(iter.getFirst());
-    travelTimeDiff = Math.abs(iter.getSecond() - nextIter.getSecond());
-    if (travelTimeDiff <= travelTimeTolerance) return nextIter.getFirst();
-
-    // 5th
-    iter = nextIter;
-    nextIter = getNextTargetApprox(iter.getFirst());
-    travelTimeDiff = Math.abs(iter.getSecond() - nextIter.getSecond());
-    if (travelTimeDiff <= travelTimeTolerance) return nextIter.getFirst();
-
-    // 6th, if this point has been reached, no
-    // further approximation will be done even
-    // if the tolerance has not been met
-    iter = nextIter;
-    nextIter = getNextTargetApprox(iter.getFirst());
+    // iterate the approximation 6 times
+    Pair<Translation2d, Double> iter;
+    Pair<Translation2d, Double> nextIter = getNextTargetApprox(startApprox);
+    double travelTimeDiff = -1;
+    for (int i = 0; i < 6; i++) {
+      iter = nextIter;
+      nextIter = getNextTargetApprox(iter.getFirst());
+      travelTimeDiff = Math.abs(iter.getSecond() - nextIter.getSecond());
+      if (travelTimeDiff <= travelTimeTolerance) return nextIter.getFirst();
+    }
+    // return the final approximation
+    // if 6 iterations have passed without
+    // reaching a value
     return nextIter.getFirst();
   }
 
