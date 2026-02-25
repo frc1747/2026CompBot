@@ -8,6 +8,7 @@ import java.util.List;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
@@ -146,6 +147,8 @@ public final class Constants {
     public static final double PID_P = 0;
     public static final double PID_I = 0;
     public static final double PID_D = 0;
+    public static final double TOLERANCE = .05; // percent tolerance
+    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d();
   }
      public static final class Intake {
         public static final int MOTOR_PORT = 46;

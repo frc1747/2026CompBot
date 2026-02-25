@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AprilLock;
+import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeOut;
 import frc.robot.commands.IntakeSpin;
 import frc.robot.commands.TeleopSwerve;
@@ -151,6 +152,8 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
         operator.b().whileTrue(new AprilLock(turret));
+
+        operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
     }
 
     public Command getAutonomousCommand() {

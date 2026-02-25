@@ -73,6 +73,11 @@ public class Hood extends SubsystemBase {
     return countsToDegrees(counts);
   }
 
+  public boolean atAngle(double angle){
+    pid.calculate(getCurrentAngle(), angle);
+    return pid.atSetpoint();
+  }
+
 
   public void resetEncoder() {
     encoder.reset();
