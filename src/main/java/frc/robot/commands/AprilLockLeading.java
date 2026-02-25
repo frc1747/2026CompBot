@@ -1,4 +1,3 @@
-
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -11,6 +10,7 @@ import java.util.function.DoubleSupplier;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,46 +25,41 @@ import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.LimeLight;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+/*
+ * This extra logic is needed in order to decide where to aim the 
+ * turret while the robot is moving because the velocity of the 
+ * bot will transfer to the fuel, meaning that if the turret only
+ * aims directly at the target, the fuel will fly off further
+ * in the direction of the velocity of the bot and miss
+ */
+// UNTESTED
 public class AprilLockLeading extends Command {
   /** Creates a new FaceObject. */
   private final Turret turret;
   private final PIDController pid;
+  private final Translation2d targetLoc;
+  private Translation2d totalTurretVelocity;
+  private Translation2d turretLoc;
 
   // TODO: fix starting pose of robot
   public AprilLockLeading(Turret turret) {
     this.turret = turret;
     this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
-    // Use addRequirements() here to declare subsystem dependencies.
+    // actual location of the target the fuel should hit
+    targetLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
+    totalTurretVelocity = new Translation2d();
+    turretLoc = new Translation2d();
     addRequirements(turret);
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // UNFINISHED AND UNTESTED
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    // location of target to shoot ball at
-    Translation2d targetLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
-    
-    // may need to find latency and predict future velocity
-    // velocity of bot center relative to field
-    Translation2d robotVel = RobotContainer.drivetrain.getVelocity();
-    // tangential velocity of turret relative to bot center, directed in field space
-    Translation2d turretTangentialVel = turret.getTangentialVelocity();
-    // total velocity vector of turret relative to field
-    // could instead be made into a turret subsysyem get method
-    Translation2d totalTurretVelocity = robotVel.plus(turretTangentialVel);
-
-    // may need to take latency into account and find where the
-    // robot will be in a very short time
-    // current location of turret relative to field
-    Translation2d turretLoc = turret.getAbsTurretPose().getTranslation();
+  // takes the previous approximation for location to target
+  // with the turret in order for the ball to hit the final 
+  // target, and returns the next improved approximation
+  // as well as the calculated travel time to the previous
+  // approximation
+  private Pair<Translation2d, Double> getNextTargetApprox(Translation2d prevApprox) {
     // distance from  turret to target
-    double dist = turretLoc.getDistance(targetLoc);
+    double dist = turretLoc.getDistance(prevApprox);
 
     // gets ideal hood angle and power given distance 
     // returns value of {-1, -1} if the 
@@ -74,8 +69,8 @@ public class AprilLockLeading extends Command {
     // getPowerAndAngleFromDistance still needs to be implemented 
     // fully once empirical measurements are made
     double[] hoodAngleAndShooterSpeed = RobotContainer.shooter.getPowerAndAngleFromDistance(dist);
-    Double hoodAngle = hoodAngleAndShooterSpeed[0];
-    Double shooterSpeed =hoodAngleAndShooterSpeed[1];
+    double hoodAngle = hoodAngleAndShooterSpeed[0];
+    double shooterSpeed = hoodAngleAndShooterSpeed[1];
 
     // predicted amount of time between when the fuel leaves the
     // turret and when it reaches the height of the fuel hub 
@@ -84,22 +79,97 @@ public class AprilLockLeading extends Command {
     // the hub, but the shooter speed and hood angle calculated 
     // should ensure that never happens
     // must check for null before use in final code
-    // Double travelTime = turret.getFuelTravelTime(hoodAngle, shooterSpeed);
+    Double travelTime = turret.getFuelTravelTime(hoodAngle, shooterSpeed);
 
-    // first iteration adjusted targetting location
-    // Translation2d targetLocPrime = totalTurretVelocity.times(-1 * travelTime).plus(targetLoc);
-    // take this new targetting location and plug back into the
-    // above logic; get distance from bot, then shooter speed and // hood angle, then fuel travel time, then a new targetting   // location. repeat this process several times and the        // targetLocPrime and travelTime should converge onto certain // values close enough to the ideal to use.
-    // use the change in calculated travel time to determine      // whether the values have converged closely enough.
-    // once the values have converged enough, target the final
-    // calculated targetting position with the turret
+    // next iteration adjusted targetting location
+    Translation2d nextApprox = totalTurretVelocity.times(-1 * travelTime).plus(prevApprox);
+    return new Pair<Translation2d, Double>(nextApprox, travelTime);
+  }
 
-    // ensures the belly pan falls off in the middle of the match
-    // bellypan.fallOff();
-
-    // ---- previous working code ----
+  // takes a primary approximation of the point to aim the
+  // turret at in order to shoot and hit the actual target
+  // and a tolerance for difference in between calculated
+  // travel times before the approximation is considered good,
+  // then outputs a final approximation that should be reasonable
+  // may need more iterations.
+  // code is repeated to avoid loop usage, perhaps a better method
+  // is available taking advantage of the scheduer, but that
+  // may cause too much latency
+  private Translation2d getTargetApprox(Translation2d startApprox, double travelTimeTolerance) {
+    // 1st iteration of the approximation
+    Pair<Translation2d, Double> iter = getNextTargetApprox(startApprox);
+    Pair<Translation2d, Double> nextIter = getNextTargetApprox(iter.getFirst());
+    double travelTimeDiff = Math.abs(iter.getSecond() - nextIter.getSecond());
+    if (travelTimeDiff <= travelTimeTolerance) return nextIter.getFirst();
     
-    double yawOffset = turret.getYawOffset(targetLoc);
+    // 2nd iteration
+    iter = nextIter;
+    nextIter = getNextTargetApprox(iter.getFirst());
+    travelTimeDiff = Math.abs(iter.getSecond() - nextIter.getSecond());
+    if (travelTimeDiff <= travelTimeTolerance) return nextIter.getFirst();
+    
+    // 3rd 
+    iter = nextIter;
+    nextIter = getNextTargetApprox(iter.getFirst());
+    travelTimeDiff = Math.abs(iter.getSecond() - nextIter.getSecond());
+    if (travelTimeDiff <= travelTimeTolerance) return nextIter.getFirst();
+
+    // 4th
+    iter = nextIter;
+    nextIter = getNextTargetApprox(iter.getFirst());
+    travelTimeDiff = Math.abs(iter.getSecond() - nextIter.getSecond());
+    if (travelTimeDiff <= travelTimeTolerance) return nextIter.getFirst();
+
+    // 5th
+    iter = nextIter;
+    nextIter = getNextTargetApprox(iter.getFirst());
+    travelTimeDiff = Math.abs(iter.getSecond() - nextIter.getSecond());
+    if (travelTimeDiff <= travelTimeTolerance) return nextIter.getFirst();
+
+    // 6th, if this point has been reached, no
+    // further approximation will be done even
+    // if the tolerance has not been met
+    iter = nextIter;
+    nextIter = getNextTargetApprox(iter.getFirst());
+    return nextIter.getFirst();
+  }
+
+  // updates the stored velocity and location of the turret
+  private void updateTurretVelAndLoc() {
+    // may need to find latency and predict future velocity
+    // velocity of bot center relative to field
+    Translation2d robotVel = RobotContainer.drivetrain.getVelocity();
+    // tangential velocity of turret relative to bot center, directed in field space
+    Translation2d turretTangentialVel = turret.getTangentialVelocity();
+    // total velocity vector of turret relative to field
+    // could instead be made into a turret subsysyem get method
+    totalTurretVelocity = robotVel.plus(turretTangentialVel);
+    // may need to take latency into account and find where the
+    // robot will be in a very short time
+    // current location of turret relative to field
+    turretLoc = turret.getAbsTurretPose().getTranslation();
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    // initialize turret velocity and location
+    updateTurretVelAndLoc();
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    // update turret velocity and location
+    updateTurretVelAndLoc();
+    // TODO: move magic number to constants
+    // first iteration of approximation of point to aim turret at
+    Translation2d targetLocPrime = getTargetApprox(targetLoc, 0.01); 
+    
+    // ensures the belly pan falls off in the middle of the match
+    RobotContainer.bellyPan.fallOff();
+    
+    double yawOffset = turret.getYawOffset(targetLocPrime);
     // pid controlling rotation compensation
     double pidOutput = pid.calculate(yawOffset); 
     double clampPid = pidOutput;

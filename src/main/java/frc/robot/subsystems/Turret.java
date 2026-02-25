@@ -153,6 +153,10 @@ public class Turret extends SubsystemBase {
     return tangentialVelocity;
   }
 
+  public Double getFuelTravelTime(double hoodAngle, double shooterSpeed) {
+    throw new UnsupportedOperationException("Turret.getFuelTravelTime is not yet implemented");
+  }
+
   // TODO: Tune PID
   public void goToAngle(double targetAngle) {
     double currentAngle = getTurretAngle();

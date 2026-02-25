@@ -32,6 +32,7 @@ import frc.robot.commands.IntakeSpin;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TurretRotate;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.BellyPan;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakePivot;
@@ -75,6 +76,7 @@ public class RobotContainer {
     public static final Shooter shooter = new Shooter();
     public static final Hopper hopper = new Hopper();
     public static final Turret turret = new Turret();
+    public static final BellyPan bellyPan = new BellyPan();
 
     public static final Field2d field = new Field2d();
 
