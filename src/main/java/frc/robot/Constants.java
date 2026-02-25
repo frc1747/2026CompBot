@@ -68,6 +68,10 @@ public final class Constants {
 
     public static final double RED_RIGHT_CORNER_X = 17.5482504;
     public static final double RED_RIGHT_CORNER_Y = 8.0519016;
+
+    // tolerance for differences between estimated fuel travel times
+    // for sequential targetting location approximations
+    public static final double LEADING_TRAVEL_TIME_TOLERANCE = 0.01;
   }
 
   public static final class Controller {

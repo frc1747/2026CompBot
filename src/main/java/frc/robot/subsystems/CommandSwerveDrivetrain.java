@@ -38,7 +38,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.Drivetrain;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**

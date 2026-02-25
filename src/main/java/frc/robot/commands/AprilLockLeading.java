@@ -38,6 +38,7 @@ public class AprilLockLeading extends Command {
   private final Turret turret;
   private final PIDController pid;
   private final Translation2d targetLoc;
+  private Translation2d targetLocPrime;
   private Translation2d totalTurretVelocity;
   private Translation2d turretLoc;
 
@@ -47,6 +48,8 @@ public class AprilLockLeading extends Command {
     this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
     // actual location of the target the fuel should hit
     targetLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
+    // location to aim the turret at
+    targetLocPrime = targetLoc;
     totalTurretVelocity = new Translation2d();
     turretLoc = new Translation2d();
     addRequirements(turret);
@@ -91,7 +94,7 @@ public class AprilLockLeading extends Command {
   // and a tolerance for difference in between calculated
   // travel times before the approximation is considered good,
   // then outputs a final approximation that should be reasonable
-  // may need more iterations.
+  // may need more or less iterations.
   // code is repeated to avoid loop usage, perhaps a better method
   // is available taking advantage of the scheduer, but that
   // may cause too much latency
@@ -164,7 +167,7 @@ public class AprilLockLeading extends Command {
     updateTurretVelAndLoc();
     // TODO: move magic number to constants
     // first iteration of approximation of point to aim turret at
-    Translation2d targetLocPrime = getTargetApprox(targetLoc, 0.01); 
+    targetLocPrime = getTargetApprox(targetLocPrime, Constants.Vision.LEADING_TRAVEL_TIME_TOLERANCE);
     
     // ensures the belly pan falls off in the middle of the match
     RobotContainer.bellyPan.fallOff();
