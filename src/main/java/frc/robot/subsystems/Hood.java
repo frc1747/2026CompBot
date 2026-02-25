@@ -11,6 +11,7 @@ import com.ctre.phoenix6.signals.MotorArrangementValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,11 +23,13 @@ import frc.robot.Constants;
 public class Hood extends SubsystemBase {
   private TalonFXS motor;
   private Encoder encoder;
+  private double desiredAngle;
   private DutyCycleOut dutyCycle = new DutyCycleOut(0.0);
   private PIDController pid = new PIDController(Constants.Hood.kP, Constants.Hood.kI, Constants.Hood.kD);
 
 
   public Hood() {
+    SmartDashboard.putNumber("hood/Desired Angle", 25.0);
     motor = new TalonFXS(Constants.Hood.MOTOR_PORT);
     encoder = new Encoder(Constants.Hood.ENCODER_PORT_A, Constants.Hood.ENCODER_PORT_B);
     
@@ -54,18 +57,21 @@ public class Hood extends SubsystemBase {
     return run(() -> goToAngle(angle));
   }
 
+  public Command goToDesiredAngleCommand() {
+    return run(() -> goToAngle(desiredAngle));
+  }
+
   private void setPower(double power) {
     dutyCycle.Output = power;
     motor.setControl(dutyCycle);
   }
 
   public double countsToDegrees(double counts) {
-    return counts / (Constants.Hood.COUNTS_PER_DEGREE + Constants.Hood.STARTING_ANGLE);
+    return ((counts) * Constants.Hood.TOTAL_HOOD_DEGREES / Constants.Hood.MAX_HEIGHT) + Constants.Hood.STARTING_ANGLE  ;
   }
 
-
   public double degreesToCounts(double degrees) {
-    return (degrees + Constants.Hood.STARTING_ANGLE) * Constants.Hood.COUNTS_PER_DEGREE;
+    return ((degrees - Constants.Hood.STARTING_ANGLE ) /  Constants.Hood.TOTAL_HOOD_DEGREES) * Constants.Hood.MAX_HEIGHT ;
   }
 
 
@@ -80,13 +86,13 @@ public class Hood extends SubsystemBase {
   }
 
 
-  private void goToAngle(double targetDegrees) {
+  public void goToAngle(double targetDegrees) {
     // don't go to an un-obtainable angle
-    targetDegrees = MathUtil.clamp(targetDegrees, 0.0, Constants.Hood.TOTAL_HOOD_DEGREES);
+   // targetDegrees = MathUtil.clamp(targetDegrees, 0.0, Constants.Hood.TOTAL_HOOD_DEGREES);
 
     double targetCounts = degreesToCounts(targetDegrees);
-    double currentCounts = encoder.get();
-    dutyCycle.Output = pid.calculate(currentCounts, targetCounts);
+    double currentCounts = getCurrentAngle();
+    dutyCycle.Output = pid.calculate(getCurrentAngle(), targetDegrees);
 
     motor.setControl(dutyCycle);
   }
@@ -96,7 +102,10 @@ public class Hood extends SubsystemBase {
   @Override
   public void periodic() {
     // SmartDashboard.putBoolean("hood/encoder connected?", encoder.isConnected());
-    SmartDashboard.putNumber("hood/encoder ticks", encoder.get());
+    SmartDashboard.putNumber("hood/encoder ticks", degreesToCounts(getCurrentAngle()));
     SmartDashboard.putNumber("hood/hood angle", getCurrentAngle());
+    desiredAngle = SmartDashboard.getNumber("hood/Desired Angle", 25);
+    SmartDashboard.putNumber("hood/PID", pid.calculate(getCurrentAngle(), desiredAngle));
+    SmartDashboard.putNumber("hood/DutyCycle", dutyCycle.Output);
   }
 }
