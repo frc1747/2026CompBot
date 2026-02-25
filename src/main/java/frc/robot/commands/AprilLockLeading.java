@@ -74,7 +74,8 @@ public class AprilLockLeading extends Command {
     double[] hoodAngleAndShooterSpeed = RobotContainer.shooter.getPowerAndAngleFromDistance(dist);
     double hoodAngle = hoodAngleAndShooterSpeed[0];
     double shooterSpeed = hoodAngleAndShooterSpeed[1];
-
+    if (hoodAngle == -1 || shooterSpeed == -1) return;
+    
     // predicted amount of time between when the fuel leaves the
     // turret and when it reaches the height of the fuel hub 
     // on its way down. should return null if the fuel
@@ -83,9 +84,10 @@ public class AprilLockLeading extends Command {
     // should ensure that never happens
     // must check for null before use in final code
     Double travelTime = turret.getFuelTravelTime(hoodAngle, shooterSpeed);
+    if (travelTime == null) return;
 
     // next iteration adjusted targetting location
-    Translation2d nextApprox = totalTurretVelocity.times(-1 * travelTime).plus(prevApprox);
+    Translation2d nextApprox = totalTurretVelocity.times(-1 * travelTime).plus(targetLoc);
     return new Pair<Translation2d, Double>(nextApprox, travelTime);
   }
 
@@ -175,17 +177,11 @@ public class AprilLockLeading extends Command {
     double yawOffset = turret.getYawOffset(targetLocPrime);
     // pid controlling rotation compensation
     double pidOutput = pid.calculate(yawOffset); 
-    double clampPid = pidOutput;
-    if (clampPid > Constants.Vision.APRIL_LOCK_PID_CLAMP) {
-      clampPid = Constants.Vision.APRIL_LOCK_PID_CLAMP;
-    } else if (clampPid < -Constants.Vision.APRIL_LOCK_PID_CLAMP) {
-      clampPid = -Constants.Vision.APRIL_LOCK_PID_CLAMP;
-    }
+    double clampPid = MathUtil.clamp(pidOutput, -Constants.Vision.APRIL_LOCK_PID_CLAMP, Constants.Vision.APRIL_LOCK_PID_CLAMP);
 
     SmartDashboard.putNumber("pidOutput", pidOutput);
     SmartDashboard.putNumber("clampPid", clampPid);
     SmartDashboard.putNumber("yawOffset", yawOffset);
-    // double clampPid = MathUtil.clamp(pidOutput, -Constants.Vision.APRIL_LOCK_PID_CLAMP, Constants.Vision.APRIL_LOCK_PID_CLAMP);
     turret.basicSpin(clampPid);
   } 
 
