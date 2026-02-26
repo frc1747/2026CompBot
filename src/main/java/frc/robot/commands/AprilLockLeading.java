@@ -105,7 +105,7 @@ public class AprilLockLeading extends Command {
     // several times in the future, using a travel
     // time tolerance to determine when to stop.
     // currently the approximation is applied only 
-    // once per scheduler loop
+    // once per scheduler loop, travelTime ignored
     Translation2d nextApprox = getNextTargetApprox(startApprox).getFirst();
     // return startApprox input if calculated approximation is null
     if (nextApprox == null) return startApprox;
