@@ -100,22 +100,17 @@ public class AprilLockLeading extends Command {
   // code is repeated to avoid loop usage, perhaps a better method
   // is available taking advantage of the scheduer, but that
   // may cause too much latency
-  // TODO: Add null handling
   private Translation2d getTargetApprox(Translation2d startApprox, double travelTimeTolerance) {
-    // iterate the approximation 6 times
-    Pair<Translation2d, Double> iter;
-    Pair<Translation2d, Double> nextIter = getNextTargetApprox(startApprox);
-    double travelTimeDiff = -1;
-    for (int i = 0; i < 6; i++) {
-      iter = nextIter;
-      nextIter = getNextTargetApprox(iter.getFirst());
-      travelTimeDiff = Math.abs(iter.getSecond() - nextIter.getSecond());
-      if (travelTimeDiff <= travelTimeTolerance) return nextIter.getFirst();
-    }
-    // return the final approximation
-    // if 6 iterations have passed without
-    // reaching a value
-    return nextIter.getFirst();
+    // may in choose to iterate the aproximation
+    // several times in the future, using a travel
+    // time tolerance to determine when to stop.
+    // currently the approximation is applied only 
+    // once per scheduler loop
+    Translation2d nextApprox = getNextTargetApprox(startApprox).getFirst();
+    // return startApprox input if calculated approximation is null
+    if (nextApprox == null) return startApprox;
+    // return the calculated approximation if not null
+    return nextApprox;
   }
 
   // updates the stored velocity and location of the turret
