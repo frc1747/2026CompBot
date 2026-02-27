@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot Path Start"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot Path Pick Up"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot Post Pick Up Path"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go to shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depp Pick Up"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Final Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
