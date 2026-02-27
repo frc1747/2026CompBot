@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Objects;
@@ -372,18 +373,24 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         //
         // It is returned as a Map Entry (key/value pair) to preserve both the 
         // name of the selected LimeLight and its PoseEstimate instance.
-        Optional<Map.Entry<String, LimelightHelpers.PoseEstimate>> bestLimeLightPose =
-            Constants.Vision.ACTIVE_POSE_LIMELIGHTS.stream()
-                .map(name -> Map.entry(
-                    name, 
-                    LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name)
-                ))
-                .filter(entry -> entry.getValue() != null)
-                .filter(entry -> entry.getValue().tagCount > 0)
-                .min(Comparator.comparingDouble(entry ->
-                    bestAmbiguity(entry.getValue())
-                )
-            );
+        Optional<Map.Entry<String, LimelightHelpers.PoseEstimate>> bestLimeLightPose = Optional.empty();
+        Map.Entry<String, LimelightHelpers.PoseEstimate> bestEntry = null;
+        
+        double bestAmbiguity = Double.MAX_VALUE;
+        for (String name :Constants.Vision.ACTIVE_POSE_LIMELIGHTS) {
+            var mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);
+            if (mt2 == null) continue; 
+            if (mt2.tagCount <= 0) continue;
+
+            double ambiguity = bestAmbiguity(mt2);
+            if (ambiguity < bestAmbiguity) {
+                bestAmbiguity = ambiguity;
+                bestEntry = new AbstractMap.SimpleEntry<>(name, mt2);
+            }
+        }
+
+        bestLimeLightPose = Optional.ofNullable(bestEntry);
+
 
         double yawDeg = getState().Pose.getRotation().getDegrees();
 
