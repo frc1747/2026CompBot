@@ -100,17 +100,23 @@ public class AprilLockLeading extends Command {
   // code is repeated to avoid loop usage, perhaps a better method
   // is available taking advantage of the scheduer, but that
   // may cause too much latency
-  private Translation2d getTargetApprox(Translation2d startApprox, double travelTimeTolerance) {
+  private Translation2d getTargetApprox(Translation2d startApprox) {
     // may in choose to iterate the aproximation
     // several times in the future, using a travel
     // time tolerance to determine when to stop.
-    // currently the approximation is applied only 
-    // once per scheduler loop, travelTime ignored
-    Translation2d nextApprox = getNextTargetApprox(startApprox).getFirst();
-    // return startApprox input if calculated approximation is null
-    if (nextApprox == null) return startApprox;
-    // return the calculated approximation if not null
-    return nextApprox;
+    // Constants.Vision.LEADING_TRAVEL_TIME_TOLERANCE
+    // currently the approximation is always applied 6
+    // times per scheduler loop, travelTime ignored
+    Translation2d approxA;
+    Translation2d approxB = startApprox;
+    for (int i = 0; i < 6; i++) {
+      approxA = approxB;
+      approxB = getNextTargetApprox(approxA);
+      // return most recent valid approx if calculated approximation is null
+      if (approxB == null) return approxA;
+    }
+    // return the final approximation
+    return approxB;
   }
 
   // updates the stored velocity and location of the turret
@@ -143,7 +149,7 @@ public class AprilLockLeading extends Command {
     updateTurretVelAndLoc();
     // TODO: move magic number to constants
     // first iteration of approximation of point to aim turret at
-    targetLocPrime = getTargetApprox(targetLocPrime, Constants.Vision.LEADING_TRAVEL_TIME_TOLERANCE);
+    targetLocPrime = getTargetApprox(targetLocPrime);
     
     // ensures the belly pan falls off in the middle of the match
     RobotContainer.bellyPan.fallOff();
