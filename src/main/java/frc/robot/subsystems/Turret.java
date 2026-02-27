@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,6 +25,10 @@ import frc.robot.RobotContainer;
 public class Turret extends SubsystemBase {
   private TalonFXS motor;
   private Encoder encoder;
+  // left from perspective of someone facing the turret sie of bot
+  private DigitalInput leftLimitSwitch;
+  private DigitalInput rightLimitSwitch;
+  private double targetPower;
 
   // optimization for not creating new control object 50/sec
   private DutyCycleOut dutyCycle = new DutyCycleOut(0);
@@ -45,22 +50,61 @@ public class Turret extends SubsystemBase {
     
     encoder = new Encoder(Constants.Turret.ENCODER_PORT_A, Constants.Turret.ENCODER_PORT_B);
 
+    leftLimitSwitch = new DigitalInput(Constants.Turret.LEFT_LIMIT_PORT);
+    rightLimitSwitch = new DigitalInput(Constants.Turret.RIGHT_LIMIT_PORT);
+
+    targetPower = 0.0;
+
     pid.enableContinuousInput(0.0, 360.0);
     pid.setTolerance(1.0);
   }
 
-
-    // supplies power to spin turret but stops at encoder limit
-  public void basicSpin(double power) {
-    dutyCycle.Output = power;
-    motor.setControl(dutyCycle);
-    return;
+  // left from perspective of a person facing turret side of robot
+  public boolean getLeftLimitSwitchPressed() {
+    // not (!) operator used because limit switch is normally open
+    return !leftLimitSwitch.get();
   }
 
-  // currently incorrect because of gear ratio and absolute encoder degrees
-  // also rename to getRelativeTurretAngle
+  // right from perspective of a person facing turret side of robot
+  public boolean getRightLimitSwitchPressed() {
+    // not (!) operator used because limit switch is normally open
+    return !rightLimitSwitch.get();
+  }
+
+  // supplies power to spin turret but stops at limit switches
+  // public void basicSpin(double power) {
+  //  dutyCycle.Output = power;
+  //  if (leftLimitSwitch.get()) {
+  //    if (power > 0) { // > or <
+  //      dutyCycle.Output = power;
+  //    } else {
+  //      dutyCycle.Output = 0.0;
+  //    }
+  //  } else if (rightLimitSwitch.get()) {
+  //    if (power < 0) { // > or <
+  //      dutyCycle.Output = power;
+  //    } else {
+  //      dutyCycle.Output = 0.0;
+  //    }
+  //  }
+  //  motor.setControl(dutyCycle);
+  //  return;
+  // }
+
+  public void basicSpin(double power) {
+    // dutyCycle.Output = power;
+    targetPower = power;
+  }
+
+  // TODO: also rename and refactor to getRelativeTurretAngle
   public double getTurretAngle() {
-    return encoder.get() / 93.867;//Constants.Turret.TURRET_RATIO;
+    // gear ratio 15 to 110, 110/15 ~= 7.333
+    // 8196 pulses from encoder per rotation
+    // 4x quadrature
+    // 8196 / 4 = 2048
+    // 2048 * 7.333 ~= 15018.667 resulting pulses per full turret rotation
+    // 15018.667 / 360 degrees ~= 41.719
+    return -encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
   }
 
   // returns pose of turret relative to field (absolute)
@@ -82,6 +126,19 @@ public class Turret extends SubsystemBase {
     return absoluteTurretPose;
   }
 
+    public double getYawOffset(Translation2d targetLoc) {
+    Pose2d turretPose = getAbsTurretPose();
+      
+    // difference between robot and april tag poses
+    Translation2d diff = turretPose.getTranslation().minus(targetLoc);
+        
+    // yaw offset between target and robot vector pointing directly out from robot-front
+    double phi = Math.atan2(diff.getY(), diff.getX());
+    double yawOffset = phi - turretPose.getRotation().getRadians() - Math.PI;
+    double wrappedYaw = Math.atan2(Math.sin(yawOffset), Math.cos(yawOffset));
+    return wrappedYaw;
+  }
+
 
   // TODO: Tune PID
   public void goToAngle(double targetAngle) {
@@ -100,9 +157,28 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
+    dutyCycle.Output = targetPower;
+    // soft limits and limit switches
+    if (getLeftLimitSwitchPressed() && targetPower < 0) {
+      dutyCycle.Output = 0.0;
+    } 
+    if (getRightLimitSwitchPressed() && targetPower > 0) {
+      dutyCycle.Output = 0.0;
+    }
+    if (getTurretAngle() > Constants.Turret.TURRET_YAW_LIMIT && targetPower < 0) {
+      dutyCycle.Output = 0.0;
+    }
+    if (getTurretAngle() < -Constants.Turret.TURRET_YAW_LIMIT && targetPower > 0) {
+      dutyCycle.Output = 0.0;
+    }
+    motor.setControl(dutyCycle);
+
+    // SmartDashboard
     SmartDashboard.putNumber("Turret/encoder value", encoder.get());
     SmartDashboard.putNumber("Turret/encoder angle", getTurretAngle());
     SmartDashboard.putNumber("Turret/turret degrees", getAbsTurretPose().getRotation().getDegrees());
+    SmartDashboard.putBoolean("Left Limit Switch", getLeftLimitSwitchPressed());
+    SmartDashboard.putBoolean("Right Limit Switch", getRightLimitSwitchPressed());
     //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
   }
 }

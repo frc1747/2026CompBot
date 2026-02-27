@@ -20,46 +20,60 @@ import edu.wpi.first.math.numbers.N3;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final class Vision {
+    // Local hostnames of the unique Limelights on the system
+    // WARNING: IF YOU CHANGE OUT THE HARDWARE, ENSURE TO PROPERLY
+    // SET THE HOSTNAME ON THE LIMELIGHT TO COORESPOND WITH ITS 
+    // LOCATION ON THE BOT!!! 
+    public static final String LIMELIGHT_LEFT = "limelight-left";
+    public static final String LIMELIGHT_RIGHT = "limelight-right";
+    public static final String LIMELIGHT_TURRET = "limelight-turret";
 
-      public static final class Vision {
-        // Local hostnames of the unique Limelights on the system
-        // WARNING: IF YOU CHANGE OUT THE HARDWARE, ENSURE TO PROPERLY
-        // SET THE HOSTNAME ON THE LIMELIGHT TO COORESPOND WITH ITS 
-        // LOCATION ON THE BOT!!! 
-        public static final String LIMELIGHT_LEFT = "limelight-left";
-        public static final String LIMELIGHT_RIGHT = "limelight-right";
-        public static final String LIMELIGHT_TURRET = "limelight-turret";
+    // List of the active Limelights on the system to be used for Pose2D estimation
+    // Add any Limelights defined above to this list.
+    public static final List<String> ACTIVE_POSE_LIMELIGHTS = List.of(
+      LIMELIGHT_LEFT,
+      LIMELIGHT_RIGHT
+    );
 
-        // List of the active Limelights on the system to be used for Pose2D estimation
-        // Add any Limelights defined above to this list.
-        public static final List<String> ACTIVE_POSE_LIMELIGHTS = List.of(
-            LIMELIGHT_LEFT,
-            LIMELIGHT_RIGHT
-        );
+        // Limelight horizontal Field of view in degrees
+        public static final double FOV_HORIZONTAL = 62.5;
 
-        // VISION_STDDEVS allows us to control how much we trust the values coming from the Limelight(s).
-        // The higher the value (distance standard deviations), the less we trust it.
-        // 
-        // n1: X Position Standard Deviations in meters
-        //     How wrong do we think vision could be about where we am on the field in X?
-        // n2: Y Position Standard Deviations in meters
-        //     How wrong do we think vision could be about where we are on the field in Y?
-        // n3: Rotation (theta) Standard Deviations in RADIANS
-        //     How wrong is vision about our heading?
-        //
-        // 0.7, 0.7, and 9999999 tells the code that we are somewhat trusting distant april tags
-        // and basically completely trusting the Pigeon for Yaw.
-        public static final Matrix<N3, N1> VISION_STDDEVS = VecBuilder.fill(0.7, 0.7, 9999999);
+        // AprilLock2 rotation compensation pid values
+        public static final double APRIL_LOCK_P = 0.5;
+        public static final double APRIL_LOCK_I = 0.003;
+        public static final double APRIL_LOCK_D = 0.003;
+        // maximum magnitude of PID output
+        public static final double APRIL_LOCK_PID_CLAMP = 0.1;
 
-        public static final double FIELD_CENTER_X = 8.7741252;
-        public static final double FIELD_CENTER_Y = 4.0259508;
+    // VISION_STDDEVS allows us to control how much we trust the values coming from the Limelight(s).
+    // The higher the value (distance standard deviations), the less we trust it.
+    // 
+    // n1: X Position Standard Deviations in meters
+    //     How wrong do we think vision could be about where we am on the field in X?
+    // n2: Y Position Standard Deviations in meters
+    //     How wrong do we think vision could be about where we are on the field in Y?
+    // n3: Rotation (theta) Standard Deviations in RADIANS
+    //     How wrong is vision about our heading?
+    //
+    // 0.7, 0.7, and 9999999 tells the code that we are somewhat trusting distant april tags
+    // and basically completely trusting the Pigeon for Yaw.
+    public static final Matrix<N3, N1> VISION_STDDEVS = VecBuilder.fill(0.7, 0.7, 9999999);
 
-    }
+    public static final double FIELD_CENTER_X = 8.7741252;
+    public static final double FIELD_CENTER_Y = 4.0259508;
 
-    public static final class Controller {
-        public static final int DRIVER_PORT = 0;
-        public static final int OPERATOR_PORT = 1;
-    }
+    public static final double RED_HUB_CENTER_X = 11.88;
+    public static final double RED_HUB_CENTER_Y = 4.0259508;
+
+    public static final double RED_RIGHT_CORNER_X = 17.5482504;
+    public static final double RED_RIGHT_CORNER_Y = 8.0519016;
+  }
+
+  public static final class Controller {
+    public static final int DRIVER_PORT = 0;
+    public static final int OPERATOR_PORT = 1;
+  }
 
   public static final class Drivetrain {
     public static final double MAX_SPEED = 4.1 * 0.5;  // Max speed in m/s  half-speed for now
@@ -68,7 +82,7 @@ public final class Constants {
   }
   public static final class Hopper {
     public static final int MOTOR_PORT = 44;
-    public static final double MOTOR_POWER = 0.2;
+    public static final double MOTOR_POWER = 0.5;
   }
 
   public static final class Hood {
@@ -90,13 +104,18 @@ public final class Constants {
 
   }
 
+  
+
   public static final class Turret {
     public static final int MOTOR_PORT = 59;
     public static final int ENCODER_PORT_A = 0;
     public static final int ENCODER_PORT_B = 1;
+    // left from the perspective of someone facing towards the turret side of bot
+    public static final int LEFT_LIMIT_PORT = 2;
+    public static final int RIGHT_LIMIT_PORT = 3;
     // gear ratio of 396 to 1 here probably but needs to be tested
-    //public static final double TURRETRATIO = 7.33333333333333333333333; 
-    public static final double TURRET_RATIO = 166.9;
+    // value to divide encoder value by in order to get 360 degress per turret rotation
+    public static final double TURRET_RATIO = 41.719;
     public static final int encoderLimit = 5771 / 2; // temporary encoder value limit
     public static final double PID_P = 0;
     public static final double PID_I = 0; // needs tuning
@@ -106,6 +125,7 @@ public final class Constants {
     public static final double UPPER_LIMIT = 90;
     public static final double LOWER_LIMIT = -90;
     public static final double DIST_TO_BOT_CENTER = 0.1529842; // meters
+    public static final double TURRET_YAW_LIMIT = 45; // deg
   }
 
   public static final class Shooter {
@@ -129,7 +149,7 @@ public final class Constants {
   }
      public static final class Intake {
         public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.2;
+        public static final double POWER = 0.3;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
         public static final double kP = 0.2; //TODO: VERIFY
         public static final double kI = 0.0; //TODO: VERIFY
@@ -143,7 +163,7 @@ public final class Constants {
 
     public static final class Kicker {
         public static final int MOTOR_PORT = 43;
-        public static final double MOTOR_POWER = 0.35;
+        public static final double MOTOR_POWER = 0.5;
     }
 }
 
