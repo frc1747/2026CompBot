@@ -122,14 +122,15 @@ public class RobotContainer {
 
         // intake commands
         // this is broken cause no encoder
-        driver.rightTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK).alongWith(new IntakeSpin(intake, Constants.Intake.POWER)));
+        driver.rightTrigger().whileTrue(intakePivot.moveOutIntakeCommand().alongWith(intake.SetIntakePowerCommand()))
+        .whileFalse(intakePivot.moveHomeIntakeCommand().alongWith(intake.StopIntakePowerCommand()));
 
         // much slower for the moment
         driver.rightBumper().whileTrue(new TurretRotate(turret, 0.025));
         driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
 
         // this is on operator for now
-        operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER));
+        operator.leftBumper().whileTrue( intake.SetIntakePowerCommand());
 
         operator.a().onTrue(kicker.run())
                     .onFalse(kicker.stop());

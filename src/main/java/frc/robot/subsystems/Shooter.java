@@ -76,7 +76,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command setSpeedToDesired() {
-    return runOnce(() -> setRPM(desiredRPM));
+    return run(() -> setRPM(desiredRPM));
   }
 
   public void setPower(double power) {
