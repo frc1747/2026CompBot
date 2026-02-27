@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -27,6 +28,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -39,6 +42,7 @@ import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.Drivetrain;
+import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -294,6 +298,30 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         addLimelightMeasurement();
         SmartDashboard.putNumber("Distance To Hub", distanceToPose(
             new Pose2d(new Translation2d(Constants.Vision.FIELD_CENTER_X, Constants.Vision.FIELD_CENTER_Y), new Rotation2d(0.0))));
+
+        SwerveModule[] swerveModules = getModules();
+
+        SmartDashboard.putData("Swerve Drive", new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.setSmartDashboardType("SwerveDrive");
+
+                builder.addDoubleProperty("Front Left Angle", () -> swerveModules[0].getCurrentState().angle.getRadians(), null);
+                builder.addDoubleProperty("Front Left Velocity", () -> swerveModules[0].getCurrentState().speedMetersPerSecond, null);
+
+                builder.addDoubleProperty("Front Right Angle", () -> swerveModules[1].getCurrentState().angle.getRadians(), null);
+                builder.addDoubleProperty("Front Right Velocity", () -> swerveModules[1].getCurrentState().speedMetersPerSecond, null);
+
+                builder.addDoubleProperty("Back Left Angle", () -> swerveModules[2].getCurrentState().angle.getRadians(), null);
+                builder.addDoubleProperty("Back Left Velocity", () -> swerveModules[2].getCurrentState().speedMetersPerSecond, null);
+
+                builder.addDoubleProperty("Back Right Angle", () -> swerveModules[3].getCurrentState().angle.getRadians(), null);
+                builder.addDoubleProperty("Back Right Velocity", () -> swerveModules[3].getCurrentState().speedMetersPerSecond, null);
+
+                builder.addDoubleProperty("Robot Angle", () -> getRotation3d().getAngle(), null);
+            }
+    });
+    
     }
 
     public double distanceToPose(Pose2d targetPose) {
