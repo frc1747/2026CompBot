@@ -81,6 +81,8 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
+        NamedCommands.registerCommand("Shoot", shooter.setPowerCommand(0.5)); // CHANGE THIS PLEASE
+
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
