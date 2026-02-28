@@ -14,6 +14,7 @@ import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -32,6 +33,7 @@ public class Shooter extends SubsystemBase {
   private DutyCycleEncoder encoder;
   private final PIDController pid = new PIDController(Constants.Shooter.PID_P, Constants.Shooter.PID_I, Constants.Shooter.PID_D);
   private double desiredRPM = 0.0;
+  public double desiredPower = 0.0;
 
   public Shooter() {
     motorLeft = new TalonFX(Constants.Shooter.MOTOR_LEFT_PORT);
@@ -44,9 +46,11 @@ public class Shooter extends SubsystemBase {
       .withPeakForwardVoltage(12)
       .withPeakReverseVoltage(-12);
     
-    configShooter.Slot0.kP = 1.0;
-    configShooter.Slot0.kI = 0.0;
-    configShooter.Slot0.kD = 0.0;
+    configShooter.Slot0.kP = Constants.Shooter.PID_P;
+    configShooter.Slot0.kI = Constants.Shooter.PID_I;
+    configShooter.Slot0.kD = Constants.Shooter.PID_D;
+
+    configShooter.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
 
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -57,7 +61,7 @@ public class Shooter extends SubsystemBase {
     if (!status.isOK()) {
       System.out.println("Could not apply configs, error code: " + status.toString());
     }
-    
+    follower.getConfigurator().apply(configShooter);
     //motorLeft.getConfigurator().apply(configShooter);
 
     //pid.enableContinuousInput(0.0, 360.0);
@@ -65,10 +69,15 @@ public class Shooter extends SubsystemBase {
 
     follower.setControl(new Follower(motorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
     SmartDashboard.putNumber("Shooter/Desired RPM", 0.0);
+     SmartDashboard.putNumber("Shooter/Desired Power", 0.0);
   }
 
   public Command setPowerCommand(double power){
     return runOnce(() -> setPower(power));
+  }
+
+  public Command SetDesiredPowerCommand(){
+    return run(() -> setPower(desiredPower));
   }
 
   public Command stopCommand() {
@@ -76,7 +85,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command setSpeedToDesired() {
-    return runOnce(() -> setRPM(desiredRPM));
+    return run(() -> setRPM(desiredRPM));
   }
 
   public void setPower(double power) {
@@ -87,13 +96,13 @@ public class Shooter extends SubsystemBase {
   // in RPM
   public void setRPM(double rpm) {
     System.out.println("I am being commanded to " + rpm);
-    motorLeft.setControl(velocityShooter.withVelocity(rpm / 60.0));
+    //velocityShooter.Velocity * 60 = //pid.calculate(getRPM(), rpm);
+    motorLeft.setControl(velocityShooter.withVelocity(rpm/60.0));
   }
 
   public double getRPM() {
     return (motorLeft.getVelocity().getValueAsDouble() + follower.getVelocity().getValueAsDouble()) / 2 * 60;
   }
-
 
   public double getPowerNeededFromDistanceAndAngle(double x, double y){
     // Z = A + BX + CY + DX^2 + FY^2 + EXY is the quady E Z is power, X is distance, Y is hood angle
@@ -107,7 +116,7 @@ public class Shooter extends SubsystemBase {
     double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative
     if (aws > 0) return aws;
     return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A;
-    // slove with the good old quady for
+    // slove with the good old quady form
   }
 
   public double getAngleNeededFromDistanceAndPower(double x, double z ){
@@ -117,7 +126,7 @@ public class Shooter extends SubsystemBase {
     double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative
     if (aws > 0) return aws;
     return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A;
-    // slove with the good old quady for
+    // slove with the good old quady form
   }
 
   public double[] findSpeedAndAngleFromDistance(double Distance){
@@ -151,7 +160,17 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter/Average RPM", getRPM());
     desiredRPM = SmartDashboard.getNumber("Shooter/Desired RPM", 0.0);
+    //SmartDashboard.putNumber("Shooter/Desired RPM error", Math.abs((desiredRPM - getRPM()) / getRPM()));
+    if (Math.abs((desiredRPM - getRPM()) / getRPM()) <= 0.01) {
+      SmartDashboard.putBoolean("Shooter/Desired RPM Reached", true);
+    }
+    else{
+      SmartDashboard.putBoolean("Shooter/Desired RPM Reached", false);
+    }
+    desiredPower = SmartDashboard.getNumber("Shooter/Desired Power", 0.0) ;
     SmartDashboard.putNumber("number I am putting on smartdashbard", desiredRPM);
     //setRPM(desiredRPM);
+    SmartDashboard.putNumber("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity);
+    SmartDashboard.getNumber("Shooter/Desired Power?", desiredPower) ;
   }
 }

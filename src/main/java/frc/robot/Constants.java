@@ -8,6 +8,7 @@ import java.util.List;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
@@ -82,21 +83,23 @@ public final class Constants {
   }
   public static final class Hopper {
     public static final int MOTOR_PORT = 44;
-    public static final double MOTOR_POWER = 0.5;
+    public static final double MOTOR_POWER = 0.7;
   }
 
   public static final class Hood {
     public static final int MOTOR_PORT = 40;
-    public static final int ENCODER_PORT_A = 5;
-    public static final int ENCODER_PORT_B = 6;
+    public static final int ENCODER_PORT_A = 4;
+    public static final int ENCODER_PORT_B = 5;
     public static final int COUNTS_PER_REV = 2048;
     public static final double GEAR_RATIO = 17.0;  // 170 tooth rack / 10 tooth pinion
     public static final double TOTAL_HOOD_DEGREES = 19.25;  // 19.25 degrees of hood rotation
     public static final double COUNTS_PER_HOOD_SWEEP = COUNTS_PER_REV * GEAR_RATIO;
     public static final double COUNTS_PER_DEGREE = COUNTS_PER_HOOD_SWEEP / TOTAL_HOOD_DEGREES;
     public static final double STARTING_ANGLE = 25.0;  // Angle that the hood starts at
+    public static final double MAX_HEIGHT = 1800;
+    public static final double MAX_HOOD_ANGLE = 44;
 
-    public static final double kP = 0.2;
+    public static final double kP = 0.05;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
 
@@ -125,13 +128,12 @@ public final class Constants {
     public static final double UPPER_LIMIT = 90;
     public static final double LOWER_LIMIT = -90;
     public static final double DIST_TO_BOT_CENTER = 0.1529842; // meters
-    public static final double TURRET_YAW_LIMIT = 45; // deg
+    public static final double TURRET_YAW_LIMIT = 70; // deg
   }
 
   public static final class Shooter {
     public static final int MOTOR_LEFT_PORT = 41;
     public static final int MOTOR_RIGHT_PORT = 42;
-    public static final int MOTOR_HOOD_PORT = 40;
     public static final int ENCODER_PORT = 1; // needs to be set
     public static final double ENCODER_OFFSET = .2; // needs to be set o7
     public static final double SURFACE_A = 44.1596; // needs tuning
@@ -143,27 +145,33 @@ public final class Constants {
     public static final double MAX_AUTOSHOOT_POWER =.85;
     public static final double MAX_HOOD_ANGLE = 43;// degrees
     public static final double MIN_HOOD_ANGLE = 26;// degrees
-    public static final double PID_P = 0;
-    public static final double PID_I = 0;
-    public static final double PID_D = 0;
+    public static final double PID_P = 0.5;
+    public static final double PID_I = 0.0;
+    public static final double PID_D = 0.0;
+    public static final double TOLERANCE = .05; // percent tolerance
+    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d();
+    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d();
+    // max rpm 5800ish
   }
      public static final class Intake {
         public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.3;
+        public static final double POWER = 0.7;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
-        public static final double kP = 0.2; //TODO: VERIFY
-        public static final double kI = 0.0; //TODO: VERIFY
-        public static final double kD = 0.0; //TODO: VERIFY
 
     }
 
     public static final class IntakePivot {
         public static final int MOTOR_PORT = 45;
+        public static final double OUT = -7; // needs tuning for the encoder
+        public static final double HOME = -.8; // needs tuning for the encoder
+        public static final double kP = 0.01; //TODO: VERIFY
+        public static final double kI = 0.0; //TODO: VERIFY
+        public static final double kD = 0.0; //TODO: VERIFY
     }
 
     public static final class Kicker {
         public static final int MOTOR_PORT = 43;
-        public static final double MOTOR_POWER = 0.5;
+        public static final double MOTOR_POWER = 0.7;
     }
 }
 
