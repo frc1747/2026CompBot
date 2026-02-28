@@ -2,7 +2,11 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -19,6 +23,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -26,10 +31,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
+import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
+import frc.robot.RobotContainer;
+import frc.robot.Constants.Drivetrain;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -279,6 +288,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+
+        RobotContainer.field.setRobotPose(getState().Pose);
+        SmartDashboard.putData("Field2d ", RobotContainer.field);
+        addLimelightMeasurement();
+        SmartDashboard.putNumber("Distance To Hub", distanceToPose(
+            new Pose2d(new Translation2d(Constants.Vision.FIELD_CENTER_X, Constants.Vision.FIELD_CENTER_Y), new Rotation2d(0.0))));
+    }
+
+    public double distanceToPose(Pose2d targetPose) {
+        return getState().Pose.getTranslation().getDistance(targetPose.getTranslation());
     }
 
     private void startSimThread() {
@@ -340,5 +359,79 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     @Override
     public Optional<Pose2d> samplePoseAt(double timestampSeconds) {
         return super.samplePoseAt(Utils.fpgaToCurrentTime(timestampSeconds));
+    }
+
+
+    // ****** ADDITIONAL METHODS TO SUPPORT VISION PROCESSING *******
+    private void addLimelightMeasurement() {
+        // This will create an Optional instance of an MegaTag2 PoseEstimate from 
+        // the LimeLight with the best (lowest ambiguity value) pose estimation.
+        // It does this by walking the list of defined LimeLights, getting the
+        // abiguity value for all fiducials seen by a given LimeLight, and 
+        // then returns the best PoseEstimate instance.
+        //
+        // It is returned as a Map Entry (key/value pair) to preserve both the 
+        // name of the selected LimeLight and its PoseEstimate instance.
+        Optional<Map.Entry<String, LimelightHelpers.PoseEstimate>> bestLimeLightPose =
+            Constants.Vision.ACTIVE_POSE_LIMELIGHTS.stream()
+                .filter(name -> LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name) != null)
+                .map(name -> Map.entry(
+                    name, 
+                    LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name)
+                ))
+                // .filter(entry -> entry.getValue() != null)
+                .filter(entry -> entry.getValue().tagCount > 0)
+                .min(Comparator.comparingDouble(entry -> 
+                        bestAmbiguity(entry.getValue())
+                )
+            );
+
+        double yawDeg = getState().Pose.getRotation().getDegrees();
+
+        // If we had a usable PoseEstimate from a LimeLight, the Optional instance
+        // contains a Map Entry with the best (lowest abiguity of all visible 
+        // ApriTags across all available LimeLights) PoseEstimate and String name 
+        // of the responsible LimeLight to inform the drivetrain of the bot's current 
+        // position on the field.
+        bestLimeLightPose.ifPresentOrElse(entry -> {
+                String limelight = entry.getKey();
+                var mt2 = entry.getValue();
+
+                LimelightHelpers.SetRobotOrientation(
+                    limelight, yawDeg, 0, 0, 
+                    0, 0, 0
+                );
+                addVisionMeasurement(mt2.pose, 
+                    mt2.timestampSeconds, 
+                    Constants.Vision.VISION_STDDEVS
+                );
+
+                SmartDashboard.putString("Pose LimeLight", limelight);
+                SmartDashboard.putNumber("Pose Distance", mt2.avgTagDist);
+                
+            },
+            () -> {
+                // If we didn't get any good AprilTag information, clear
+                // the values so we're not confused later.
+                SmartDashboard.putString("Pose LimeLight", "NONE");                
+                SmartDashboard.putNumber("Pose Distance", 0.0);
+            }
+        );
+
+        SmartDashboard.putNumber("Yaw Degrees", yawDeg);
+
+
+    }
+
+    // Helper Method to use for the min method to select the lowest abiguity AprilTag.
+    //
+    // Rather than hardcoding to rawFiducials[0], iterate any instances it may have.
+    // (e.g., if a given LimeLight can see multiple AprilTags)
+    private static double bestAmbiguity(LimelightHelpers.PoseEstimate p) {
+        System.out.println(p);
+        return Arrays.stream(p.rawFiducials)
+            .mapToDouble(f -> f.ambiguity)
+            .min()
+            .orElse(Double.MAX_VALUE);
     }
 }

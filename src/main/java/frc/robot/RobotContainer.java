@@ -16,17 +16,31 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.teleop.AprilLock;
+import frc.robot.commands.teleop.IntakeOut;
+import frc.robot.commands.teleop.IntakeSpin;
+import frc.robot.commands.teleop.TeleopSwerve;
+import frc.robot.commands.teleop.TurretRotate;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakePivot;
+import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Kicker;
+import frc.robot.subsystems.LimeLight;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -48,10 +62,21 @@ public class RobotContainer {
     private final DoubleSupplier strafeSup = () -> driver.getRawAxis(XboxController.Axis.kLeftX.value); // right/left on left stick
     private final DoubleSupplier rotationSup = () -> driver.getRawAxis(XboxController.Axis.kRightX.value); // right/left on right stick 
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public static final Kicker kicker = new Kicker();
+    public static final Hood hood = new Hood();
+
+    public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
+
+    public static final Intake intake = new Intake();
+    public static final IntakePivot intakePivot = new IntakePivot();
+    public static final Shooter shooter = new Shooter();
+    public static final Hopper hopper = new Hopper();
+    public static final Turret turret = new Turret();
+
+    public static final Field2d field = new Field2d();
 
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
@@ -92,9 +117,40 @@ public class RobotContainer {
         driver.start().and(driver.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        driver.povDown().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+        // intake commands
+        // this is broken cause no encoder
+        driver.rightTrigger().whileTrue(new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK).alongWith(new IntakeSpin(intake, Constants.Intake.POWER)));
+
+        // much slower for the moment
+        driver.rightBumper().whileTrue(new TurretRotate(turret, 0.025));
+        driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
+
+        // this is on operator for now
+        operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER));
+
+        operator.a().onTrue(kicker.run())
+                    .onFalse(kicker.stop());
+
+        operator.x().whileTrue(hood.setPowerCommand(true))  // down
+                    .onFalse(hood.stopCommand());
+        operator.y().whileTrue(hood.setPowerCommand(false))  // up
+                    .onFalse(hood.stopCommand());
+
+        // safe middle angle
+        operator.rightBumper().whileTrue(hood.goToAngleCommand(10.0))
+                              .onFalse(hood.stopCommand());
+
+        operator.rightTrigger().whileTrue(shooter.setPowerCommand(0.5))
+                               .onFalse(shooter.stopCommand());
+
+        operator.leftTrigger().whileTrue(hopper.run())
+                              .onFalse(hopper.stop());
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        operator.b().whileTrue(new AprilLock(turret));
     }
 
     public Command getAutonomousCommand() {

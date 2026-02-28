@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.teleop;
 
 import java.util.function.DoubleSupplier;
 
@@ -35,9 +35,9 @@ public class TeleopSwerve extends Command {
   public void execute() {
     drivetrain.setControl(
       swerveRequest
-        .withVelocityX(-translationSup.getAsDouble() * Constants.Drivetrain.MAX_SPEED)
-        .withVelocityY(-strafeSup.getAsDouble() * Constants.Drivetrain.MAX_SPEED)
-        .withRotationalRate(-rotationSup.getAsDouble() * Constants.Drivetrain.MAX_ANGULAR_VELOCITY)
+        .withVelocityX(translationSup.getAsDouble() * Constants.Drivetrain.MAX_SPEED)
+        .withVelocityY(strafeSup.getAsDouble() * Constants.Drivetrain.MAX_SPEED)
+        .withRotationalRate(rotationSup.getAsDouble() * Constants.Drivetrain.MAX_ANGULAR_VELOCITY)
     );
   }
 
