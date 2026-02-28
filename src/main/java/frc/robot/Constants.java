@@ -66,6 +66,10 @@ public final class Constants {
     public static final double RED_HUB_CENTER_X = 11.88;
     public static final double RED_HUB_CENTER_Y = 4.0259508;
 
+    // height of hub opening (not funnel)
+    public static final double HUB_HEIGHT = 1.5; // placeholder (meters) TODO: replace with real measurement
+    public static final double HUB_CLEAR_HEIGHT = 1.8; // placeholder (meters) TODO: replace with real measurments
+
     public static final double RED_RIGHT_CORNER_X = 17.5482504;
     public static final double RED_RIGHT_CORNER_Y = 8.0519016;
 
@@ -129,6 +133,7 @@ public final class Constants {
     public static final double UPPER_LIMIT = 90;
     public static final double LOWER_LIMIT = -90;
     public static final double DIST_TO_BOT_CENTER = 0.1529842; // meters
+    public static final double DIST_TO_GROUND = 0.1; // placeholder TODO: replace with real measurement
     public static final double TURRET_YAW_LIMIT = 45; // deg
   }
 

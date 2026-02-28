@@ -64,26 +64,16 @@ public class AprilLockLeading extends Command {
     // distance from  turret to target
     double dist = turretLoc.getDistance(prevApprox);
 
-    // gets ideal hood angle and power given distance 
-    // returns value of {-1, -1} if the 
-    // turret is incapable of any shooter speed and hood angle
-    // combination to reach the specified distance
-    // must check for {-1, -1} before use in final code
-    // getPowerAndAngleFromDistance still needs to be implemented 
-    // fully once empirical measurements are made
-    double[] hoodAngleAndShooterSpeed = RobotContainer.shooter.getPowerAndAngleFromDistance(dist);
-    double hoodAngle = hoodAngleAndShooterSpeed[0];
-    double shooterSpeed = hoodAngleAndShooterSpeed[1];
-    if (hoodAngle == -1 || shooterSpeed == -1) return null;
+    // gets current hood angle in radians
+    double hoodAngleRad = RobotContainer.hood.getCurrentAngle() * Math.PI / 180;
     
     // predicted amount of time between when the fuel leaves the
     // turret and when it reaches the height of the fuel hub 
     // on its way down. should return null if the fuel
     // is predicted not to ever surpass the height of the top of
-    // the hub, but the shooter speed and hood angle calculated 
-    // should ensure that never happens
+    // the hub
     // must check for null before use in final code
-    Double travelTime = turret.getFuelTravelTime(hoodAngle, shooterSpeed);
+    Double travelTime = turret.getFuelTravelTime(hoodAngleRad, dist);
     if (travelTime == null) return null;
 
     // next iteration adjusted targetting location
@@ -106,12 +96,12 @@ public class AprilLockLeading extends Command {
     // time tolerance to determine when to stop.
     // Constants.Vision.LEADING_TRAVEL_TIME_TOLERANCE
     // currently the approximation is always applied 6
-    // times per scheduler loop, travelTime ignored
+    // times per scheduler loop, travelTime ignored 
     Translation2d approxA;
     Translation2d approxB = startApprox;
     for (int i = 0; i < 6; i++) {
       approxA = approxB;
-      approxB = getNextTargetApprox(approxA);
+      approxB = getNextTargetApprox(approxA).getFirst();
       // return most recent valid approx if calculated approximation is null
       if (approxB == null) return approxA;
     }
