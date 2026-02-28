@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -39,9 +40,10 @@ public class IntakePivot extends SubsystemBase {
     }
 
     public void intakePivot(double tick) {
-        tick = MathUtil.clamp(tick, 0.0, Constants.Intake.INTAKE_PIVOT_TICK);
+        tick = MathUtil.clamp(tick, -0.05, 0.05);
         
-        double currentCounts = encoder.get();
+       // double currentCounts = encoder.get();
+        double currentCounts = motor.getPosition().getValueAsDouble();
         dutyCycle.Output = pid.calculate(currentCounts, tick);
 
         motor.setControl(dutyCycle);
@@ -58,4 +60,10 @@ public class IntakePivot extends SubsystemBase {
     public Command moveHomeIntakeCommand(){
         return run( () -> intakePivot(Constants.IntakePivot.HOME));
     }
+
+    
+  @Override
+  public void periodic() {
+      SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
+  }
 }

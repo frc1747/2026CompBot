@@ -150,6 +150,9 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter/Average RPM", getRPM());
     desiredRPM = SmartDashboard.getNumber("Shooter/Desired RPM", 0.0);
+    if (Math.abs((desiredRPM - getRPM()) / getRPM()) <= 0.1) {
+      SmartDashboard.putBoolean("Desired RPM Reached", true);
+    }
     SmartDashboard.putNumber("number I am putting on smartdashbard", desiredRPM);
     //setRPM(desiredRPM);
   }

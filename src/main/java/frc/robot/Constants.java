@@ -152,16 +152,16 @@ public final class Constants {
   }
      public static final class Intake {
         public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.3;
+        public static final double POWER = 0.1;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
 
     }
 
     public static final class IntakePivot {
         public static final int MOTOR_PORT = 45;
-        public static final double OUT = 100; // needs tuning
-        public static final double HOME = 0; // needs tuning
-        public static final double kP = 0.2; //TODO: VERIFY
+        public static final double OUT = -7.6; // needs tuning for the encoder
+        public static final double HOME = -.8; // needs tuning for the encoder
+        public static final double kP = 0.002; //TODO: VERIFY
         public static final double kI = 0.0; //TODO: VERIFY
         public static final double kD = 0.0; //TODO: VERIFY
     }

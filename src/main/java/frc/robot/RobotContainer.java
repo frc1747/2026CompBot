@@ -130,7 +130,7 @@ public class RobotContainer {
         driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
 
         // this is on operator for now
-        operator.leftBumper().whileTrue( intake.SetIntakePowerCommand());
+        operator.leftBumper().whileTrue( intake.SetIntakePowerCommand()).whileFalse(intake.StopIntakePowerCommand());
 
         operator.a().onTrue(kicker.run())
                     .onFalse(kicker.stop());

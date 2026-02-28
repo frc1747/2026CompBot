@@ -101,5 +101,11 @@ public class Hood extends SubsystemBase {
     // SmartDashboard.putBoolean("hood/encoder connected?", encoder.isConnected());
     SmartDashboard.putNumber("hood/encoder ticks", encoder.get());
     SmartDashboard.putNumber("hood/hood angle", getCurrentAngle());
+
+    SmartDashboard.getNumber("hood/Hood Desired Angle")
+
+    if (Math.abs(( - getCurrentAngle()) / getAngle()) <= 0.1) {
+      SmartDashboard.putBoolean("Desired RPM Reached", true);
+    }
   }
 }
