@@ -130,12 +130,15 @@ public class RobotContainer {
         // this is on operator for now
         operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER));
 
+        // roll back fuel
+        operator.povRight().whileTrue(new IntakeSpin(intake, -Constants.Intake.POWER));
+
         operator.a().onTrue(kicker.run())
                     .onFalse(kicker.stop());
 
         operator.x().whileTrue(hood.setPowerCommand(true))  // down
                     .onFalse(hood.stopCommand());
-        operator.y().whileTrue(hood.setPowerCommand(false))  // up
+        operator.y().whileTrue(hood.setPowerCommand(false)) // up
                     .onFalse(hood.stopCommand());
 
         // safe middle angle
