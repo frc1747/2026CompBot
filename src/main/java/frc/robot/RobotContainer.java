@@ -140,10 +140,12 @@ public class RobotContainer {
                     .onFalse(hood.stopCommand());
 
         // safe middle angle
-        operator.rightBumper().whileTrue(hood.goToDesiredAngleCommand().alongWith(shooter.setSpeedToDesired()))
-                              .onFalse(hood.stopCommand().alongWith(shooter.stopCommand()));
+        // operator.rightBumper().whileTrue(hood.goToDesiredAngleCommand().alongWith(shooter.setSpeedToDesired()))
+        //                       .onFalse(hood.stopCommand().alongWith(shooter.stopCommand()));
+        operator.rightBumper().whileTrue(shooter.setSpeedToDesired())
+                            .onFalse(shooter.stopCommand());
 
-        operator.rightTrigger().whileTrue(shooter.setPowerCommand(shooter.desiredPower))
+        operator.rightTrigger().whileTrue(shooter.SetDesiredPowerCommand())
                                .onFalse(shooter.stopCommand());
                 
         operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER).alongWith(hopper.run()))

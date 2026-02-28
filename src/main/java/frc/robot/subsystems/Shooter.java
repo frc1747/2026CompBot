@@ -14,6 +14,7 @@ import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -49,6 +50,8 @@ public class Shooter extends SubsystemBase {
     configShooter.Slot0.kI = Constants.Shooter.PID_I;
     configShooter.Slot0.kD = Constants.Shooter.PID_D;
 
+    configShooter.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
+
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
@@ -58,7 +61,7 @@ public class Shooter extends SubsystemBase {
     if (!status.isOK()) {
       System.out.println("Could not apply configs, error code: " + status.toString());
     }
-    
+    follower.getConfigurator().apply(configShooter);
     //motorLeft.getConfigurator().apply(configShooter);
 
     //pid.enableContinuousInput(0.0, 360.0);
@@ -71,6 +74,10 @@ public class Shooter extends SubsystemBase {
 
   public Command setPowerCommand(double power){
     return runOnce(() -> setPower(power));
+  }
+
+  public Command SetDesiredPowerCommand(){
+    return run(() -> setPower(desiredPower));
   }
 
   public Command stopCommand() {
@@ -89,8 +96,8 @@ public class Shooter extends SubsystemBase {
   // in RPM
   public void setRPM(double rpm) {
     System.out.println("I am being commanded to " + rpm);
-    dutyCycleShooter.Output = pid.calculate(getRPM(), rpm);
-    motorLeft.setControl(dutyCycleShooter);
+    //velocityShooter.Velocity * 60 = //pid.calculate(getRPM(), rpm);
+    motorLeft.setControl(velocityShooter.withVelocity(rpm/60.0));
   }
 
   public double getRPM() {
@@ -160,8 +167,10 @@ public class Shooter extends SubsystemBase {
     else{
       SmartDashboard.putBoolean("Shooter/Desired RPM Reached", false);
     }
-    desiredPower = SmartDashboard.getNumber("Shooter/Desired RPM", 0) ;
+    desiredPower = SmartDashboard.getNumber("Shooter/Desired Power", 0.0) ;
     SmartDashboard.putNumber("number I am putting on smartdashbard", desiredRPM);
     //setRPM(desiredRPM);
+    SmartDashboard.putNumber("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity);
+    SmartDashboard.getNumber("Shooter/Desired Power?", desiredPower) ;
   }
 }
