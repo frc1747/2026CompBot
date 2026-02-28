@@ -6,8 +6,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.MotorArrangementValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -40,7 +38,7 @@ public class IntakePivot extends SubsystemBase {
     }
 
     public void intakePivot(double tick) {
-        tick = MathUtil.clamp(tick, -0.05, 0.05);
+        //tick = MathUtil.clamp(tick, -0.05, 0.05);
         
        // double currentCounts = encoder.get();
         double currentCounts = motor.getPosition().getValueAsDouble();
@@ -49,15 +47,15 @@ public class IntakePivot extends SubsystemBase {
         motor.setControl(dutyCycle);
     }
 
-    public void setIntakePower(double armPower) {
+    public void setPower(double armPower) {
         this.motor.set(armPower);
     }
 
-    public Command moveOutIntakeCommand(){
+    public Command moveOutCommand(){
         return run( () -> intakePivot(Constants.IntakePivot.OUT));
     }
 
-    public Command moveHomeIntakeCommand(){
+    public Command moveHomeCommand(){
         return run( () -> intakePivot(Constants.IntakePivot.HOME));
     }
 

@@ -21,7 +21,7 @@ public class AutoAim extends Command {
   private Pose2d target;
   private double[] hoodAngleAndShooterPower = {-1,-1};
 
-  public AutoAim(Shooter shooter , Hood hood, Pose2d target) {
+  public AutoAim(Shooter shooter, Hood hood, Pose2d target) {
     this.shooter = shooter;
     this.hood = hood;
     this.target = target;

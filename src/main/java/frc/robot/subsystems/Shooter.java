@@ -32,6 +32,7 @@ public class Shooter extends SubsystemBase {
   private DutyCycleEncoder encoder;
   private final PIDController pid = new PIDController(Constants.Shooter.PID_P, Constants.Shooter.PID_I, Constants.Shooter.PID_D);
   private double desiredRPM = 0.0;
+  public double desiredPower = 0.0;
 
   public Shooter() {
     motorLeft = new TalonFX(Constants.Shooter.MOTOR_LEFT_PORT);
@@ -44,9 +45,9 @@ public class Shooter extends SubsystemBase {
       .withPeakForwardVoltage(12)
       .withPeakReverseVoltage(-12);
     
-    configShooter.Slot0.kP = 1.0;
-    configShooter.Slot0.kI = 0.0;
-    configShooter.Slot0.kD = 0.0;
+    configShooter.Slot0.kP = Constants.Shooter.PID_P;
+    configShooter.Slot0.kI = Constants.Shooter.PID_I;
+    configShooter.Slot0.kD = Constants.Shooter.PID_D;
 
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -65,6 +66,7 @@ public class Shooter extends SubsystemBase {
 
     follower.setControl(new Follower(motorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
     SmartDashboard.putNumber("Shooter/Desired RPM", 0.0);
+     SmartDashboard.putNumber("Shooter/Desired Power", 0.0);
   }
 
   public Command setPowerCommand(double power){
@@ -87,7 +89,8 @@ public class Shooter extends SubsystemBase {
   // in RPM
   public void setRPM(double rpm) {
     System.out.println("I am being commanded to " + rpm);
-    motorLeft.setControl(velocityShooter.withVelocity(rpm / 60.0));
+    dutyCycleShooter.Output = pid.calculate(getRPM(), rpm);
+    motorLeft.setControl(dutyCycleShooter);
   }
 
   public double getRPM() {
@@ -150,9 +153,14 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter/Average RPM", getRPM());
     desiredRPM = SmartDashboard.getNumber("Shooter/Desired RPM", 0.0);
-    if (Math.abs((desiredRPM - getRPM()) / getRPM()) <= 0.1) {
-      SmartDashboard.putBoolean("Desired RPM Reached", true);
+    //SmartDashboard.putNumber("Shooter/Desired RPM error", Math.abs((desiredRPM - getRPM()) / getRPM()));
+    if (Math.abs((desiredRPM - getRPM()) / getRPM()) <= 0.01) {
+      SmartDashboard.putBoolean("Shooter/Desired RPM Reached", true);
     }
+    else{
+      SmartDashboard.putBoolean("Shooter/Desired RPM Reached", false);
+    }
+    desiredPower = SmartDashboard.getNumber("Shooter/Desired RPM", 0) ;
     SmartDashboard.putNumber("number I am putting on smartdashbard", desiredRPM);
     //setRPM(desiredRPM);
   }

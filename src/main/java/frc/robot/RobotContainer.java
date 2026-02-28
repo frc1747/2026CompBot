@@ -32,7 +32,7 @@ import frc.robot.commands.teleop.IntakeOut;
 import frc.robot.commands.teleop.IntakeSpin;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.TurretRotate;
-import frc.robot.commands.autoAim;
+import frc.robot.commands.AutoAim;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
@@ -123,16 +123,14 @@ public class RobotContainer {
 
         // intake commands
         // this is broken cause no encoder
-        driver.rightTrigger().whileTrue(intakePivot.moveOutIntakeCommand().alongWith(intake.SetIntakePowerCommand()))
-        .whileFalse(intakePivot.moveHomeIntakeCommand().alongWith(intake.StopIntakePowerCommand()));
+        driver.rightTrigger().whileTrue(intakePivot.moveOutCommand().alongWith(intake.SetPowerCommand()))
+        .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
 
         // much slower for the moment
         driver.rightBumper().whileTrue(new TurretRotate(turret, 0.025));
         driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
 
         // this is on operator for now
-        operator.leftBumper().whileTrue( intake.SetIntakePowerCommand()).whileFalse(intake.StopIntakePowerCommand());
-
         operator.a().onTrue(kicker.run())
                     .onFalse(kicker.stop());
 
@@ -142,20 +140,25 @@ public class RobotContainer {
                     .onFalse(hood.stopCommand());
 
         // safe middle angle
-        operator.rightBumper().whileTrue(hood.goToDesiredAngleCommand())
-                              .onFalse(hood.stopCommand());
+        operator.rightBumper().whileTrue(hood.goToDesiredAngleCommand().alongWith(shooter.setSpeedToDesired()))
+                              .onFalse(hood.stopCommand().alongWith(shooter.stopCommand()));
 
-        operator.rightTrigger().whileTrue(shooter.setPowerCommand(0.5))
+        operator.rightTrigger().whileTrue(shooter.setPowerCommand(shooter.desiredPower))
                                .onFalse(shooter.stopCommand());
                 
-        
+        operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER).alongWith(hopper.run()))
+            .onTrue(kicker.run())
+            .onFalse(kicker.stop().alongWith(hopper.stop()));
 
-        operator.leftTrigger().whileTrue(hopper.run())
-                              .onFalse(hopper.stop());
+        // operator.leftTrigger().whileTrue(hopper.run())
+        //                       .onFalse(hopper.stop());
+
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
         operator.b().whileTrue(new AprilLock(turret));
+
+
 
         operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
     }

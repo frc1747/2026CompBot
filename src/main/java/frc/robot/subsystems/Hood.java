@@ -112,8 +112,8 @@ public class Hood extends SubsystemBase {
 
     //SmartDashboard.getNumber("hood/Hood Desired Angle")
 
-    if (Math.abs(( - getCurrentAngle()) / getCurrentAngle()) <= 0.1) {
-      SmartDashboard.putBoolean("Desired RPM Reached", true);
+    if (Math.abs(( desiredAngle - getCurrentAngle()) / getCurrentAngle()) <= 0.01) {
+      SmartDashboard.putBoolean("hood/hood angle Reached", true);
     }
   }
 }
