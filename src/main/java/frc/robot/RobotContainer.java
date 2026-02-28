@@ -138,6 +138,7 @@ public class RobotContainer {
                     .onFalse(hood.stopCommand());
         operator.y().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(false))  // up
                     .onFalse(hood.stopCommand());
+        
 
         // safe middle angle
         // operator.rightBumper().whileTrue(hood.goToDesiredAngleCommand().alongWith(shooter.setSpeedToDesired()))

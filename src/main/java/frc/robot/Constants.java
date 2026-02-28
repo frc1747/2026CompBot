@@ -83,7 +83,7 @@ public final class Constants {
   }
   public static final class Hopper {
     public static final int MOTOR_PORT = 44;
-    public static final double MOTOR_POWER = 0.5;
+    public static final double MOTOR_POWER = 0.7;
   }
 
   public static final class Hood {
@@ -128,7 +128,7 @@ public final class Constants {
     public static final double UPPER_LIMIT = 90;
     public static final double LOWER_LIMIT = -90;
     public static final double DIST_TO_BOT_CENTER = 0.1529842; // meters
-    public static final double TURRET_YAW_LIMIT = 45; // deg
+    public static final double TURRET_YAW_LIMIT = 70; // deg
   }
 
   public static final class Shooter {
@@ -155,23 +155,23 @@ public final class Constants {
   }
      public static final class Intake {
         public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.1;
+        public static final double POWER = 0.7;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
 
     }
 
     public static final class IntakePivot {
         public static final int MOTOR_PORT = 45;
-        public static final double OUT = -7.6; // needs tuning for the encoder
+        public static final double OUT = -7; // needs tuning for the encoder
         public static final double HOME = -.8; // needs tuning for the encoder
-        public static final double kP = 0.002; //TODO: VERIFY
+        public static final double kP = 0.01; //TODO: VERIFY
         public static final double kI = 0.0; //TODO: VERIFY
         public static final double kD = 0.0; //TODO: VERIFY
     }
 
     public static final class Kicker {
         public static final int MOTOR_PORT = 43;
-        public static final double MOTOR_POWER = 0.5;
+        public static final double MOTOR_POWER = 0.7;
     }
 }
 
