@@ -17,7 +17,7 @@ public class IntakePivot extends SubsystemBase {
     private TalonFX motor;
     private Encoder encoder;
     private DutyCycleOut dutyCycle = new DutyCycleOut(0);
-    private PIDController pid = new PIDController(Constants.Intake.kP, Constants.Intake.kI, Constants.Intake.kD);
+    private PIDController pid = new PIDController(Constants.IntakePivot.kP, Constants.IntakePivot.kI, Constants.IntakePivot.kD);
 
     public IntakePivot() {
         this.motor = new TalonFX(Constants.IntakePivot.MOTOR_PORT);
