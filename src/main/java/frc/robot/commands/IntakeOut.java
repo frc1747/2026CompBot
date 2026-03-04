@@ -27,4 +27,9 @@ public class IntakeOut extends Command {
     public void end(boolean interrupted) {
         intakePivot.intakePivot(0);
     } 
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
