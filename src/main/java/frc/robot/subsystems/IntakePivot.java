@@ -1,5 +1,4 @@
 package frc.robot.subsystems;
-
 import java.lang.invoke.ConstantCallSite;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -7,7 +6,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.math.MathUtil;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

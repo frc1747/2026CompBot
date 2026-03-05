@@ -9,6 +9,7 @@ import java.util.List;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
@@ -149,8 +150,8 @@ public final class Constants {
     public static final double PID_I = 0.0;
     public static final double PID_D = 0.0;
     public static final double TOLERANCE = .05; // percent tolerance
-    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d();
-    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d();
+    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(-4.634, -4.016, new Rotation2d()); // cords hurt my brain  
+    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(4.634,4.016,new Rotation2d());
     // max rpm 5800ish
   }
      public static final class Intake {
