@@ -45,7 +45,7 @@ public class Hopper extends SubsystemBase {
     }
 
     public Command setPowerCommand(boolean reverse) {
-        return runOnce(() -> setPower((reverse ? -1 : 1) * -Constants.Hopper.MOTOR_POWER));
+        return runOnce(() -> setPower((reverse ? -1 : 1) * Constants.Hopper.MOTOR_POWER));
     }
 
     public Command stop() {
