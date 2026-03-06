@@ -59,8 +59,8 @@ public class Turret extends SubsystemBase {
 
     pid.enableContinuousInput(0.0, 360.0);
     pid.setTolerance(1.0);
-    desiredAngle = 0;
-    SmartDashboard.putNumber("Turret/Desired Angle", 0);
+    desiredAngle = 0.0;
+    SmartDashboard.putNumber("Turret/Desired Angle", 0.0);
   }
 
   // left from perspective of a person facing turret side of robot
