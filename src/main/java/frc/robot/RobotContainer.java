@@ -156,8 +156,9 @@ public class RobotContainer {
             .onTrue(kicker.run())
             .onFalse(kicker.stop().alongWith(hopper.stop()));
 
-        operator.leftTrigger().whileTrue(hopper.run(true)
+        operator.leftTrigger().whileTrue(hopper.run(true))
             .onFalse(hopper.stop());
+
 
         // operator.leftTrigger().whileTrue(hopper.run())
         //                       .onFalse(hopper.stop());
