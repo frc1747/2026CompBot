@@ -11,6 +11,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -29,6 +30,7 @@ public class Turret extends SubsystemBase {
   private DigitalInput leftLimitSwitch;
   private DigitalInput rightLimitSwitch;
   private double targetPower;
+  private double desiredAngle;
 
   // optimization for not creating new control object 50/sec
   private DutyCycleOut dutyCycle = new DutyCycleOut(0);
@@ -57,6 +59,8 @@ public class Turret extends SubsystemBase {
 
     pid.enableContinuousInput(0.0, 360.0);
     pid.setTolerance(1.0);
+    desiredAngle = 0;
+    SmartDashboard.putNumber("Turret/Desired Angle", 0);
   }
 
   // left from perspective of a person facing turret side of robot
@@ -64,6 +68,7 @@ public class Turret extends SubsystemBase {
     // not (!) operator used because limit switch is normally open
     return !leftLimitSwitch.get();
   }
+
 
   // right from perspective of a person facing turret side of robot
   public boolean getRightLimitSwitchPressed() {
@@ -90,6 +95,13 @@ public class Turret extends SubsystemBase {
   //  motor.setControl(dutyCycle);
   //  return;
   // }
+
+  public Command setDesiredAngle(){
+    return run(
+      ()-> 
+      goToAngle(desiredAngle)  
+    );
+  }
 
   public void basicSpin(double power) {
     // dutyCycle.Output = power;
@@ -183,6 +195,8 @@ public class Turret extends SubsystemBase {
     Translation2d hubLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
     double distanceToHub = getAbsTurretPose().getTranslation().getDistance(hubLoc);
     SmartDashboard.putNumber("Hub Distance From Turret", distanceToHub);
+
+    desiredAngle = SmartDashboard.getNumber("Turret/Desired Angle", 0.0);
     //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
   }
 }

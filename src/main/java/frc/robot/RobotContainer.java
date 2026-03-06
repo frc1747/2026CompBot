@@ -156,6 +156,8 @@ public class RobotContainer {
             .onTrue(kicker.run())
             .onFalse(kicker.stop().alongWith(hopper.stop()));
 
+        operator.povDown().whileTrue(turret.setDesiredAngle());
+
         // operator.leftTrigger().whileTrue(hopper.run())
         //                       .onFalse(hopper.stop());
 
@@ -167,10 +169,10 @@ public class RobotContainer {
 
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
-    }
+        }
         else{
             operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
-    }
+        }
     }
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
