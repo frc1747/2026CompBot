@@ -27,4 +27,9 @@ public class IntakeSpin extends Command {
     public void end(boolean interrupted) {
         intake.intakeSpin(0.0);
     }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

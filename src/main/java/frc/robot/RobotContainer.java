@@ -80,6 +80,11 @@ public class RobotContainer {
 
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
+        NamedCommands.registerCommand("April Lock", new AprilLock(turret));
+        NamedCommands.registerCommand("Shoot", shooter.setPowerCommand(0.5));
+        NamedCommands.registerCommand("Stop Shooter", shooter.stopCommand());
+        NamedCommands.registerCommand("Intake Spin", new IntakeSpin(intake, Constants.Intake.POWER));
+        NamedCommands.registerCommand("Intake Out", new IntakeOut(intakePivot, Constants.Intake.INTAKE_PIVOT_TICK));
 
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
