@@ -128,6 +128,7 @@ public class RobotContainer {
         // driver.rightTrigger().whileTrue(intakePivot.moveOutCommand().alongWith(intake.SetPowerCommand()))
         // .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
         
+        driver.leftTrigger().onTrue(hood.goToAngleCommand(0.0));
 
         // much slower for the moment
         driver.rightBumper().whileTrue(new TurretRotate(turret, 0.025));
