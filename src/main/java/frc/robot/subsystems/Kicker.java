@@ -71,11 +71,11 @@ public class Kicker extends SubsystemBase {
 
     public void setRPM(double rpm) {
         motor.setControl(velocityKicker.withVelocity(rpm / 60.0));
-  }
+    }
 
     public double getRPM() {
         return (motor.getVelocity().getValueAsDouble() + motor.getVelocity().getValueAsDouble()) * 60;
-  }
+    }
 
     @Override
     public void periodic() {
