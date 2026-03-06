@@ -164,6 +164,9 @@ public class RobotContainer {
 
         operator.b().whileTrue(new AprilLock(turret));
 
+        operator.rightBumper().negate().whileTrue(kicker.setPowerCommand(true))
+            .onFalse(kicker.stop());
+
 
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
