@@ -158,7 +158,7 @@ public class RobotContainer {
             .onFalse(kicker.stop().alongWith(hopper.stop()));
 
         operator.povDown().whileTrue(turret.setDesiredAngle())
-        .onFalse(new TurretRotate(turret, 0.0));
+            .onFalse(new TurretRotate(turret, 0.0));
 
         // operator.leftTrigger().whileTrue(hopper.run())
         //                       .onFalse(hopper.stop());
