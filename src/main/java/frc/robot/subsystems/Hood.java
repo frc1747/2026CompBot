@@ -109,7 +109,7 @@ public class Hood extends SubsystemBase {
     desiredAngle = SmartDashboard.getNumber("hood/Desired Angle", 25);
     SmartDashboard.putNumber("hood/PID", pid.calculate(getCurrentAngle(), desiredAngle));
     SmartDashboard.putNumber("hood/DutyCycle", dutyCycle.Output);
-
+    SmartDashboard.putBoolean("hood/hood down", getCurrentAngle() == 0.0);
     //SmartDashboard.getNumber("hood/Hood Desired Angle")
 
     if (Math.abs(( desiredAngle - getCurrentAngle()) / getCurrentAngle()) <= 0.01) {
