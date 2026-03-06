@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.lang.annotation.Target;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -156,7 +157,8 @@ public class RobotContainer {
             .onTrue(kicker.run())
             .onFalse(kicker.stop().alongWith(hopper.stop()));
 
-        operator.povDown().whileTrue(turret.setDesiredAngle());
+        operator.povDown().whileTrue(turret.setDesiredAngle())
+        .onFalse(new TurretRotate(turret, 0.0));
 
         // operator.leftTrigger().whileTrue(hopper.run())
         //                       .onFalse(hopper.stop());
