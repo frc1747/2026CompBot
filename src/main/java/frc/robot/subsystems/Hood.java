@@ -100,6 +100,10 @@ public class Hood extends SubsystemBase {
     motor.setControl(dutyCycle);
   }
 
+  public boolean isDown() {
+    return getCurrentAngle() >= Constants.Hood.STARTING_ANGLE && getCurrentAngle() <= Constants.Hood.STARTING_ANGLE + Constants.Hood.ANGLE_TOLERANCE;
+  }
+
 
   @Override
   public void periodic() {
@@ -109,7 +113,7 @@ public class Hood extends SubsystemBase {
     desiredAngle = SmartDashboard.getNumber("hood/Desired Angle", 25);
     SmartDashboard.putNumber("hood/PID", pid.calculate(getCurrentAngle(), desiredAngle));
     SmartDashboard.putNumber("hood/DutyCycle", dutyCycle.Output);
-    SmartDashboard.putBoolean("hood/hood down", getCurrentAngle() >= Constants.Hood.STARTING_ANGLE && getCurrentAngle() <= Constants.Hood.STARTING_ANGLE + Constants.Hood.ANGLE_TOLERANCE);
+    SmartDashboard.putBoolean("hood/hood down", isDown());
     //SmartDashboard.getNumber("hood/Hood Desired Angle")
 
     if (Math.abs(( desiredAngle - getCurrentAngle()) / getCurrentAngle()) <= 0.01) {
