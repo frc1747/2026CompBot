@@ -97,9 +97,7 @@ public class Turret extends SubsystemBase {
   // }
 
   public Command setDesiredAngle(){
-    return run(
-      ()-> 
-      goToAngle(desiredAngle)  
+    return run(()-> goToAngle(desiredAngle)  
     );
   }
 
