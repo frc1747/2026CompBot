@@ -32,6 +32,7 @@ public class Turret extends SubsystemBase {
     private double targetPower;
     public double distanceToHub;
     private double yawOffsetFudge;
+  private double desiredAngle;
 
     // optimization for not creating new control object 50/sec
     private DutyCycleOut dutyCycle = new DutyCycleOut(0);
@@ -63,7 +64,9 @@ public class Turret extends SubsystemBase {
         pid.enableContinuousInput(0.0, 360.0);
         pid.setTolerance(1.0);
         yawOffsetFudge = 0;
-    }
+      desiredAngle = 0;
+    SmartDashboard.putNumber("Turret/Desired Angle", 0);
+  }
 
     // left from perspective of a person facing turret side of robot
     public boolean getLeftLimitSwitchPressed() {
@@ -77,25 +80,32 @@ public class Turret extends SubsystemBase {
         return !rightLimitSwitch.get();
     }
 
-    // supplies power to spin turret but stops at limit switches
-    // public void basicSpin(double power) {
-    //  dutyCycle.Output = power;
-    //  if (leftLimitSwitch.get()) {
-    //    if (power > 0) { // > or <
-    //      dutyCycle.Output = power;
-    //    } else {
-    //      dutyCycle.Output = 0.0;
-    //    }
-    //  } else if (rightLimitSwitch.get()) {
-    //    if (power < 0) { // > or <
-    //      dutyCycle.Output = power;
-    //    } else {
-    //      dutyCycle.Output = 0.0;
-    //    }
-    //  }
-    //  motor.setControl(dutyCycle);
-    //  return;
-    // }
+  // supplies power to spin turret but stops at limit switches
+  // public void basicSpin(double power) {
+  //  dutyCycle.Output = power;
+  //  if (leftLimitSwitch.get()) {
+  //    if (power > 0) { // > or <
+  //      dutyCycle.Output = power;
+  //    } else {
+  //      dutyCycle.Output = 0.0;
+  //    }
+  //  } else if (rightLimitSwitch.get()) {
+  //    if (power < 0) { // > or <
+  //      dutyCycle.Output = power;
+  //    } else {
+  //      dutyCycle.Output = 0.0;
+  //    }
+  //  }
+  //  motor.setControl(dutyCycle);
+  //  return;
+  // }
+
+  public Command setDesiredAngle(){
+    return run(
+      ()->
+      goToAngle(desiredAngle)
+    );
+  }
 
     public void basicSpin(double power) {
         // dutyCycle.Output = power;
@@ -195,6 +205,8 @@ public class Turret extends SubsystemBase {
         SmartDashboard.putBoolean("Left Limit Switch", getLeftLimitSwitchPressed());
         SmartDashboard.putBoolean("Right Limit Switch", getRightLimitSwitchPressed());
         SmartDashboard.putNumber("Turret/speed:", dutyCycle.Output);
+
+    desiredAngle = SmartDashboard.getNumber("Turret/Desired Angle", 0.0);
         //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
     }
 }
