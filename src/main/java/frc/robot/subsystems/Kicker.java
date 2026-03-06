@@ -25,10 +25,10 @@ public class Kicker extends SubsystemBase {
         TalonFXConfiguration config = new TalonFXConfiguration();
         
         config.Voltage
-            .withPeakForwardVoltage(12)
-            .withPeakReverseVoltage(-12);
+            .withPeakForwardVoltage(12.0)
+            .withPeakReverseVoltage(-12.0);
 
-        config.Slot0.kP = 0.0;
+        config.Slot0.kP = 0.5;
         config.Slot0.kI = 0.0;
         config.Slot0.kD = 0.0;
         
@@ -70,12 +70,11 @@ public class Kicker extends SubsystemBase {
     }
 
     public void setRPM(double rpm) {
-        System.out.println("I am being commanded to " + rpm);
         motor.setControl(velocityKicker.withVelocity(rpm / 60.0));
   }
 
-  public double getRPM() {
-    return (motor.getVelocity().getValueAsDouble() + motor.getVelocity().getValueAsDouble()) / 2 * 60;
+    public double getRPM() {
+        return (motor.getVelocity().getValueAsDouble() + motor.getVelocity().getValueAsDouble()) * 60;
   }
 
     @Override
