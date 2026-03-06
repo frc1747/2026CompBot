@@ -147,10 +147,10 @@ public class RobotContainer {
         // operator.rightBumper().whileTrue(hood.goToDesiredAngleCommand().alongWith(shooter.setSpeedToDesired()))
         //                       .onFalse(hood.stopCommand().alongWith(shooter.stopCommand()));
         operator.rightBumper().whileTrue(shooter.setSpeedToDesired())
-                            .onFalse(shooter.stopCommand());
+                .onFalse(shooter.stopCommand());
 
         operator.rightTrigger().whileTrue(shooter.SetDesiredPowerCommand())
-                               .onFalse(shooter.stopCommand());
+                .onFalse(shooter.stopCommand());
                 
         operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER).alongWith(hopper.run()))
             .onTrue(kicker.run())
@@ -166,11 +166,10 @@ public class RobotContainer {
 
 
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-
-        operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
+            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
     }
-    else{
-                operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
+        else{
+            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
     }
     }
     public Command getAutonomousCommand() {
