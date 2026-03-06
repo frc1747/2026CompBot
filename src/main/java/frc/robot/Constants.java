@@ -165,6 +165,7 @@ public final class Constants {
         public static final int MOTOR_PORT = 45;
         public static final double OUT = -7; // needs tuning for the encoder
         public static final double HOME = -.8; // needs tuning for the encoder
+        public static final double TOLERANCE = 0.05; // ARBITRARY CHANGE THIS PLEASE!!!
         public static final double kP = 0.01; //TODO: VERIFY
         public static final double kI = 0.0; //TODO: VERIFY
         public static final double kD = 0.0; //TODO: VERIFY

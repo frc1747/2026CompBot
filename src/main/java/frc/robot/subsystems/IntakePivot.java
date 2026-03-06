@@ -58,6 +58,9 @@ public class IntakePivot extends SubsystemBase {
         return run( () -> intakePivot(Constants.IntakePivot.HOME));
     }
 
+    public double getIntakePivotAngle() {
+        return motor.getPosition().getValueAsDouble();
+    }
     
   @Override
   public void periodic() {
