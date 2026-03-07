@@ -16,8 +16,10 @@ public class IntakePivot extends SubsystemBase {
     private Encoder encoder;
     private DutyCycleOut dutyCycle = new DutyCycleOut(0);
     private PIDController pid = new PIDController(Constants.IntakePivot.kP, Constants.IntakePivot.kI, Constants.IntakePivot.kD);
+    double desiredPos;
 
     public IntakePivot() {
+         SmartDashboard.putNumber("intake/Desired Pos", Constants.IntakePivot.OUT);
         this.motor = new TalonFX(Constants.IntakePivot.MOTOR_PORT);
         
         var request = new PositionDutyCycle(0.0);
@@ -54,9 +56,15 @@ public class IntakePivot extends SubsystemBase {
     public Command moveHomeCommand(){ // move home
         return run( () -> intakePivot(Constants.IntakePivot.HOME));
     }
+
+    public Command moveDesiredPosCommand(){ // move home
+        return run( () -> intakePivot(desiredPos));
+    }
     
   @Override
   public void periodic() {
-      SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
+         SmartDashboard.putNumber("intake/intake pid", dutyCycle.Output = pid.calculate(motor.getPosition().getValueAsDouble() , desiredPos));
+        desiredPos = SmartDashboard.getNumber("intake/Desired intake", Constants.IntakePivot.OUT);
+        SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
   }
 }
