@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.teleop.AprilLock;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.teleop.IntakeOut;
+import frc.robot.commands.teleop.IntakePivotHome;
 import frc.robot.commands.teleop.IntakeSpin;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.TurretRotate;
@@ -125,8 +126,9 @@ public class RobotContainer {
 
         // intake commands
         // this is broken cause no encoder
-        driver.rightTrigger().whileTrue(intakePivot.moveDesiredPosCommand().alongWith(intake.SetPowerCommand()))
-        .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
+        // sean broke the motor o7 he lose intake rights
+        // driver.rightTrigger().whileTrue(intakePivot.moveDesiredPosCommand().alongWith(intake.SetPowerCommand()))
+        // .onFalse(new IntakePivotHome(intakePivot).alongWith(intake.StopCommand()));
         
 
         // much slower for the moment
@@ -134,8 +136,8 @@ public class RobotContainer {
         driver.leftBumper().whileTrue(new TurretRotate(turret, -0.125));
 
         // this is on operator for now
-        operator.a().onTrue(kicker.run())
-                    .onFalse(kicker.stop());
+    //    operator.a().onTrue(kicker.run())
+      //              .onFalse(kicker.stop());
 
         operator.x().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(true))  // down
                     .onFalse(hood.stopCommand());
@@ -166,10 +168,10 @@ public class RobotContainer {
 
 
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
+            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D)).onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
     }
         else{
-            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
+            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D)).onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
     }
     }
     public Command getAutonomousCommand() {

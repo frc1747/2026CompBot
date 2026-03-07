@@ -17,6 +17,7 @@ import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -95,7 +96,7 @@ public class Shooter extends SubsystemBase {
 
   // in RPM
   public void setRPM(double rpm) {
-    System.out.println("I am being commanded to " + rpm);
+   // System.out.println("I am being commanded to " + rpm);
     //velocityShooter.Velocity * 60 = //pid.calculate(getRPM(), rpm);
     motorLeft.setControl(velocityShooter.withVelocity(rpm/60.0));
   }
@@ -129,26 +130,31 @@ public class Shooter extends SubsystemBase {
     // slove with the good old quady form
   }
 
+  public double dumbdumbcodeforSpeed(double Distance){
+    return getPowerNeededFromDistanceAndAngle(Distance, RobotContainer.hood.getCurrentAngle());
+  }
+
   public double[] findSpeedAndAngleFromDistance(double Distance){
+    // the power is multplyed by 100 to move up to the thousands
     double currentAngle = RobotContainer.hood.getCurrentAngle();
     double wantedPower = getPowerNeededFromDistanceAndAngle(Distance, currentAngle);
     double[] array = {-1,-1};
     // this could be refactor 
     if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-     double[] angleAndSpeed = {currentAngle, wantedPower};
+     double[] angleAndSpeed = {currentAngle, wantedPower*101};
       return angleAndSpeed;
   }
   // we are assuming that greater hood angle is a furtuer Shoot
     for (currentAngle = RobotContainer.hood.getCurrentAngle() ; currentAngle <= Constants.Shooter.MAX_HOOD_ANGLE ; currentAngle ++ ){
       if (currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE) return array;
       if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-        double[] angleAndSpeed = {currentAngle, wantedPower};
+        double[] angleAndSpeed = {currentAngle, wantedPower*101};
         return angleAndSpeed;}
     }
     for (currentAngle = RobotContainer.hood.getCurrentAngle() ; currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE ; currentAngle -- ){
       if (currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE) return array;
       if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-        double[] angleAndSpeed = {currentAngle, wantedPower};
+        double[] angleAndSpeed = {currentAngle, wantedPower*101};
         return angleAndSpeed;}
     }
     return array;
@@ -160,6 +166,8 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter/Average RPM", getRPM());
     desiredRPM = SmartDashboard.getNumber("Shooter/Desired RPM", 0.0);
+    SmartDashboard.putNumber("Shooter/RPM for auto aim", findSpeedAndAngleFromDistance(RobotContainer.turret.distanceToHub)[1]);
+    SmartDashboard.putNumber("Shooter/hood for auto aim", findSpeedAndAngleFromDistance(RobotContainer.turret.distanceToHub)[0]);
     //SmartDashboard.putNumber("Shooter/Desired RPM error", Math.abs((desiredRPM - getRPM()) / getRPM()));
     if (Math.abs((desiredRPM - getRPM()) / getRPM()) <= 0.01) {
       SmartDashboard.putBoolean("Shooter/Desired RPM Reached", true);

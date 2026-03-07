@@ -66,7 +66,8 @@ public class IntakePivot extends SubsystemBase {
     
   @Override
   public void periodic() {
-         SmartDashboard.putNumber("intake/intake pid", dutyCycle.Output = pid.calculate(motor.getPosition().getValueAsDouble() , desiredPos));
+
+        SmartDashboard.putNumber("intake/intake pid", dutyCycle.Output = pid.calculate(motor.getPosition().getValueAsDouble() , desiredPos));
         desiredPos = SmartDashboard.getNumber("intake/Desired intake", Constants.IntakePivot.OUT);
         SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
   }

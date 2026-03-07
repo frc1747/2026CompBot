@@ -42,7 +42,7 @@ public final class Constants {
         public static final double FOV_HORIZONTAL = 62.5;
 
         // AprilLock2 rotation compensation pid values
-        public static final double APRIL_LOCK_P = 0.5;
+        public static final double APRIL_LOCK_P = 0.6;
         public static final double APRIL_LOCK_I = 0.003;
         public static final double APRIL_LOCK_D = 0.003;
         // maximum magnitude of PID output
@@ -143,20 +143,20 @@ public final class Constants {
     public static final double SURFACE_D = 12.4826; // needs tuning
     public static final double SURFACE_E = -10.8847; // needs tuning
     public static final double SURFACE_F = 2.9962; // needs tuning
-    public static final double MAX_AUTOSHOOT_POWER =.85;
+    public static final double MAX_AUTOSHOOT_POWER =4500;
     public static final double MAX_HOOD_ANGLE = 43;// degrees
     public static final double MIN_HOOD_ANGLE = 26;// degrees
-    public static final double PID_P = 0.5;
-    public static final double PID_I = 0.0;
+    public static final double PID_P = 1.0;
+    public static final double PID_I = 0.45;
     public static final double PID_D = 0.0;
     public static final double TOLERANCE = .05; // percent tolerance
-    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(-4.634, -4.016, new Rotation2d()); // cords hurt my brain  
-    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(4.634,4.016,new Rotation2d());
+    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Vision.RED_HUB_CENTER_X, Vision.RED_HUB_CENTER_Y, new Rotation2d()); // cords hurt my brain  
+    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(- Vision.RED_HUB_CENTER_X,-Vision.RED_HUB_CENTER_Y,new Rotation2d());
     // max rpm 5800ish
   }
      public static final class Intake {
         public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.7;
+        public static final double POWER = 0.6;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
 
     }
