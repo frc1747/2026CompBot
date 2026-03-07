@@ -163,15 +163,13 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        operator.b().whileTrue(new AprilLock(turret));
-
+        operator.b().toggleOnTrue(new AprilLock(turret));
 
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
-    }
-        else{
+        } else {
             operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
-    }
+        }
     }
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
