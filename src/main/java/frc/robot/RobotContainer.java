@@ -125,8 +125,9 @@ public class RobotContainer {
 
         // intake commands
         // this is broken cause no encoder
-        // driver.rightTrigger().whileTrue(intakePivot.moveOutCommand().alongWith(intake.SetPowerCommand()))
-        // .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
+        
+        driver.rightTrigger().whileTrue(intakePivot.moveOutCommand())
+            .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
         
 
         // much slower for the moment
