@@ -1,12 +1,9 @@
 package frc.robot.subsystems;
 import java.lang.invoke.ConstantCallSite;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
-
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,14 +47,13 @@ public class IntakePivot extends SubsystemBase {
         this.motor.set(armPower);
     }
 
-    public Command moveOutCommand(){
+    public Command moveOutCommand(){ // move the intake to the pos to fix up fuel
         return run( () -> intakePivot(Constants.IntakePivot.OUT));
     }
 
-    public Command moveHomeCommand(){
+    public Command moveHomeCommand(){ // move home
         return run( () -> intakePivot(Constants.IntakePivot.HOME));
     }
-
     
   @Override
   public void periodic() {
