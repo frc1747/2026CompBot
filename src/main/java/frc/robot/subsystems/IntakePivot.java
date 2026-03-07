@@ -62,5 +62,7 @@ public class IntakePivot extends SubsystemBase {
   @Override
   public void periodic() {
       SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
+
+      SmartDashboard.putBoolean("Intake out", (Constants.IntakePivot.OUT - Constants.IntakePivot.OUT*Constants.IntakePivot.TOLERANCE <  motor.getPosition().getValueAsDouble() && motor.getPosition().getValueAsDouble() < Constants.IntakePivot.OUT - Constants.IntakePivot.OUT*Constants.IntakePivot.TOLERANCE   ));
   }
 }
