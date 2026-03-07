@@ -60,6 +60,9 @@ public class IntakePivot extends SubsystemBase {
     public Command moveDesiredPosCommand(){ // move home
         return run( () -> intakePivot(desiredPos));
     }
+    public double getIntakePivotAngle() {
+        return motor.getPosition().getValueAsDouble();
+    }
     
   @Override
   public void periodic() {
