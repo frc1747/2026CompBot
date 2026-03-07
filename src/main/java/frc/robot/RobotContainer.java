@@ -128,11 +128,13 @@ public class RobotContainer {
         
         driver.rightTrigger().whileTrue(intakePivot.moveOutCommand())
             .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
+        driver.rightTrigger().whileTrue(intakePivot.moveDesiredPosCommand().alongWith(intake.SetPowerCommand()))
+        .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
         
 
         // much slower for the moment
-        driver.rightBumper().whileTrue(new TurretRotate(turret, 0.025));
-        driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
+        driver.rightBumper().whileTrue(new TurretRotate(turret, 0.125));
+        driver.leftBumper().whileTrue(new TurretRotate(turret, -0.125));
 
         // this is on operator for now
         operator.a().onTrue(kicker.run())

@@ -138,12 +138,12 @@ public final class Constants {
     public static final int MOTOR_RIGHT_PORT = 42;
     public static final int ENCODER_PORT = 1; // needs to be set
     public static final double ENCODER_OFFSET = .2; // needs to be set o7
-    public static final double SURFACE_A = 44.1596; // needs tuning
-    public static final double SURFACE_B = -4.3595; // needs tuning
-    public static final double SURFACE_C = -0.94726; // needs tuning
-    public static final double SURFACE_D = 0.12545; // needs tuning
-    public static final double SURFACE_E = 0.36687; // needs tuning
-    public static final double SURFACE_F = 0.017314; // needs tuning
+    public static final double SURFACE_A = 3863.2518; // needs tuning
+    public static final double SURFACE_B = 617.2701; // needs tuning
+    public static final double SURFACE_C = -176.2434; // needs tuning
+    public static final double SURFACE_D = 12.4826; // needs tuning
+    public static final double SURFACE_E = -10.8847; // needs tuning
+    public static final double SURFACE_F = 2.9962; // needs tuning
     public static final double MAX_AUTOSHOOT_POWER =.85;
     public static final double MAX_HOOD_ANGLE = 43;// degrees
     public static final double MIN_HOOD_ANGLE = 26;// degrees
@@ -157,23 +157,25 @@ public final class Constants {
   }
      public static final class Intake {
         public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.2;
+        public static final double POWER = 0.7;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
 
     }
 
     public static final class IntakePivot {
         public static final int MOTOR_PORT = 45;
-        public static final double OUT = -7; // needs tuning for the encoder
-        public static final double HOME = -.8; // needs tuning for the encoder
-        public static final double kP = 0.01; //TODO: VERIFY
+        public static final double OUT = -24.; // needs tuning for the encoder
+        public static final double HOME = -.6; // needs tuning for the encoder
+        public static final double TOLERANCE = 0.05; // ARBITRARY CHANGE THIS PLEASE!!!
+        public static final double kP = 0.03; //TODO: VERIFY
         public static final double kI = 0.0; //TODO: VERIFY
         public static final double kD = 0.0; //TODO: VERIFY
+
     }
 
     public static final class Kicker {
         public static final int MOTOR_PORT = 43;
-        public static final double MOTOR_POWER = 0.7;
+        public static final double MOTOR_POWER = -0.7;
     }
 }
 
