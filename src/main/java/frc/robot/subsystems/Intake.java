@@ -36,11 +36,16 @@ public class Intake extends SubsystemBase {
         this.motor.set(wheelsPower);
     }
 
-    public Command SetPowerCommand(){
-        return runOnce( () -> intakeSpin(Constants.Intake.POWER));
+    public void setPower(double power) {
+        dutyCycle.Output = power;
+        motor.setControl(dutyCycle);
     }
 
      public Command StopCommand(){
         return runOnce( () -> setIntakePower(0));
     }
+    public Command setPowerCommand(boolean reverse) {
+        return runOnce(() -> setPower((reverse ? -1 : 1) * Constants.Intake.POWER));
+    }
+
 }

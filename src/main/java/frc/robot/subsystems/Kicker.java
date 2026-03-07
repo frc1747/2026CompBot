@@ -52,6 +52,9 @@ public class Kicker extends SubsystemBase {
         dutyControl.Output = power;
         motor.setControl(dutyControl);
     }
+    public Command setPowerCommand(boolean reverse) {
+        return runOnce(() -> setPower((reverse ? -1 : 1) * Constants.Kicker.MOTOR_POWER));
+    }
 
     @Override
     public void periodic() {

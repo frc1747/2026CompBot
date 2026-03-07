@@ -152,9 +152,24 @@ public class RobotContainer {
         operator.rightTrigger().whileTrue(shooter.SetDesiredPowerCommand())
                 .onFalse(shooter.stopCommand());
                 
-        operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER).alongWith(hopper.run()))
-            .onTrue(kicker.run())
-            .onFalse(kicker.stop().alongWith(hopper.stop()));
+        operator.leftBumper()
+            .whileTrue(new IntakeSpin(intake, Constants.Intake.POWER).alongWith(hopper.run()))
+                .onTrue(kicker.run())
+                .onFalse(kicker.stop().alongWith(hopper.stop()));
+        
+        operator.leftTrigger()
+            .negate()
+            .whileTrue(
+                hopper.setPowerCommand(true)
+                    .alongWith(kicker.setPowerCommand(true))
+                    .alongWith(intake.setPowerCommand(true))
+            )
+            .onFalse(
+                intake.StopCommand()
+                    .alongWith(hopper.stop())
+                    .alongWith(kicker.stop())
+            );
+
 
         // operator.leftTrigger().whileTrue(hopper.run())
         //                       .onFalse(hopper.stop());
