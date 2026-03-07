@@ -14,11 +14,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+// TODO: Fix indentation inconsistencies
 public class IntakePivot extends SubsystemBase {
     private TalonFX motor;
     private Encoder encoder;
     private DutyCycleOut dutyCycle = new DutyCycleOut(0);
     private PIDController pid = new PIDController(Constants.IntakePivot.kP, Constants.IntakePivot.kI, Constants.IntakePivot.kD);
+    private double defaultPosition;
+    private boolean down;
 
     public IntakePivot() {
         this.motor = new TalonFX(Constants.IntakePivot.MOTOR_PORT);
@@ -34,8 +37,10 @@ public class IntakePivot extends SubsystemBase {
 
         motor.getConfigurator().apply(config);
 
+        defaultPosition = Constants.IntakePivot.ENCODER_UP;
     }
 
+    // TODO: rename method and refactor
     public void intakePivot(double tick) {
         //tick = MathUtil.clamp(tick, -0.05, 0.05);
         
@@ -44,6 +49,24 @@ public class IntakePivot extends SubsystemBase {
         dutyCycle.Output = pid.calculate(currentCounts, tick);
 
         motor.setControl(dutyCycle);
+    }
+
+    // where the intake should return when doing nothing
+    public void setDefaultPosition(double defaultPosition) {
+        this.defaultPosition = defaultPosition;
+    }
+
+    // where the intake should return when doing nothing
+    public double getDefaultPosition() {
+        return defaultPosition;
+    }
+
+    public void toggleDown() {
+        down = !down;
+    }
+
+    public boolean getDown() {
+        return down;
     }
 
     public void setPower(double armPower) {
@@ -56,6 +79,10 @@ public class IntakePivot extends SubsystemBase {
 
     public Command moveHomeCommand(){
         return run( () -> intakePivot(Constants.IntakePivot.HOME));
+    }
+
+    public double getEncoderValue() {
+        return motor.getPosition().getValueAsDouble();
     }
 
     
