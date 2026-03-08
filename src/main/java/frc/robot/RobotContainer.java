@@ -155,10 +155,12 @@ public class RobotContainer {
         operator.leftBumper()
             .whileTrue(new IntakeSpin(intake, Constants.Intake.POWER).alongWith(hopper.run()))
                 .onTrue(kicker.run())
-                .onFalse(kicker.stop().alongWith(hopper.stop()));
+                .onFalse(
+                    kicker.stop()
+                        .alongWith(hopper.stop())
+                );
         
         operator.leftTrigger()
-            .negate()
             .whileTrue(
                 hopper.setPowerCommand(true)
                     .alongWith(kicker.setPowerCommand(true))
