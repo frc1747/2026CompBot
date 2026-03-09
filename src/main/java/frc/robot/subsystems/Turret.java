@@ -9,14 +9,22 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
+import com.ctre.phoenix6.sim.TalonFXSSimState;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.simulation.DIOSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -29,11 +37,20 @@ public class Turret extends SubsystemBase {
   private DigitalInput leftLimitSwitch;
   private DigitalInput rightLimitSwitch;
   private double targetPower;
+  
+  public double distanceToHub;
+
+  // Fields required for simulation mode
+  private DCMotorSim motorSim;
+  private EncoderSim encoderSim;
+  private TalonFXSSimState talonSimState;
+  private DIOSim leftLimitSim;
+  private DIOSim rightLimitSim;
 
   // optimization for not creating new control object 50/sec
   private DutyCycleOut dutyCycle = new DutyCycleOut(0);
 
-  private final PIDController pid = new PIDController(Constants.Turret.PID_D, Constants.Turret.PID_D, Constants.Turret.PID_D);
+  private final PIDController pid = new PIDController(Constants.Turret.PID_P, Constants.Turret.PID_I, Constants.Turret.PID_D);
 
   public Turret() {
     motor = new TalonFXS(Constants.Turret.MOTOR_PORT);
@@ -57,6 +74,27 @@ public class Turret extends SubsystemBase {
 
     pid.enableContinuousInput(0.0, 360.0);
     pid.setTolerance(1.0);
+
+    if (RobotBase.isSimulation()) {
+      // Encoder is on the motor shaft side of the 15:110 reduction.
+      // DCMotorSim needs the gearing FROM motor TO the simulated shaft.
+      // Since encoder IS the motor shaft here, gearing = 1.0.
+      // We use Minion motor (comparable to NEO 550 class) -- adjust if needed.
+      motorSim = new DCMotorSim(
+          LinearSystemId.createDCMotorSystem(
+              DCMotor.getMinion(1),
+              0.0001,  // moment of inertia (kg·m²) -- tune this
+              1.0              // motor-to-encoder gear ratio (1:1, encoder on motor shaft)
+          ),
+          DCMotor.getMinion(1)
+      );
+      encoderSim = new EncoderSim(encoder);
+      talonSimState = motor.getSimState();
+
+      leftLimitSim = new DIOSim(leftLimitSwitch);
+      rightLimitSim = new DIOSim(rightLimitSwitch);
+    }
+
   }
 
   // left from perspective of a person facing turret side of robot
@@ -104,7 +142,7 @@ public class Turret extends SubsystemBase {
     // 8196 / 4 = 2048
     // 2048 * 7.333 ~= 15018.667 resulting pulses per full turret rotation
     // 15018.667 / 360 degrees ~= 41.719
-    return -encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
+    return encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
   }
 
   // returns pose of turret relative to field (absolute)
@@ -126,7 +164,7 @@ public class Turret extends SubsystemBase {
     return absoluteTurretPose;
   }
 
-    public double getYawOffset(Translation2d targetLoc) {
+  public double getYawOffset(Translation2d targetLoc) {
     Pose2d turretPose = getAbsTurretPose();
       
     // difference between robot and april tag poses
@@ -159,10 +197,10 @@ public class Turret extends SubsystemBase {
   public void periodic() {
     dutyCycle.Output = targetPower;
     // soft limits and limit switches
-    if (getLeftLimitSwitchPressed() && targetPower < 0) {
+    if (getLeftLimitSwitchPressed() && targetPower > 0) {
       dutyCycle.Output = 0.0;
     } 
-    if (getRightLimitSwitchPressed() && targetPower > 0) {
+    if (getRightLimitSwitchPressed() && targetPower < 0) {
       dutyCycle.Output = 0.0;
     }
     if (getTurretAngle() > Constants.Turret.TURRET_YAW_LIMIT && targetPower < 0) {
@@ -181,8 +219,37 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putBoolean("Right Limit Switch", getRightLimitSwitchPressed());
 
     Translation2d hubLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
-    double distanceToHub = getAbsTurretPose().getTranslation().getDistance(hubLoc);
+    distanceToHub = getAbsTurretPose().getTranslation().getDistance(hubLoc);
     SmartDashboard.putNumber("Hub Distance From Turret", distanceToHub);
     //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
   }
+
+  @Override
+  public void simulationPeriodic() {
+    // 1. Read what voltage the TalonFXS is commanding
+    talonSimState.setSupplyVoltage(RobotController.getBatteryVoltage());
+    double motorVoltage = talonSimState.getMotorVoltage();
+
+    // 2. Step the physics simulation (20ms loop)
+    motorSim.setInputVoltage(motorVoltage);
+    motorSim.update(0.020);
+
+    // 3. Push simulated position back to the EncoderSim.
+    //    getTurretAngle() divides raw count by 41.719 to get degrees.
+    //    Invert matches the negative sign in getTurretAngle().
+    double motorRevolutions = motorSim.getAngularPositionRotations();
+    // encoder CPR = 2048 (2048 raw pulses/rev in 4x quadrature mode)
+    int rawCounts = (int) (-motorRevolutions * 1024);
+    encoderSim.setCount(rawCounts);
+
+    // 4. Also feed velocity so any rate-based logic stays consistent
+    double motorRPS = motorSim.getAngularVelocityRPM() / 60.0;
+    encoderSim.setRate(-motorRPS * 1024); // counts per second
+
+    // 5. Update our limit switches
+    double turretAngle = getTurretAngle();
+    leftLimitSim.setValue(!(turretAngle <= -Constants.Turret.TURRET_YAW_LIMIT));
+    rightLimitSim.setValue(!(turretAngle >= Constants.Turret.TURRET_YAW_LIMIT));
+  }
+
 }

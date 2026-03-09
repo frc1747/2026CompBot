@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -12,6 +15,10 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
+
+  // Attributes for simulation purposes
+  private boolean simPoseInitialized = false;
+  private boolean prevDSAttached = false;
 
   public Robot() {
     m_robotContainer = new RobotContainer();
@@ -71,5 +78,37 @@ public class Robot extends TimedRobot {
   public void testExit() {}
 
   @Override
-  public void simulationPeriodic() {}
+
+  public void simulationPeriodic() {
+    boolean dsAttached = DriverStation.isDSAttached();
+
+    if (!prevDSAttached && dsAttached) {
+      simPoseInitialized = false;
+    }
+    prevDSAttached = dsAttached;
+
+    if (!simPoseInitialized && DriverStation.getAlliance().isPresent()) {
+      RobotContainer.drivetrain.resetPose(getStartingPose());
+      simPoseInitialized = true;
+    }
+  }
+
+  // Helper methods for determining bot's initial position on field
+  private Pose2d getStartingPose() {
+    Pose2d blueStartingPose = new Pose2d(1.5, 5.5, Rotation2d.fromDegrees(0));
+
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+      return flipPose(blueStartingPose);
+    }
+    return blueStartingPose;
+  }
+
+  private Pose2d flipPose(Pose2d pose) {
+    return new Pose2d(
+      Constants.Field.FIELD_LENGTH - pose.getX(),
+      Constants.Field.FIELD_WIDTH - pose.getY(),
+      pose.getRotation().plus(Rotation2d.fromDegrees(180))
+    );
+  }
 }
