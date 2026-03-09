@@ -164,7 +164,7 @@ public class RobotContainer {
 
         operator.b().whileTrue(new AprilLock(turret));
 
-        operator.rightBumper().negate().whileTrue(kicker.setPowerCommand(true))
+        operator.rightBumper().whileTrue(kicker.runReverse(true))
             .onFalse(kicker.stop());
 
 
