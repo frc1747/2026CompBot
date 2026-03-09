@@ -74,7 +74,7 @@ public class Kicker extends SubsystemBase {
     }
 
     public double getRPM() {
-        return (motor.getVelocity().getValueAsDouble() + motor.getVelocity().getValueAsDouble()) * 60;
+        return (motor.getVelocity().getValueAsDouble()) * 60;
     }
 
     @Override
