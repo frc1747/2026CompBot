@@ -83,8 +83,8 @@ public class Turret extends SubsystemBase {
       motorSim = new DCMotorSim(
           LinearSystemId.createDCMotorSystem(
               DCMotor.getMinion(1),
-              0.0001,  // moment of inertia (kg·m²) -- tune this
-              1.0              // motor-to-encoder gear ratio (1:1, encoder on motor shaft)
+              0.001,   // moment of inertia (kg·m²) -- tune this
+              7.3333   // motor-to-encoder gear ratio (1:1, encoder on motor shaft)
           ),
           DCMotor.getMinion(1)
       );
@@ -239,12 +239,12 @@ public class Turret extends SubsystemBase {
     //    Invert matches the negative sign in getTurretAngle().
     double motorRevolutions = motorSim.getAngularPositionRotations();
     // encoder CPR = 2048 (2048 raw pulses/rev in 4x quadrature mode)
-    int rawCounts = (int) (-motorRevolutions * 1024);
+    int rawCounts = (int) (-motorRevolutions * 2048);
     encoderSim.setCount(rawCounts);
 
     // 4. Also feed velocity so any rate-based logic stays consistent
     double motorRPS = motorSim.getAngularVelocityRPM() / 60.0;
-    encoderSim.setRate(-motorRPS * 1024); // counts per second
+    encoderSim.setRate(-motorRPS * 2048); // counts per second
 
     // 5. Update our limit switches
     double turretAngle = getTurretAngle();
