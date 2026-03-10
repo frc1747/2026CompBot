@@ -428,7 +428,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     // Rather than hardcoding to rawFiducials[0], iterate any instances it may have.
     // (e.g., if a given LimeLight can see multiple AprilTags)
     private static double bestAmbiguity(LimelightHelpers.PoseEstimate p) {
-        System.out.println(p);
         return Arrays.stream(p.rawFiducials)
             .mapToDouble(f -> f.ambiguity)
             .min()
