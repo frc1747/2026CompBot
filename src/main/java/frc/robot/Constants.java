@@ -38,15 +38,22 @@ public final class Constants {
       LIMELIGHT_RIGHT
     );
 
-        // Limelight horizontal Field of view in degrees
-        public static final double FOV_HORIZONTAL = 62.5;
+    // Limelight horizontal Field of view in degrees
+    public static final double FOV_HORIZONTAL = 62.5;
 
-        // AprilLock2 rotation compensation pid values
-        public static final double APRIL_LOCK_P = 0.6;
-        public static final double APRIL_LOCK_I = 0.007;
-        public static final double APRIL_LOCK_D = 0.007;
-        // maximum magnitude of PID output
-        public static final double APRIL_LOCK_PID_CLAMP = 0.2;
+    // AprilLock rotation compensation pid values
+    public static final double APRIL_LOCK_P = 0.6;   // TODO: Verify
+    public static final double APRIL_LOCK_I = 0.007; // TODO: Verify
+    public static final double APRIL_LOCK_D = 0.007; // TODO: Verify
+    // maximum magnitude of PID output
+    public static final double APRIL_LOCK_PID_CLAMP = 0.2; // TODO: Verify
+
+    // AprilLockDrive rotation compensation PID values
+    public static final double APRIL_LOCK_DRIVE_P = 0.6;   // TODO: Verify
+    public static final double APRIL_LOCK_DRIVE_I = 0.007; // TODO: Verify
+    public static final double APRIL_LOCK_DRIVE_D = 0.007; // TODO: Verify
+    // maximum magnitude of PID output
+    public static final double APRIL_LOCK_DRIVE_PID_CLAMP = 0.2; // TODO: Verify
 
     // VISION_STDDEVS allows us to control how much we trust the values coming from the Limelight(s).
     // The higher the value (distance standard deviations), the less we trust it.
