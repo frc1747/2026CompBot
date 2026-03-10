@@ -53,7 +53,7 @@ public class Kicker extends SubsystemBase {
         motor.setControl(dutyControl);
     }
 
-    public Command runReverse(boolean reverse) {
+    public Command run(boolean reverse) {
         return runOnce(() -> setPower((reverse ? -1 : 1) * Constants.Kicker.MOTOR_POWER));
     }
 
