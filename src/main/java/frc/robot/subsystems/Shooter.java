@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
     //pid.enableContinuousInput(0.0, 360.0);
     //pid.setTolerance(1.0);
 
-    follower.setControl(new Follower(motorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+    //follower.setControl(new Follower(motorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
     SmartDashboard.putNumber("Shooter/Desired RPM", 0.0);
      SmartDashboard.putNumber("Shooter/Desired Power", 0.0);
   }
