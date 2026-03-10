@@ -95,7 +95,7 @@ public final class Constants {
     public static final double BLUE_SHUTTLE_RIGHT_Y = 2.01;
 
     public static final double BLUE_SHUTTLE_LEFT_X = 2.84;
-    public static final double BLUE_SHUTTLE_LEFT_Y = 6.039
+    public static final double BLUE_SHUTTLE_LEFT_Y = 6.039;
 
     // height of hub opening (not funnel)
     public static final double HUB_HEIGHT = 1.5; // placeholder (meters) TODO: replace with real measurement
