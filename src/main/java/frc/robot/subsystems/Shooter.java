@@ -80,7 +80,7 @@ public class Shooter extends SubsystemBase {
     follower.setControl(new Follower(motorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
     SmartDashboard.putNumber("Shooter/Desired RPM", 0.0);
     SmartDashboard.putNumber("Shooter/Desired Power", 0.0);
-    double[][] listOfPoints = {{1,2,3,4,5},{1,4,9,16,25}};
+    double[][] listOfPoints = {{1,2,3,4,5,6,10,8,9},{1,4,9,16,25,36,49,64,81}};
 
     Matrix<N6,N1> martrix = GetCoeffients(listOfPoints);
   }
@@ -210,8 +210,8 @@ public class Shooter extends SubsystemBase {
   }
 
   private Matrix<N6,N1> GetCoeffients(double[][] listOfPoints){
-    System.out.print("inv matrix" + MatrixOfSumOfXpoints(listOfPoints).inv().toString());
-    return MatrixOfSumOfXpoints(listOfPoints).inv().times(MatrixOfSumOfYXpoints(listOfPoints));
+    System.out.print("inv matrix" + MatrixOfSumOfXpoints(listOfPoints) + "dem" + MatrixOfSumOfXpoints(listOfPoints).det());
+    return MatrixOfSumOfXpoints(listOfPoints).solve(MatrixOfSumOfYXpoints(listOfPoints));
   }
 
 
