@@ -16,7 +16,15 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.Num;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.numbers.N0;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N20;
+import edu.wpi.first.math.numbers.N5;
+import edu.wpi.first.math.numbers.N6;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,6 +42,8 @@ public class Shooter extends SubsystemBase {
   private final PIDController pid = new PIDController(Constants.Shooter.PID_P, Constants.Shooter.PID_I, Constants.Shooter.PID_D);
   private double desiredRPM = 0.0;
   public double desiredPower = 0.0;
+  private Nat<N6> dergee = Nat.N6();
+  Matrix<N6,N1> martrix;
 
   public Shooter() {
     motorLeft = new TalonFX(Constants.Shooter.MOTOR_LEFT_PORT);
@@ -69,7 +79,10 @@ public class Shooter extends SubsystemBase {
 
     follower.setControl(new Follower(motorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
     SmartDashboard.putNumber("Shooter/Desired RPM", 0.0);
-     SmartDashboard.putNumber("Shooter/Desired Power", 0.0);
+    SmartDashboard.putNumber("Shooter/Desired Power", 0.0);
+    double[][] listOfPoints = {{1,2,3,4,5},{1,4,9,16,25}};
+
+    Matrix<N6,N1> martrix = GetCoeffients(listOfPoints);
   }
 
   public Command setPowerCommand(double power){
@@ -155,9 +168,57 @@ public class Shooter extends SubsystemBase {
 
   }
 
+  private double SumOfPoints(double[] listOfPoints){
+    double total = 0;
+    for (int i = 0; i < listOfPoints.length ; i ++ ){
+      total += listOfPoints[i];
+    }
+    return total;
+  }
+
+  private Matrix<N6,N6> MatrixOfSumOfXpoints(double[][] listOfPoints){
+    Matrix<N6,N6> matrix = new Matrix<>(Nat.N6(), Nat.N6() );
+    System.out.print(matrix.getNumCols() );
+    for (int i = 0 ; i < matrix.getNumCols(); i++){
+
+      for (int j = 0 ; j < matrix.getNumCols(); j++){
+        // soo how this works is we are sending all of the x values of because the array is set up like this
+        // [ x0 ]   [ y0 ]
+        // [ x1 ]   [ y1 ]
+        // [ x2 ]   [ y2 ]
+        // [ x3 ] , [ y3 ]
+        // by sending the array of points
+        matrix.set(i,j,
+        Math.pow(SumOfPoints(listOfPoints[0]),j+i));
+      }
+      
+    }
+    return matrix;
+  }
+
+  private Matrix<N6,N1> MatrixOfSumOfYXpoints(double[][] listOfPoints){
+    double total = 0;
+    Matrix<N6,N1> matrix = new Matrix<N6,N1>(Nat.N6(),Nat.N1());
+    for(int i = 0 ; i < matrix.getNumRows(); i++){
+      total = 0;
+      for(int j = 0; j < listOfPoints[0].length; j++ ){
+        total += listOfPoints[0][j] + listOfPoints[1][j];
+      }
+      matrix.set(i,0,total);
+    }
+    return matrix;
+  }
+
+  private Matrix<N6,N1> GetCoeffients(double[][] listOfPoints){
+    System.out.print(MatrixOfSumOfXpoints(listOfPoints).toString());
+    return MatrixOfSumOfXpoints(listOfPoints).inv().times(MatrixOfSumOfYXpoints(listOfPoints));
+  }
+
 
   @Override
   public void periodic() {
+    
+    System.out.print(martrix.get(1,1) + " " + martrix.get(2,1) + " " + martrix.get(3,1) + " " + martrix.get(4,1) + " " + martrix.get(5,1) );
     SmartDashboard.putNumber("Shooter/Average RPM", getRPM());
     desiredRPM = SmartDashboard.getNumber("Shooter/Desired RPM", 0.0);
     //SmartDashboard.putNumber("Shooter/Desired RPM error", Math.abs((desiredRPM - getRPM()) / getRPM()));
