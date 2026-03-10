@@ -62,18 +62,44 @@ public final class Constants {
     // and basically completely trusting the Pigeon for Yaw.
     public static final Matrix<N3, N1> VISION_STDDEVS = VecBuilder.fill(0.7, 0.7, 9999999);
 
+    // field positions
+    // right/left from perspective of driver on given side facing field
     public static final double FIELD_CENTER_X = 8.7741252;
     public static final double FIELD_CENTER_Y = 4.0259508;
 
     public static final double RED_HUB_CENTER_X = 11.88;
     public static final double RED_HUB_CENTER_Y = 4.0259508;
 
-    // height of hub opening (not funnel)
-    public static final double HUB_HEIGHT = 1.5; // placeholder (meters) TODO: replace with real measurement
-    public static final double HUB_CLEAR_HEIGHT = 1.8; // placeholder (meters) TODO: replace with real measurments
+    public static final double BLUE_HUB_CENTER_X = 5.66;      // TODO: Verify
+    public static final double BLUE_HUB_CENTER_Y = 4.0259508; // TODO: Verify
 
     public static final double RED_RIGHT_CORNER_X = 17.5482504;
     public static final double RED_RIGHT_CORNER_Y = 8.0519016;
+
+    public static final double RED_LEFT_CORNER_X = 17.5482504;
+    public static final double RED_LEFT_CORNER_Y = 0.0;
+
+    public static final double BLUE_RIGHT_CORNER_X = 0.0;
+    public static final double BLUE_RIGHT_CORNER_Y = 0.0;
+
+    public static final double BLUE_LEFT_CORNER_X = 0.0;
+    public static final double BLUE_LEFT_CORNER_Y = 8.0519016;
+
+    public static final double RED_SHUTTLE_RIGHT_X = 14.71;
+    public static final double RED_SHUTTLE_RIGHT_Y = 6.039;
+
+    public static final double RED_SHUTTLE_LEFT_X = 14.71;
+    public static final double RED_SHUTTLE_LEFT_Y = 2.01;
+
+    public static final double BLUE_SHUTTLE_RIGHT_X = 2.84;
+    public static final double BLUE_SHUTTLE_RIGHT_Y = 2.01;
+
+    public static final double BLUE_SHUTTLE_LEFT_X = 2.84;
+    public static final double BLUE_SHUTTLE_LEFT_Y = 6.039
+
+    // height of hub opening (not funnel)
+    public static final double HUB_HEIGHT = 1.5; // placeholder (meters) TODO: replace with real measurement
+    public static final double HUB_CLEAR_HEIGHT = 1.8; // placeholder (meters) TODO: replace with real measurments
 
     // tolerance for differences between estimated fuel travel times
     // for sequential targetting location approximations
