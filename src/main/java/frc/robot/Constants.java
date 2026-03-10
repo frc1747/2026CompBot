@@ -171,7 +171,7 @@ public final class Constants {
     public static final double ENCODER_UP = -0.7;     // TODO: Verify
     public static final double ENCODER_DOWN = -24.5;  // TODO: Verify
     public static final double ENCODER_READY = -14.2; // TODO: Verify
-    public static final double SET_POINT_P = 0.1;  // TODO: tune
+    public static final double SET_POINT_P = 0.01;  // TODO: tune
     public static final double SET_POINT_I = 0.001; // TODO: tune
     public static final double SET_POINT_D = 0.001; // TODO: tune
     public static final double SET_POINT_PID_CLAMP = 1.0; // TODO: change
