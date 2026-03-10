@@ -210,7 +210,7 @@ public class Shooter extends SubsystemBase {
   }
 
   private Matrix<N6,N1> GetCoeffients(double[][] listOfPoints){
-    System.out.print(MatrixOfSumOfXpoints(listOfPoints).toString());
+    System.out.print("inv matrix" + MatrixOfSumOfXpoints(listOfPoints).inv().toString());
     return MatrixOfSumOfXpoints(listOfPoints).inv().times(MatrixOfSumOfYXpoints(listOfPoints));
   }
 
