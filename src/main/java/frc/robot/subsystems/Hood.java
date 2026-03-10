@@ -65,11 +65,11 @@ public class Hood extends SubsystemBase {
   }
 
   public double countsToDegrees(double counts) {
-    return ((counts) * Constants.Hood.TOTAL_HOOD_DEGREES / Constants.Hood.MAX_HEIGHT) + Constants.Hood.STARTING_ANGLE  ;
+    return Math.abs((counts) * Constants.Hood.TOTAL_HOOD_DEGREES / Constants.Hood.MAX_HEIGHT) + Constants.Hood.STARTING_ANGLE  ;
   }
 
   public double degreesToCounts(double degrees) {
-    return ((degrees - Constants.Hood.STARTING_ANGLE ) /  Constants.Hood.TOTAL_HOOD_DEGREES) * Constants.Hood.MAX_HEIGHT ;
+    return Math.abs((degrees - Constants.Hood.STARTING_ANGLE ) /  Constants.Hood.TOTAL_HOOD_DEGREES) * Constants.Hood.MAX_HEIGHT ;
   }
 
 

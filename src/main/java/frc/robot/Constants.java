@@ -93,10 +93,10 @@ public final class Constants {
     public static final int ENCODER_PORT_B = 5;
     public static final int COUNTS_PER_REV = 2048;
     public static final double GEAR_RATIO = 17.0;  // 170 tooth rack / 10 tooth pinion
-    public static final double TOTAL_HOOD_DEGREES = 19.25;  // 19.25 degrees of hood rotation
+    public static final double TOTAL_HOOD_DEGREES = 17.5;  // 19.25 degrees of hood rotation
     public static final double COUNTS_PER_HOOD_SWEEP = COUNTS_PER_REV * GEAR_RATIO;
     public static final double COUNTS_PER_DEGREE = COUNTS_PER_HOOD_SWEEP / TOTAL_HOOD_DEGREES;
-    public static final double STARTING_ANGLE = 25.0;  // Angle that the hood starts at
+    public static final double STARTING_ANGLE = 25.7;  // Angle that the hood starts at
     public static final double ANGLE_TOLERANCE = 2.5;
     public static final double MAX_HEIGHT = 1800;
     public static final double MAX_HOOD_ANGLE = 44;
