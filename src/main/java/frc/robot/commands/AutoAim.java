@@ -37,7 +37,7 @@ public class AutoAim extends Command {
   @Override
   public void execute() {
     double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
-    double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
+    double[] hoodAngleAndShooterPower = shooter.getPowerAndAngleFromDistance(distance);
 
     hood.goToAngleCommand(hoodAngleAndShooterPower[0]);
     if (hood.atAngle(hoodAngleAndShooterPower[0])){
