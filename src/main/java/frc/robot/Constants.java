@@ -99,7 +99,9 @@ public final class Constants {
     public static final double STARTING_ANGLE = 25.7;  // Angle that the hood starts at
     public static final double ANGLE_TOLERANCE = 2.5;
     public static final double MAX_HEIGHT = 1800;
-    public static final double MAX_HOOD_ANGLE = 44;
+    public static final double DEFAULT_VALUE = 25.4;
+    public static final double MAX_HOOD_ANGLE = DEFAULT_VALUE + TOTAL_HOOD_DEGREES;
+    
 
     public static final double kP = 0.05;
     public static final double kI = 0.0;

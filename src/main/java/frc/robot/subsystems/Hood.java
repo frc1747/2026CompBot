@@ -110,7 +110,7 @@ public class Hood extends SubsystemBase {
     // SmartDashboard.putBoolean("hood/encoder connected?", encoder.isConnected());
     SmartDashboard.putNumber("hood/encoder ticks", degreesToCounts(getCurrentAngle()));
     SmartDashboard.putNumber("hood/hood angle", getCurrentAngle());
-    desiredAngle = SmartDashboard.getNumber("hood/Desired Angle", 25);
+    desiredAngle = SmartDashboard.getNumber("hood/Desired Angle", Constants.Hood.DEFAULT_VALUE);
     SmartDashboard.putNumber("hood/PID", pid.calculate(getCurrentAngle(), desiredAngle));
     SmartDashboard.putNumber("hood/DutyCycle", dutyCycle.Output);
     SmartDashboard.putBoolean("hood/hood down", isDown());
