@@ -56,6 +56,10 @@ public class Kicker extends SubsystemBase {
         return runOnce(() -> setPower(Constants.Kicker.MOTOR_POWER));
     }
 
+    public Command setRPMCommand() {
+        return runOnce(() -> setRPM(Constants.Kicker.MOTOR_RPM));
+    }
+
     public Command stop() {
         return runOnce(() -> setPower(0.0));
     }
