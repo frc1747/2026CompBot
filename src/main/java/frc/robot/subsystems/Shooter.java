@@ -35,13 +35,18 @@ public class Shooter extends SubsystemBase {
   private final PIDController pid = new PIDController(Constants.Shooter.PID_P, Constants.Shooter.PID_I, Constants.Shooter.PID_D);
   private double desiredRPM = 0.0;
   public double desiredPower = 0.0;
+  public TalonFXConfiguration configShooter;
+  public double PID_P = Constants.Shooter.PID_P ;
+  public double PID_I = Constants.Shooter.PID_I;
+  public double PID_D = Constants.Shooter.PID_D;
+
 
   public Shooter() {
     motorLeft = new TalonFX(Constants.Shooter.MOTOR_LEFT_PORT);
     follower = new TalonFX(Constants.Shooter.MOTOR_RIGHT_PORT);
 
     // config for the shooter motors
-    TalonFXConfiguration configShooter = new TalonFXConfiguration();
+    configShooter = new TalonFXConfiguration();
 
     configShooter.Voltage
       .withPeakForwardVoltage(12)
@@ -68,9 +73,12 @@ public class Shooter extends SubsystemBase {
     //pid.enableContinuousInput(0.0, 360.0);
     //pid.setTolerance(1.0);
 
-    //follower.setControl(new Follower(motorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+    follower.setControl(new Follower(motorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
     SmartDashboard.putNumber("Shooter/Desired RPM", 0.0);
      SmartDashboard.putNumber("Shooter/Desired Power", 0.0);
+    SmartDashboard.putNumber("Shooter/Shooter pid P", PID_P);
+    SmartDashboard.putNumber("Shooter/Shooter pid I", PID_I);
+    SmartDashboard.putNumber("Shooter/Shooter pid D", PID_D);
   }
 
   public Command setPowerCommand(double power){
@@ -141,20 +149,20 @@ public class Shooter extends SubsystemBase {
     double[] array = {-1,-1};
     // this could be refactor 
     if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-     double[] angleAndSpeed = {currentAngle, wantedPower*101};
+     double[] angleAndSpeed = {currentAngle, wantedPower*104};
       return angleAndSpeed;
   }
   // we are assuming that greater hood angle is a furtuer Shoot
     for (currentAngle = RobotContainer.hood.getCurrentAngle() ; currentAngle <= Constants.Shooter.MAX_HOOD_ANGLE ; currentAngle ++ ){
       if (currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE) return array;
       if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-        double[] angleAndSpeed = {currentAngle, wantedPower*101};
+        double[] angleAndSpeed = {currentAngle, wantedPower*104};
         return angleAndSpeed;}
     }
     for (currentAngle = RobotContainer.hood.getCurrentAngle() ; currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE ; currentAngle -- ){
       if (currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE) return array;
       if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-        double[] angleAndSpeed = {currentAngle, wantedPower*101};
+        double[] angleAndSpeed = {currentAngle, wantedPower*104};
         return angleAndSpeed;}
     }
     return array;
@@ -180,5 +188,30 @@ public class Shooter extends SubsystemBase {
     //setRPM(desiredRPM);
     SmartDashboard.putNumber("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity);
     SmartDashboard.getNumber("Shooter/Desired Power?", desiredPower) ;
+
+
+    // pids yay!!!!
+
+    PID_P = SmartDashboard.getNumber("Shooter/Shooter pid P", PID_P);
+    PID_I = SmartDashboard.getNumber("Shooter/Shooter pid I", PID_I);
+    PID_D = SmartDashboard.getNumber("Shooter/Shooter pid D", PID_D);
+    SmartDashboard.putNumber("Shooter/Shooter true pid P",  configShooter.Slot0.kP);
+
+    if(configShooter.Slot0.kP != PID_P)  {
+      configShooter.Slot0.kP = PID_P;
+  
+    }
+    if(configShooter.Slot0.kI != PID_I)  {
+      configShooter.Slot0.kI = PID_I;
+      
+    }
+    if(configShooter.Slot0.kD != PID_D)  {
+      configShooter.Slot0.kD = PID_D;
+      
+    }
+
+ 
+
+
   }
 }
