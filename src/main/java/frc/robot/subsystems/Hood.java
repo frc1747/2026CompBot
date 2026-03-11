@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFXS;
@@ -32,12 +33,11 @@ public class Hood extends SubsystemBase {
   // Simulation attributes
   private EncoderSim encoderSim;
   private double simCountAccumulator = 0.0;
-
+  
   public Hood() {
     SmartDashboard.putNumber("hood/Desired Angle", Constants.Hood.MIN_ANGLE);
     motor = new TalonFXS(Constants.Hood.MOTOR_PORT);
     encoder = new Encoder(Constants.Hood.ENCODER_PORT_A, Constants.Hood.ENCODER_PORT_B);
-    
     TalonFXSConfiguration config = new TalonFXSConfiguration();
 
     config.Voltage
@@ -106,7 +106,7 @@ public class Hood extends SubsystemBase {
     );
 
     double pidOutput = pid.calculate(getCurrentAngle(), targetDegrees);
-    dutyCycle.Output = MathUtil.clamp(pidOutput, 
+    dutyCycle.Output = -MathUtil.clamp(pidOutput, 
       -Constants.Hood.MAX_PID_OUTPUT, 
       Constants.Hood.MAX_PID_OUTPUT
     );
@@ -140,7 +140,7 @@ public class Hood extends SubsystemBase {
     SmartDashboard.putBoolean("hood/hood down", isDown());
     //SmartDashboard.getNumber("hood/Hood Desired Angle")
 
-    if (Math.abs(( desiredAngle - getCurrentAngle()) / getCurrentAngle()) <= 0.01) {
+    if (Math.abs((desiredAngle - getCurrentAngle()) / getCurrentAngle()) <= 0.01) {
       SmartDashboard.putBoolean("hood/hood angle Reached", true);
     } else {
       SmartDashboard.putBoolean("hood/hood angle Reached", false);
