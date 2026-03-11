@@ -6,7 +6,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -88,6 +88,6 @@ public class IntakePivot extends SubsystemBase {
     
   @Override
   public void periodic() {
-      SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
   }
 }

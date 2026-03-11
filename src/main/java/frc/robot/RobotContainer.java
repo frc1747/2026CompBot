@@ -35,7 +35,7 @@ import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.teleop.IntakeOut;
 import frc.robot.commands.teleop.IntakeSpin;
 import frc.robot.commands.teleop.TeleopSwerve;
-import frc.robot.commands.teleop.ToggleIntakeDown;
+import frc.robot.commands.teleop.ToggleIntakeReady;
 import frc.robot.commands.teleop.TurretRotate;
 import frc.robot.commands.AutoAim;
 import frc.robot.generated.TunerConstants;
@@ -104,6 +104,9 @@ public class RobotContainer {
             new TeleopSwerve(drivetrain, translationSup, strafeSup, rotationSup)
         );
 
+        // always try to go to default
+        intakePivot.setDefaultCommand(new IntakeGoToDefault(intakePivot));
+
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
         final var idle = new SwerveRequest.Idle();
@@ -153,8 +156,8 @@ public class RobotContainer {
 
         // TODO: change controls for better driver and operator convenience
         operator.povLeft()
-            .onTrue(new ToggleIntakeDown(intakePivot));
-        
+            .onTrue(new ToggleIntakeReady(intakePivot))
+            .onTrue(new IntakeGoToDefault(intakePivot));
 
         // safe middle angle
         // operator.rightBumper().whileTrue(hood.goToDesiredAngleCommand().alongWith(shooter.setSpeedToDesired()))

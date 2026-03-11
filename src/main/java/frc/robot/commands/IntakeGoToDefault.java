@@ -49,10 +49,11 @@ public class IntakeGoToDefault extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(intakePivot.getEncoderValue() - intakePivot.getDefaultPosition()) <= Constants.IntakePivot.SET_POINT_TOLERANCE) {
-      return true;
-    } else {
-      return false;
-    }
+    return false;
+    // if (Math.abs(intakePivot.getEncoderValue() - intakePivot.getDefaultPosition()) <= Constants.IntakePivot.SET_POINT_TOLERANCE) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
   }
 }

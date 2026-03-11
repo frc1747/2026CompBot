@@ -10,10 +10,10 @@ import frc.robot.subsystems.IntakePivot;
 
 // toggle between default position down and
 // default position up on IntakePivot subsystem
-public class ToggleIntakeDown extends InstantCommand {
+public class ToggleIntakeReady extends InstantCommand {
   public IntakePivot intakePivot;
   
-  public ToggleIntakeDown(IntakePivot intakePivot) {
+  public ToggleIntakeReady(IntakePivot intakePivot) {
     this.intakePivot = intakePivot;
   }
 
@@ -23,7 +23,7 @@ public class ToggleIntakeDown extends InstantCommand {
     if (intakePivot.getDown()) {
       intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_UP);
     } else {
-      intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_DOWN);
+      intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_READY);
     }
     intakePivot.toggleDown();
   }

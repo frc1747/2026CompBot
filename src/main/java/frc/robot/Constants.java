@@ -157,7 +157,7 @@ public final class Constants {
      
   public static final class Intake {
     public static final int MOTOR_PORT = 46;
-    public static final double POWER = 0.2;
+    public static final double POWER = 0.4;
     public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
   }
 
@@ -168,12 +168,12 @@ public final class Constants {
     public static final double kP = 0.01; // TODO: VERIFY
     public static final double kI = 0.0;  // TODO: VERIFY
     public static final double kD = 0.0;  // TODO: VERIFY
-    public static final double ENCODER_UP = -0.7;     // TODO: Verify
-    public static final double ENCODER_DOWN = -24.5;  // TODO: Verify
-    public static final double ENCODER_READY = -14.2; // TODO: Verify
-    public static final double SET_POINT_P = 0.01;  // TODO: tune
+    public static final double ENCODER_UP = 0;     // TODO: Verify
+    public static final double ENCODER_DOWN = -41;  // TODO: Verify
+    public static final double ENCODER_READY = -22; // TODO: Verify
+    public static final double SET_POINT_P = 0.05;  // TODO: tune
     public static final double SET_POINT_I = 0.001; // TODO: tune
-    public static final double SET_POINT_D = 0.001; // TODO: tune
+    public static final double SET_POINT_D = 0.0004; // TODO: tune
     public static final double SET_POINT_PID_CLAMP = 1.0; // TODO: change
     public static final double SET_POINT_TOLERANCE = 0.2; // TODO: tune
   }
