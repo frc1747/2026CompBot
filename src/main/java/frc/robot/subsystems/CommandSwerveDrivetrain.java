@@ -377,8 +377,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Map.Entry<String, LimelightHelpers.PoseEstimate> bestEntry = null;
         
         double bestAmbiguity = Double.MAX_VALUE;
-        for (String name :Constants.Vision.ACTIVE_POSE_LIMELIGHTS) {
-            var mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);
+        for (String name : Constants.Vision.ACTIVE_POSE_LIMELIGHTS) {
+            LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);
             if (mt2 == null) continue; 
             if (mt2.tagCount <= 0) continue;
 
