@@ -18,6 +18,7 @@ public class Kicker extends SubsystemBase {
     private VelocityVoltage velocityKicker = new VelocityVoltage(0).withSlot(0);
     private DutyCycleOut dutyControl = new DutyCycleOut(0.0);
     private double desiredRPM = 0.0;
+    private boolean reverse = false;
 
     public Kicker() {
         motor = new TalonFX(Constants.Kicker.MOTOR_PORT);

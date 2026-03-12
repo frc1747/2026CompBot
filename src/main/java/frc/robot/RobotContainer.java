@@ -155,8 +155,8 @@ public class RobotContainer {
 
         operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
     
-        operator.povDown().whileTrue(kicker.setRPMCommand());
-        
+        operator.povDown().whileTrue(kicker.setRPMCommand())
+                          .onFalse(kicker.stop());
     }
 
     public Command getAutonomousCommand() {
