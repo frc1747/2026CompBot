@@ -168,10 +168,10 @@ public class Shooter extends SubsystemBase {
 
   }
 
-  private double SumOfPoints(double[] listOfPoints){
+  private double SumOfPoints(double[] listOfPoints,int pow){
     double total = 0;
     for (int i = 0; i < listOfPoints.length ; i ++ ){
-      total += listOfPoints[i];
+      total += Math.pow(listOfPoints[i], pow);
     }
     return total;
   }
@@ -189,7 +189,7 @@ public class Shooter extends SubsystemBase {
         // [ x3 ] , [ y3 ]
         // by sending the array of points
         matrix.set(i,j,
-        Math.pow(SumOfPoints(listOfPoints[0]),j+i));
+        SumOfPoints(listOfPoints[0],j+i));
       }
       
     }
