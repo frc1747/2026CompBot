@@ -31,7 +31,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.teleop.AprilLock;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.teleop.IntakeOut;
-import frc.robot.commands.teleop.IntakePivotHome;
 import frc.robot.commands.teleop.IntakeSpin;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.TurretRotate;
@@ -127,8 +126,6 @@ public class RobotContainer {
         // intake commands
         // this is broken cause no encoder
         // sean broke the motor o7 he lose intake rights
-        // driver.rightTrigger().whileTrue(intakePivot.moveDesiredPosCommand().alongWith(intake.SetPowerCommand()))
-        // .onFalse(new IntakePivotHome(intakePivot).alongWith(intake.StopCommand()));
         
 
         // much slower for the moment

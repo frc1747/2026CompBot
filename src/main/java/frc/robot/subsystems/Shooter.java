@@ -138,10 +138,6 @@ public class Shooter extends SubsystemBase {
     // slove with the good old quady form
   }
 
-  public double dumbdumbcodeforSpeed(double Distance){
-    return getPowerNeededFromDistanceAndAngle(Distance, RobotContainer.hood.getCurrentAngle());
-  }
-
   public double[] findSpeedAndAngleFromDistance(double Distance){
     // the power is multplyed by 100 to move up to the thousands
     double currentAngle = RobotContainer.hood.getCurrentAngle();
@@ -149,20 +145,20 @@ public class Shooter extends SubsystemBase {
     double[] array = {-1,-1};
     // this could be refactor 
     if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-     double[] angleAndSpeed = {currentAngle, wantedPower*104};
+     double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};
       return angleAndSpeed;
   }
   // we are assuming that greater hood angle is a furtuer Shoot
     for (currentAngle = RobotContainer.hood.getCurrentAngle() ; currentAngle <= Constants.Shooter.MAX_HOOD_ANGLE ; currentAngle ++ ){
       if (currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE) return array;
       if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-        double[] angleAndSpeed = {currentAngle, wantedPower*104};
+        double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};
         return angleAndSpeed;}
     }
     for (currentAngle = RobotContainer.hood.getCurrentAngle() ; currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE ; currentAngle -- ){
       if (currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE) return array;
       if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-        double[] angleAndSpeed = {currentAngle, wantedPower*104};
+        double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};
         return angleAndSpeed;}
     }
     return array;
