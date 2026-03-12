@@ -374,14 +374,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         // name of the selected LimeLight and its PoseEstimate instance.
         Optional<Map.Entry<String, LimelightHelpers.PoseEstimate>> bestLimeLightPose =
             Constants.Vision.ACTIVE_POSE_LIMELIGHTS.stream()
+                .filter(name -> LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name) != null)
                 .map(name -> Map.entry(
                     name, 
                     LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name)
                 ))
-                .filter(entry -> entry.getValue() != null)
+                // .filter(entry -> entry.getValue() != null)
                 .filter(entry -> entry.getValue().tagCount > 0)
-                .min(Comparator.comparingDouble(entry ->
-                    bestAmbiguity(entry.getValue())
+                .min(Comparator.comparingDouble(entry -> 
+                        bestAmbiguity(entry.getValue())
                 )
             );
 
