@@ -43,4 +43,7 @@ public class Intake extends SubsystemBase {
      public Command StopCommand(){
         return runOnce( () -> setIntakePower(0));
     }
+    public Command reverse(boolean reverse) {
+        return runOnce(() -> setIntakePower((reverse ? -1 : 1) * Constants.Intake.POWER));
+    }
 }

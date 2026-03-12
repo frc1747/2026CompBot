@@ -174,6 +174,9 @@ public class RobotContainer {
 
         // operator.leftTrigger().whileTrue(hopper.run())
         //                       .onFalse(hopper.stop());
+        operator.povRight().whileTrue(intake.reverse(true))
+            .onFalse(intake.StopCommand());
+
 
 
         drivetrain.registerTelemetry(logger::telemeterize);
@@ -192,4 +195,5 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
+    
 }
