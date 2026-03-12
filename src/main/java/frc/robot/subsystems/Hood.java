@@ -117,9 +117,7 @@ public class Hood extends SubsystemBase {
     return getCurrentAngle() >= Constants.Hood.MIN_ANGLE && getCurrentAngle() <= Constants.Hood.MIN_ANGLE + Constants.Hood.ANGLE_TOLERANCE;
   }
 
-
-  @Override
-  public void periodic() {
+  public void checkSafety() {
     double currentAngle = getCurrentAngle();
 
     // Global kill. If any method is at or disobeying the bounds,
@@ -129,7 +127,12 @@ public class Hood extends SubsystemBase {
       dutyCycle.Output = 0.0;
       motor.setControl(dutyCycle);
     }
+  }
 
+
+  @Override
+  public void periodic() {
+    checkSafety();
     // Allow an input from Elastic
     desiredAngle = SmartDashboard.getNumber("hood/Desired Angle", Constants.Hood.MIN_ANGLE);
 
@@ -140,7 +143,7 @@ public class Hood extends SubsystemBase {
     SmartDashboard.putBoolean("hood/hood down", isDown());
     //SmartDashboard.getNumber("hood/Hood Desired Angle")
 
-    if (Math.abs((desiredAngle - getCurrentAngle()) / getCurrentAngle()) <= 0.01) {
+    if (Math.abs((desiredAngle - getCurrentAngle()) / getCurrentAngle()) <= Constants.Hood.ANGLE_TOLERANCE) {
       SmartDashboard.putBoolean("hood/hood angle Reached", true);
     } else {
       SmartDashboard.putBoolean("hood/hood angle Reached", false);
