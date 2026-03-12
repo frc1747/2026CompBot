@@ -172,12 +172,8 @@ public final class Constants {
 
     public static final class Kicker {
         public static final int MOTOR_PORT = 43;
-<<<<<<< HEAD
-        public static final double MOTOR_POWER = 0.5;
         public static final double MOTOR_RPM = 1800;
-=======
         public static final double MOTOR_POWER = -0.7;
->>>>>>> main
     }
 }
 
