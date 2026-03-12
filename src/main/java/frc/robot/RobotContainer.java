@@ -134,6 +134,11 @@ public class RobotContainer {
         driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
 
         // this is on operator for now
+        operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER));
+
+        // roll back fuel
+        operator.povRight().whileTrue(new IntakeSpin(intake, -Constants.Intake.POWER));
+
         operator.a().onTrue(kicker.run())
                     .onFalse(kicker.stop());
 
