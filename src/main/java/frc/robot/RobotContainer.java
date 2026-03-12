@@ -134,7 +134,7 @@ public class RobotContainer {
         driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
 
         // this is on operator for now
-        operator.a().onTrue(kicker.run())
+        operator.a().onTrue(kicker.reverse(true))
                     .onFalse(kicker.stop());
 
         operator.x().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(true))  // down
@@ -165,12 +165,12 @@ public class RobotContainer {
         operator.b().whileTrue(new AprilLock(turret));
 
 
-        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
-    }
-        else{
-            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
-    }
+    //     if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+    //         operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
+    // }
+    //     else{
+    //         operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
+    // }
     }
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();

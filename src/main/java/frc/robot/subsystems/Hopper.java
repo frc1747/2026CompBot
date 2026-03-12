@@ -53,6 +53,10 @@ public class Hopper extends SubsystemBase {
         motor.setControl(dutyControl);
     }
 
+    public Command run(boolean reverse) {
+        return runOnce(() -> setPower((reverse ? -1 : 1) * Constants.Hopper.MOTOR_POWER));
+    }
+
     @Override
     public void periodic() {}
 
