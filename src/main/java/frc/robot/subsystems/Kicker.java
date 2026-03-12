@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,7 +19,7 @@ public class Kicker extends SubsystemBase {
     private VelocityVoltage velocityKicker = new VelocityVoltage(0).withSlot(0);
     private DutyCycleOut dutyControl = new DutyCycleOut(0.0);
     private double desiredRPM = 0.0;
-    private boolean reverse = false;
+    private boolean reverse = true;
 
     public Kicker() {
         motor = new TalonFX(Constants.Kicker.MOTOR_PORT);
@@ -41,7 +42,7 @@ public class Kicker extends SubsystemBase {
             .withSupplyCurrentLowerLimit(40)
             .withSupplyCurrentLimitEnable(true);
 
-        config.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
+        config.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
                 
         motor.getConfigurator().apply(config);
         motor.getStatorCurrent().setUpdateFrequency(50);
@@ -84,6 +85,6 @@ public class Kicker extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        SmartDashboard.putNumber("kicker/kicker rpm", getRPM());
     }
 }
