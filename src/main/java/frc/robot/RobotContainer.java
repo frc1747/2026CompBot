@@ -174,7 +174,7 @@ public class RobotContainer {
 
         // operator.leftTrigger().whileTrue(hopper.run())
         //                       .onFalse(hopper.stop());
-        operator.povRight().whileTrue(intake.reverse(true))
+        operator.povRight().whileTrue(intake.spin(true))
             .onFalse(intake.StopCommand());
 
 
