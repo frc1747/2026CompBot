@@ -78,6 +78,7 @@ public final class Constants {
   }
 
   public static final class Drivetrain {
+    public static final double DRIVER_SLOW_DOWN = 0.6;
     public static final double MAX_SPEED = 4.1 * 0.5;  // Max speed in m/s  half-speed for now
     public static final double MAX_ACCEL = 4.1;  // Max acceleration in m/s
     public static final double MAX_ANGULAR_VELOCITY = 10.0;  // Rad/s
