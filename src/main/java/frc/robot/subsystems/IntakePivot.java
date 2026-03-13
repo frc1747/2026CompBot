@@ -1,12 +1,9 @@
 package frc.robot.subsystems;
 import java.lang.invoke.ConstantCallSite;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
-
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,8 +16,10 @@ public class IntakePivot extends SubsystemBase {
     private Encoder encoder;
     private DutyCycleOut dutyCycle = new DutyCycleOut(0);
     private PIDController pid = new PIDController(Constants.IntakePivot.kP, Constants.IntakePivot.kI, Constants.IntakePivot.kD);
+    double desiredPos;
 
     public IntakePivot() {
+         SmartDashboard.putNumber("intake/Desired Pos", Constants.IntakePivot.OUT);
         this.motor = new TalonFX(Constants.IntakePivot.MOTOR_PORT);
         
         var request = new PositionDutyCycle(0.0);
@@ -50,17 +49,25 @@ public class IntakePivot extends SubsystemBase {
         this.motor.set(armPower);
     }
 
-    public Command moveOutCommand(){
+    public Command moveOutCommand(){ // move the intake to the pos to fix up fuel
         return run( () -> intakePivot(Constants.IntakePivot.OUT));
     }
 
-    public Command moveHomeCommand(){
+    public Command moveHomeCommand(){ // move home
         return run( () -> intakePivot(Constants.IntakePivot.HOME));
     }
 
+    public Command moveDesiredPosCommand(){ // move home
+        return run( () -> intakePivot(desiredPos));
+    }
+    public double getIntakePivotAngle() {
+        return motor.getPosition().getValueAsDouble();
+    }
     
   @Override
   public void periodic() {
-      SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
+         SmartDashboard.putNumber("intake/intake pid", dutyCycle.Output = pid.calculate(motor.getPosition().getValueAsDouble() , desiredPos));
+        desiredPos = SmartDashboard.getNumber("intake/Desired intake", Constants.IntakePivot.OUT);
+        SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
   }
 }

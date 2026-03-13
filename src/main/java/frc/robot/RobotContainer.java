@@ -125,13 +125,16 @@ public class RobotContainer {
 
         // intake commands
         // this is broken cause no encoder
-        // driver.rightTrigger().whileTrue(intakePivot.moveOutCommand().alongWith(intake.SetPowerCommand()))
-        // .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
+        
+        driver.rightTrigger().whileTrue(intakePivot.moveOutCommand())
+            .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
+        driver.rightTrigger().whileTrue(intakePivot.moveDesiredPosCommand().alongWith(intake.SetPowerCommand()))
+        .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
         
 
         // much slower for the moment
-        driver.rightBumper().whileTrue(new TurretRotate(turret, 0.025));
-        driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
+        driver.rightBumper().whileTrue(new TurretRotate(turret, 0.125));
+        driver.leftBumper().whileTrue(new TurretRotate(turret, -0.125));
 
         operator.x().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(true))  // down
                     .onFalse(hood.stopCommand());
@@ -158,16 +161,15 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        operator.b().whileTrue(new AprilLock(turret));
+        operator.b().toggleOnTrue(new AprilLock(turret));
 
         operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
 
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
-    }
-        else{
+        } else {
             operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
-    }
+        }
     }
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
