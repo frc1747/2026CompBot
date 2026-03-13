@@ -175,7 +175,8 @@ public final class Constants {
 
     public static final class Kicker {
         public static final int MOTOR_PORT = 43;
-        public static final double MOTOR_POWER = -0.7;
+        public static final double MOTOR_RPM = 4300; // amount we got on shuffleboard when the kicker was ran at 70% power
+        public static final double MOTOR_POWER = 0.7;
     }
 }
 

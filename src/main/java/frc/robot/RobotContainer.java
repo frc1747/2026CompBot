@@ -136,10 +136,6 @@ public class RobotContainer {
         driver.rightBumper().whileTrue(new TurretRotate(turret, 0.125));
         driver.leftBumper().whileTrue(new TurretRotate(turret, -0.125));
 
-        // this is on operator for now
-        operator.a().onTrue(kicker.run())
-                    .onFalse(kicker.stop());
-
         operator.x().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(true))  // down
                     .onFalse(hood.stopCommand());
         operator.y().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(false))  // up
@@ -156,7 +152,7 @@ public class RobotContainer {
                 .onFalse(shooter.stopCommand());
                 
         operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER).alongWith(hopper.run()))
-            .onTrue(kicker.run())
+            .onTrue(kicker.setRPMCommand())
             .onFalse(kicker.stop().alongWith(hopper.stop()));
 
         // operator.leftTrigger().whileTrue(hopper.run())
@@ -166,6 +162,8 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
         operator.b().toggleOnTrue(new AprilLock(turret));
+
+        operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
 
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
