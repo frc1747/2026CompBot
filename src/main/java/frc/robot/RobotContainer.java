@@ -166,7 +166,7 @@ public class RobotContainer {
             operator.a()
                 .whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D))
                 .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
-        } else{
+        } else {
             operator.a()
                 .whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D))
                 .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
