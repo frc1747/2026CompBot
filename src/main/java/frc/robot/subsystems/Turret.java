@@ -104,7 +104,7 @@ public class Turret extends SubsystemBase {
     // 8196 / 4 = 2048
     // 2048 * 7.333 ~= 15018.667 resulting pulses per full turret rotation
     // 15018.667 / 360 degrees ~= 41.719
-    return -encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
+    return encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
   }
 
   // returns pose of turret relative to field (absolute)
@@ -159,10 +159,10 @@ public class Turret extends SubsystemBase {
   public void periodic() {
     dutyCycle.Output = targetPower;
     // soft limits and limit switches
-    if (getLeftLimitSwitchPressed() && targetPower < 0) {
+    if (getLeftLimitSwitchPressed() && targetPower > 0) {
       dutyCycle.Output = 0.0;
     } 
-    if (getRightLimitSwitchPressed() && targetPower > 0) {
+    if (getRightLimitSwitchPressed() && targetPower < 0) {
       dutyCycle.Output = 0.0;
     }
     if (getTurretAngle() > Constants.Turret.TURRET_YAW_LIMIT && targetPower < 0) {
