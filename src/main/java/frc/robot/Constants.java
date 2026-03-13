@@ -109,7 +109,6 @@ public final class Constants {
     public static final double kD = 0.0;
 
     public static final double MAX_PID_OUTPUT = 0.875;
-
     public static final double MANUAL_MOTOR_POWER = 0.2;
 
   }
