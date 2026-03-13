@@ -142,22 +142,22 @@ public final class Constants {
     public static final int MOTOR_RIGHT_PORT = 42;
     public static final int ENCODER_PORT = 1; // needs to be set
     public static final double ENCODER_OFFSET = .2; // needs to be set o7
-    public static final double SURFACE_A = 44.1596; // needs tuning
-    public static final double SURFACE_B = -4.3595; // needs tuning
-    public static final double SURFACE_C = -0.94726; // needs tuning
-    public static final double SURFACE_D = 0.12545; // needs tuning
-    public static final double SURFACE_E = 0.36687; // needs tuning
-    public static final double SURFACE_F = 0.017314; // needs tuning
-    public static final double MAX_AUTOSHOOT_POWER =.85;
+    public static final double SURFACE_A = 3863.2518; // needs tuning
+    public static final double SURFACE_B = 617.2701; // needs tuning
+    public static final double SURFACE_C = -176.2434; // needs tuning
+    public static final double SURFACE_D = 12.4826; // needs tuning
+    public static final double SURFACE_E = -10.8847; // needs tuning
+    public static final double SURFACE_F = 2.9962; // needs tuning
+    public static final double MAX_AUTOSHOOT_POWER =4500;
+    public static final int AUTO_SHOOTER_MULT = 110; // this should be remove when we get better auto shoot values 
     public static final double MAX_HOOD_ANGLE = 43;// degrees
     public static final double MIN_HOOD_ANGLE = 26;// degrees
-    public static final double PID_P = 0.5;
-    public static final double PID_I = 0.0;
-    public static final double PID_D = 0.0;
+    public static final double PID_P = .75;// they are half for the two motors 
+    public static final double PID_I = 0.3;
+    public static final double PID_D = 0.015;
     public static final double TOLERANCE = .05; // percent tolerance
-    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(-4.634, -4.016, new Rotation2d()); // cords hurt my brain  
-    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(4.634,4.016,new Rotation2d());
-    // max rpm 5800ish
+    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Vision.RED_HUB_CENTER_X, Vision.RED_HUB_CENTER_Y, new Rotation2d()); // cords hurt my brain  
+    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(- Vision.RED_HUB_CENTER_X,-Vision.RED_HUB_CENTER_Y,new Rotation2d());
   }
      public static final class Intake {
         public static final int MOTOR_PORT = 46;

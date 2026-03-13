@@ -168,12 +168,16 @@ public class RobotContainer {
         operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
 
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
+            operator.a()
+                .whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D))
+                .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
+        } else {
+            operator.a()
+                .whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D))
+                .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
+        }
     }
-        else{
-            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
-    }
-    }
+
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
