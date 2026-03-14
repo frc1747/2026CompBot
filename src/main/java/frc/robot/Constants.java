@@ -93,18 +93,23 @@ public final class Constants {
     public static final int ENCODER_PORT_A = 4;
     public static final int ENCODER_PORT_B = 5;
     public static final int COUNTS_PER_REV = 2048;
-    public static final double GEAR_RATIO = 17.0;  // 170 tooth rack / 10 tooth pinion
-    public static final double TOTAL_HOOD_DEGREES = 19.25;  // 19.25 degrees of hood rotation
+    public static final double GEAR_RATIO = 1.7;  // 17 tooth rack / 10 tooth pinion
+    public static final double TOTAL_HOOD_DEGREES = 17.5;  // 19.25 degrees of hood rotation
     public static final double COUNTS_PER_HOOD_SWEEP = COUNTS_PER_REV * GEAR_RATIO;
     public static final double COUNTS_PER_DEGREE = COUNTS_PER_HOOD_SWEEP / TOTAL_HOOD_DEGREES;
-    public static final double STARTING_ANGLE = 25.0;  // Angle that the hood starts at
+    public static final double ANGLE_TOLERANCE = 0.25;
     public static final double MAX_HEIGHT = 1800;
-    public static final double MAX_HOOD_ANGLE = 44;
+    public static final double MIN_ANGLE = 25.4;
+    public static final double MAX_ANGLE = MIN_ANGLE + TOTAL_HOOD_DEGREES;
+  
+    public static final double SIM_COUNTS_PER_SECOND = COUNTS_PER_HOOD_SWEEP / 2.0;
+    
 
-    public static final double kP = 0.05;
+    public static final double kP = 0.2;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
 
+    public static final double MAX_PID_OUTPUT = 0.875;
     public static final double MANUAL_MOTOR_POWER = 0.2;
 
   }
@@ -138,22 +143,22 @@ public final class Constants {
     public static final int MOTOR_RIGHT_PORT = 42;
     public static final int ENCODER_PORT = 1; // needs to be set
     public static final double ENCODER_OFFSET = .2; // needs to be set o7
-    public static final double SURFACE_A = 44.1596; // needs tuning
-    public static final double SURFACE_B = -4.3595; // needs tuning
-    public static final double SURFACE_C = -0.94726; // needs tuning
-    public static final double SURFACE_D = 0.12545; // needs tuning
-    public static final double SURFACE_E = 0.36687; // needs tuning
-    public static final double SURFACE_F = 0.017314; // needs tuning
-    public static final double MAX_AUTOSHOOT_POWER =.85;
+    public static final double SURFACE_A = 3863.2518; // needs tuning
+    public static final double SURFACE_B = 617.2701; // needs tuning
+    public static final double SURFACE_C = -176.2434; // needs tuning
+    public static final double SURFACE_D = 12.4826; // needs tuning
+    public static final double SURFACE_E = -10.8847; // needs tuning
+    public static final double SURFACE_F = 2.9962; // needs tuning
+    public static final double MAX_AUTOSHOOT_POWER =4500;
+    public static final int AUTO_SHOOTER_MULT = 110; // this should be remove when we get better auto shoot values 
     public static final double MAX_HOOD_ANGLE = 43;// degrees
     public static final double MIN_HOOD_ANGLE = 26;// degrees
-    public static final double PID_P = 0.5;
-    public static final double PID_I = 0.0;
-    public static final double PID_D = 0.0;
+    public static final double PID_P = .75;// they are half for the two motors 
+    public static final double PID_I = 0.3;
+    public static final double PID_D = 0.015;
     public static final double TOLERANCE = .05; // percent tolerance
-    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(-4.634, -4.016, new Rotation2d()); // cords hurt my brain  
-    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(4.634,4.016,new Rotation2d());
-    // max rpm 5800ish
+    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Vision.RED_HUB_CENTER_X, Vision.RED_HUB_CENTER_Y, new Rotation2d()); // cords hurt my brain  
+    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(- Vision.RED_HUB_CENTER_X,-Vision.RED_HUB_CENTER_Y,new Rotation2d());
   }
      public static final class Intake {
         public static final int MOTOR_PORT = 46;
