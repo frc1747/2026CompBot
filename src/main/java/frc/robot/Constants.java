@@ -160,21 +160,29 @@ public final class Constants {
     public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Vision.RED_HUB_CENTER_X, Vision.RED_HUB_CENTER_Y, new Rotation2d()); // cords hurt my brain  
     public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(- Vision.RED_HUB_CENTER_X,-Vision.RED_HUB_CENTER_Y,new Rotation2d());
   }
-     public static final class Intake {
-        public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.2;
-        public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
+     
+  public static final class Intake {
+    public static final int MOTOR_PORT = 46;
+    public static final double POWER = 0.4;
+    public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
+  }
 
-    }
-
-    public static final class IntakePivot {
-        public static final int MOTOR_PORT = 45;
-        public static final double OUT = -7; // needs tuning for the encoder
-        public static final double HOME = -.8; // needs tuning for the encoder
-        public static final double kP = 0.01; //TODO: VERIFY
-        public static final double kI = 0.0; //TODO: VERIFY
-        public static final double kD = 0.0; //TODO: VERIFY
-    }
+  public static final class IntakePivot {
+    public static final int MOTOR_PORT = 45;
+    public static final double OUT = -7; // needs tuning for the encoder
+    public static final double HOME = -.8; // needs tuning for the encoder
+    public static final double kP = 0.01; // TODO: VERIFY
+    public static final double kI = 0.0;  // TODO: VERIFY
+    public static final double kD = 0.0;  // TODO: VERIFY
+    public static final double ENCODER_UP = 0;     // TODO: Verify
+    public static final double ENCODER_DOWN = -41;  // TODO: Verify
+    public static final double ENCODER_READY = -22; // TODO: Verify
+    public static final double SET_POINT_P = 0.05;  // TODO: tune
+    public static final double SET_POINT_I = 0.001; // TODO: tune
+    public static final double SET_POINT_D = 0.0004; // TODO: tune
+    public static final double SET_POINT_PID_CLAMP = 1.0; // TODO: change
+    public static final double SET_POINT_TOLERANCE = 0.2; // TODO: tune
+  }
 
     public static final class Kicker {
         public static final int MOTOR_PORT = 43;
