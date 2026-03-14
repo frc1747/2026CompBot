@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -91,9 +90,9 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
-        NamedCommands.registerCommand("Intakeout", new AutoIntakeOut(intakePivot, 1500).withTimeout(0.8));
-        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7).withTimeout(0.8));
-        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7).withTimeout(0.8));
+        NamedCommands.registerCommand("Intakeout", new AutoIntakeOut(intakePivot, 1500));
+        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7));
+        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
