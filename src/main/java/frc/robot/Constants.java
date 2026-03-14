@@ -22,6 +22,7 @@ import edu.wpi.first.math.numbers.N3;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+ 
   public static final class Vision {
     // Local hostnames of the unique Limelights on the system
     // WARNING: IF YOU CHANGE OUT THE HARDWARE, ENSURE TO PROPERLY
