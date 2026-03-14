@@ -8,28 +8,24 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakePivot;
 
 public class GrabFuel extends Command {
-  Intake intake;
   IntakePivot intakePivot;
   PIDController pid;
   
   /** Creates a new GrabFuel. */
-  public GrabFuel(Intake intake, IntakePivot intakePivot) {
-    this.intake = intake;
+  public GrabFuel(IntakePivot intakePivot) {
     this.intakePivot = intakePivot;
     this.pid = new PIDController(Constants.IntakePivot.SET_POINT_P,
                                  Constants.IntakePivot.SET_POINT_I,
                                  Constants.IntakePivot.SET_POINT_D);
-    addRequirements(intake, intakePivot);
+    addRequirements( intakePivot);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.intakeSpin(Constants.Intake.POWER);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -45,7 +41,6 @@ public class GrabFuel extends Command {
   @Override
   public void end(boolean interrupted) {
     intakePivot.setPower(0.0);
-    intake.intakeSpin(0.0);
   }
 
   // Returns true when the command should end.
