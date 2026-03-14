@@ -25,4 +25,7 @@ public class AutoIntakeReverseCollect extends Command {
     public void end(boolean interrupted) {
         intake.intakeSpin(0.0);
     }
+    public boolean isFinished() {
+        return false;
+    }
 }

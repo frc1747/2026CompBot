@@ -20,11 +20,14 @@ public class AutoIntakeOut extends Command {
 
     @Override
     public void execute() {
-        
+
     }
 
     @Override
     public void end(boolean interrupted) {
         intakePivot.intakePivot(0);
     } 
+    public boolean isFinished() {
+        return false;
+    }
 }
