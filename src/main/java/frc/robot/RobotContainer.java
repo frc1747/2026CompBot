@@ -180,7 +180,7 @@ public class RobotContainer {
         // turret operator
 
         operator.povDown()
-            .whileTrue(new AprilLock(turret));
+            .toggleOnTrue(new AprilLock(turret));
 
         // this needs to be refactors to the inline standerds
         operator.rightTrigger()
