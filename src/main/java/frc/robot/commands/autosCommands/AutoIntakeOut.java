@@ -10,17 +10,17 @@ public class AutoIntakeOut extends Command {
     public AutoIntakeOut(IntakePivot intakePivot, int tick) {
         this.intakePivot = intakePivot;
         this.tick = tick;
-        addRequirements(intakePivot);
+
     }
 
     @Override
     public void initialize() {
-
+        intakePivot.intakePivot(tick);
     }
 
     @Override
     public void execute() {
-        intakePivot.intakePivot(tick);
+        
     }
 
     @Override
