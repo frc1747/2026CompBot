@@ -31,13 +31,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.teleop.AprilLock;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.AutoAim;
-<<<<<<< HEAD
 import frc.robot.commands.AutosCommands.AutoIntakeCollect;
 import frc.robot.commands.AutosCommands.AutoIntakeOut;
 import frc.robot.commands.AutosCommands.AutoIntakeReverseCollect;
-=======
 import frc.robot.commands.IntakeGoToDefault;
->>>>>>> 07f198790e9096ce7801dad9489b2f9468b93835
 import frc.robot.commands.teleop.IntakeOut;
 import frc.robot.commands.teleop.IntakeSpin;
 import frc.robot.commands.teleop.TeleopSwerve;
@@ -94,9 +91,9 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
-        NamedCommands.registerCommand("Intakeout", new AutoIntakeOut(intakePivot, 1500));
-        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7));
-        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7));
+        NamedCommands.registerCommand("Intakeout", new AutoIntakeOut(intakePivot, 1500).withTimeout(0.8));
+        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7).withTimeout(0.8));
+        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7).withTimeout(0.8));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 

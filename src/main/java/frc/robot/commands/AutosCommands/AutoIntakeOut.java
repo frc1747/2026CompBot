@@ -1,9 +1,9 @@
 package frc.robot.commands.AutosCommands;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakePivot;
 
-public class AutoIntakeOut extends InstantCommand {
+public class AutoIntakeOut extends Command {
     private IntakePivot intakePivot;
     private int tick;
 
