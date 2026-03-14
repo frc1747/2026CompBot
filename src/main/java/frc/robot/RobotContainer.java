@@ -91,9 +91,9 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
-        NamedCommands.registerCommand("Intakeout", new AutoIntakeOut(intakePivot, 1500));
-        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7));
-        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7));
+        NamedCommands.registerCommand("Intakeout", new AutoIntakeOut(intakePivot, 1500).withTimeout(0.8));
+        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7).withTimeout(0.8));
+        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7).withTimeout(0.8));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 

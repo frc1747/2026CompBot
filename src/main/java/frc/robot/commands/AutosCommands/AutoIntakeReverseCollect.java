@@ -1,9 +1,9 @@
 package frc.robot.commands.AutosCommands;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
-public class AutoIntakeReverseCollect extends InstantCommand {
+public class AutoIntakeReverseCollect extends Command {
     private Intake intake;
     private double power;
 
