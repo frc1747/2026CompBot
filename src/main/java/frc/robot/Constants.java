@@ -159,6 +159,7 @@ public final class Constants {
     public static final double TOLERANCE = .05; // percent tolerance
     public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Vision.RED_HUB_CENTER_X, Vision.RED_HUB_CENTER_Y, new Rotation2d()); // cords hurt my brain  
     public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(- Vision.RED_HUB_CENTER_X,-Vision.RED_HUB_CENTER_Y,new Rotation2d());
+    public static final double SHOOTER_SPEED = 0.7;
   }
      
   public static final class Intake {
