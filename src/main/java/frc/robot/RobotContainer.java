@@ -147,7 +147,7 @@ public class RobotContainer {
 
         // TODO: change controls for better driver and operator convenience
         operator.leftTrigger()
-            .whileTrue(new GrabFuel(intake, intakePivot))
+            .whileTrue(new GrabFuel(intakePivot))
             .onFalse(new IntakeGoToDefault(intakePivot));
 
         // TODO: change controls for better driver and operator convenience
