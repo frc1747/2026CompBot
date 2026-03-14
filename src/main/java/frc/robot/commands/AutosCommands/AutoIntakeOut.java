@@ -15,11 +15,12 @@ public class AutoIntakeOut extends Command {
 
     @Override
     public void initialize() {
-        intakePivot.intakePivot(tick);
+
     }
 
     @Override
     public void execute() {
+        intakePivot.intakePivot(tick);
     }
 
     @Override

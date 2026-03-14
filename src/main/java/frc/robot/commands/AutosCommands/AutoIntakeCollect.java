@@ -15,11 +15,12 @@ public class AutoIntakeCollect extends Command {
 
     @Override
     public void initialize() {
-        intake.intakeSpin(power);
+
     }
 
     @Override
     public void execute() {
+        intake.intakeSpin(power);
     }
 
     @Override
