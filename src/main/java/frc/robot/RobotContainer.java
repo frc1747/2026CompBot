@@ -88,7 +88,7 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
-        NamedCommands.registerCommand("Intakeout", new AutoIntakeOut(intakePivot, 0));
+        NamedCommands.registerCommand("Intakeout", new AutoIntakeOut(intakePivot, 1500));
         NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7));
         NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
