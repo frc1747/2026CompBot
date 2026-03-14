@@ -144,9 +144,12 @@ public class RobotContainer {
 
         // intake put up
         driver.rightTrigger()
-            .whileTrue(new GrabFuel( intakePivot)
-            .alongWith((intake.spin(false))))
+            .whileTrue(new GrabFuel( intakePivot))
             .onFalse(new IntakeGoToDefault(intakePivot));
+        
+        driver.rightTrigger()
+            .whileTrue(intake.spin(false))
+            .onFalse(intake.StopCommand());
 
         // intake eject
         driver.leftTrigger()
