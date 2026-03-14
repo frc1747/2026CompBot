@@ -15,12 +15,11 @@ public class AutoIntakeCollect extends InstantCommand {
 
     @Override
     public void initialize() {
-
+        intake.intakeSpin(power);
     }
 
     @Override
     public void execute() {
-        intake.intakeSpin(power);
     }
 
     @Override
