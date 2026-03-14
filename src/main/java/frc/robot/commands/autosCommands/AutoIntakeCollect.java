@@ -10,17 +10,15 @@ public class AutoIntakeCollect extends Command {
     public AutoIntakeCollect(Intake intake, double power) {
         this.intake = intake;
         this.power = power;
-        addRequirements(intake);
     }
 
     @Override
     public void initialize() {
-
+        intake.intakeSpin(power);
     }
 
     @Override
     public void execute() {
-        intake.intakeSpin(power);
     }
 
     @Override
