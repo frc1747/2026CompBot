@@ -29,11 +29,12 @@ public class Turret extends SubsystemBase {
   private DigitalInput leftLimitSwitch;
   private DigitalInput rightLimitSwitch;
   private double targetPower;
+  public double distanceToHub;
 
   // optimization for not creating new control object 50/sec
   private DutyCycleOut dutyCycle = new DutyCycleOut(0);
 
-  private final PIDController pid = new PIDController(Constants.Turret.PID_D, Constants.Turret.PID_D, Constants.Turret.PID_D);
+  private final PIDController pid = new PIDController(Constants.Turret.PID_P, Constants.Turret.PID_I, Constants.Turret.PID_D);
 
   public Turret() {
     motor = new TalonFXS(Constants.Turret.MOTOR_PORT);
@@ -181,7 +182,7 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putBoolean("Right Limit Switch", getRightLimitSwitchPressed());
 
     Translation2d hubLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
-    double distanceToHub = getAbsTurretPose().getTranslation().getDistance(hubLoc);
+    distanceToHub = getAbsTurretPose().getTranslation().getDistance(hubLoc);
     SmartDashboard.putNumber("Hub Distance From Turret", distanceToHub);
     //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
   }

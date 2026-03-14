@@ -29,10 +29,13 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.teleop.AprilLock;
+import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.AutoAim;
+import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.teleop.IntakeOut;
 import frc.robot.commands.teleop.IntakeSpin;
 import frc.robot.commands.teleop.TeleopSwerve;
+import frc.robot.commands.teleop.ToggleIntakeReady;
 import frc.robot.commands.teleop.TurretRotate;
 import frc.robot.commands.AutoAim;
 import frc.robot.generated.TunerConstants;
@@ -101,6 +104,9 @@ public class RobotContainer {
             new TeleopSwerve(drivetrain, translationSup, strafeSup, rotationSup)
         );
 
+        // always try to go to default
+        intakePivot.setDefaultCommand(new IntakeGoToDefault(intakePivot));
+
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
         final var idle = new SwerveRequest.Idle();
@@ -128,9 +134,8 @@ public class RobotContainer {
         
         driver.rightTrigger().whileTrue(intakePivot.moveOutCommand())
             .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
-        driver.rightTrigger().whileTrue(intakePivot.moveDesiredPosCommand().alongWith(intake.SetPowerCommand()))
-        .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
         
+        driver.leftTrigger().onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         // much slower for the moment
         driver.rightBumper().whileTrue(new TurretRotate(turret, 0.125));
@@ -140,7 +145,16 @@ public class RobotContainer {
                     .onFalse(hood.stopCommand());
         operator.y().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(false))  // up
                     .onFalse(hood.stopCommand());
-        
+
+        // TODO: change controls for better driver and operator convenience
+        operator.leftTrigger()
+            .whileTrue(new GrabFuel(intake, intakePivot))
+            .onFalse(new IntakeGoToDefault(intakePivot));
+
+        // TODO: change controls for better driver and operator convenience
+        operator.povLeft()
+            .onTrue(new ToggleIntakeReady(intakePivot))
+            .onTrue(new IntakeGoToDefault(intakePivot));
 
         // safe middle angle
         // operator.rightBumper().whileTrue(hood.goToDesiredAngleCommand().alongWith(shooter.setSpeedToDesired()))
@@ -155,8 +169,15 @@ public class RobotContainer {
             .onTrue(kicker.setRPMCommand())
             .onFalse(kicker.stop().alongWith(hopper.stop()));
 
+        operator.leftTrigger().whileTrue(hopper.run(true))
+            .onFalse(hopper.stop());
+
+
         // operator.leftTrigger().whileTrue(hopper.run())
         //                       .onFalse(hopper.stop());
+        operator.povRight().whileTrue(intake.spin(true))
+            .onFalse(intake.StopCommand());
+
 
 
         drivetrain.registerTelemetry(logger::telemeterize);
@@ -165,13 +186,20 @@ public class RobotContainer {
 
         operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
 
+        // 2 TODO: CHECK if conflics with 1
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
+            operator.a()
+                .whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D))
+                .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
         } else {
-            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
+            operator.a()
+                .whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D))
+                .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
         }
     }
+
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
+    
 }

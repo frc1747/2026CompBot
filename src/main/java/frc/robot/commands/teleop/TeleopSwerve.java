@@ -37,7 +37,7 @@ public class TeleopSwerve extends Command {
       swerveRequest
         .withVelocityX(translationSup.getAsDouble() * -Constants.Drivetrain.MAX_SPEED)
         .withVelocityY(strafeSup.getAsDouble() * -Constants.Drivetrain.MAX_SPEED)
-        .withRotationalRate(rotationSup.getAsDouble() * -Constants.Drivetrain.MAX_ANGULAR_VELOCITY * .6) // six lambs 
+        .withRotationalRate(rotationSup.getAsDouble() * -Constants.Drivetrain.MAX_ANGULAR_VELOCITY * Constants.Drivetrain.DRIVER_SLOW_DOWN)
     );
   }
 
