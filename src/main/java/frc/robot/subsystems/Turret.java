@@ -180,6 +180,7 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putNumber("Turret/turret degrees", getAbsTurretPose().getRotation().getDegrees());
     SmartDashboard.putBoolean("Left Limit Switch", getLeftLimitSwitchPressed());
     SmartDashboard.putBoolean("Right Limit Switch", getRightLimitSwitchPressed());
+    SmartDashboard.putNumber("Turret/speed:", dutyCycle.Output);
 
     Translation2d hubLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
     distanceToHub = getAbsTurretPose().getTranslation().getDistance(hubLoc);

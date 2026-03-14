@@ -43,11 +43,11 @@ public final class Constants {
         public static final double FOV_HORIZONTAL = 62.5;
 
         // AprilLock2 rotation compensation pid values
-        public static final double APRIL_LOCK_P = 0.8;
+        public static final double APRIL_LOCK_P = 1.0;
         public static final double APRIL_LOCK_I = 0.003;
         public static final double APRIL_LOCK_D = 0.003;
         // maximum magnitude of PID output
-        public static final double APRIL_LOCK_PID_CLAMP = 0.1;
+        public static final double APRIL_LOCK_PID_CLAMP = 0.5;
 
     // VISION_STDDEVS allows us to control how much we trust the values coming from the Limelight(s).
     // The higher the value (distance standard deviations), the less we trust it.
@@ -128,16 +128,16 @@ public final class Constants {
     // value to divide encoder value by in order to get 360 degress per turret rotation
     public static final double TURRET_RATIO = 41.719;
     public static final int encoderLimit = 5771 / 2; // temporary encoder value limit
-    public static final double PID_P = 0;
+    public static final double PID_P = 0.0;
     public static final double PID_I = 0; // needs tuning
     public static final double PID_D = 0;
-    public static final double GO_TO_ANGLE_LOWER_SAFETY = -1;
-    public static final double GO_TO_ANGLE_HIGHER_SAFETY = 1;
+    public static final double GO_TO_ANGLE_LOWER_SAFETY = -3.0;
+    public static final double GO_TO_ANGLE_HIGHER_SAFETY = 3.0;
     public static final double UPPER_LIMIT = 90;
     public static final double LOWER_LIMIT = -90;
     public static final double DIST_TO_BOT_CENTER = 0.1529842; // meters
-    public static final double TURRET_YAW_LIMIT_UPPER = 70; // deg
-    public static final double TURRET_YAW_LIMIT_LOWER = -70;
+    public static final double TURRET_YAW_LIMIT_UPPER = 105; // deg
+    public static final double TURRET_YAW_LIMIT_LOWER = -90;
 
   }
 
