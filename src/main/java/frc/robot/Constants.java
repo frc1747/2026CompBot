@@ -22,6 +22,7 @@ import edu.wpi.first.math.numbers.N3;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+ 
   public static final class Vision {
     // Local hostnames of the unique Limelights on the system
     // WARNING: IF YOU CHANGE OUT THE HARDWARE, ENSURE TO PROPERLY
@@ -161,6 +162,7 @@ public final class Constants {
     public static final double TOLERANCE = .05; // percent tolerance
     public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Vision.RED_HUB_CENTER_X, Vision.RED_HUB_CENTER_Y, new Rotation2d()); // cords hurt my brain  
     public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(- Vision.RED_HUB_CENTER_X,-Vision.RED_HUB_CENTER_Y,new Rotation2d());
+    public static final double SHOOTER_SPEED = 0.7;
   }
      
   public static final class Intake {

@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 import java.lang.invoke.ConstantCallSite;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
@@ -24,6 +23,7 @@ public class IntakePivot extends SubsystemBase {
     private boolean down;
 
     public IntakePivot() {
+         SmartDashboard.putNumber("intake/Desired Pos", Constants.IntakePivot.OUT);
         this.motor = new TalonFX(Constants.IntakePivot.MOTOR_PORT);
         
         var request = new PositionDutyCycle(0.0);
@@ -73,11 +73,11 @@ public class IntakePivot extends SubsystemBase {
         this.motor.set(armPower);
     }
 
-    public Command moveOutCommand(){
+    public Command moveOutCommand(){ // move the intake to the pos to fix up fuel
         return run( () -> intakePivot(Constants.IntakePivot.OUT));
     }
 
-    public Command moveHomeCommand(){
+    public Command moveHomeCommand(){ // move home
         return run( () -> intakePivot(Constants.IntakePivot.HOME));
     }
 
