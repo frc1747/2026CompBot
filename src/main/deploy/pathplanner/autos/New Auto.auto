@@ -9,6 +9,25 @@
           "data": {
             "pathName": "New Path"
           }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intakeout"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCollect"
+                }
+              }
+            ]
+          }
         }
       ]
     }
