@@ -10,7 +10,6 @@ public class AutoIntakeReverseCollect extends InstantCommand {
     public AutoIntakeReverseCollect(Intake intake, double power) {
         this.intake = intake;
         this.power = power;
-        addRequirements(intake);
     }
 
     @Override
