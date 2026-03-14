@@ -42,7 +42,7 @@ public final class Constants {
         public static final double FOV_HORIZONTAL = 62.5;
 
         // AprilLock2 rotation compensation pid values
-        public static final double APRIL_LOCK_P = 0.5;
+        public static final double APRIL_LOCK_P = 0.8;
         public static final double APRIL_LOCK_I = 0.003;
         public static final double APRIL_LOCK_D = 0.003;
         // maximum magnitude of PID output
@@ -135,7 +135,9 @@ public final class Constants {
     public static final double UPPER_LIMIT = 90;
     public static final double LOWER_LIMIT = -90;
     public static final double DIST_TO_BOT_CENTER = 0.1529842; // meters
-    public static final double TURRET_YAW_LIMIT = 70; // deg
+    public static final double TURRET_YAW_LIMIT_UPPER = 70; // deg
+    public static final double TURRET_YAW_LIMIT_LOWER = -70;
+
   }
 
   public static final class Shooter {

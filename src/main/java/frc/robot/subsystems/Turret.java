@@ -166,10 +166,10 @@ public class Turret extends SubsystemBase {
     if (getRightLimitSwitchPressed() && targetPower < 0) {
       dutyCycle.Output = 0.0;
     }
-    if (getTurretAngle() > Constants.Turret.TURRET_YAW_LIMIT && targetPower < 0) {
+    if (getTurretAngle() > Constants.Turret.TURRET_YAW_LIMIT_UPPER && targetPower < 0) {
       dutyCycle.Output = 0.0;
     }
-    if (getTurretAngle() < -Constants.Turret.TURRET_YAW_LIMIT && targetPower > 0) {
+    if (getTurretAngle() < Constants.Turret.TURRET_YAW_LIMIT_LOWER && targetPower > 0) {
       dutyCycle.Output = 0.0;
     }
     motor.setControl(dutyCycle);
