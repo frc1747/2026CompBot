@@ -16,6 +16,7 @@ import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,6 +27,14 @@ import frc.robot.subsystems.LimeLight;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AprilLock extends Command {
+
+  // Define names of Preferences as constants
+  // Use slashes to create namespaces, similar to SmartDashboard naming
+  private static final String APRIL_LOCK_PID_CLAMP_KEY = "AprilLock/pidClampOffset";
+
+  // Default value
+  private double pidClampOffset = 0.0;
+
   /** Creates a new FaceObject. */
   private final Turret turret;
   private final PIDController pid;
@@ -36,6 +45,10 @@ public class AprilLock extends Command {
     this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(turret);
+
+    // Initialize the Preferences on the bot (this is non-destructive)
+    Preferences.initDouble(APRIL_LOCK_PID_CLAMP_KEY, pidClampOffset);
+
   }
 
   // Called when the command is initially scheduled.
@@ -46,21 +59,35 @@ public class AprilLock extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      double yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y));
+      // Pull in the current preference value
+      pidClampOffset = Preferences.getDouble(APRIL_LOCK_PID_CLAMP_KEY, pidClampOffset);
+
+      // Determine the clamp based on the offset from the preference
+      double aprilLockPIDClamp = Constants.Vision.APRIL_LOCK_PID_CLAMP + pidClampOffset;
+
+      double yawOffset = turret.getYawOffset(
+        new Translation2d(Constants.Vision.RED_HUB_CENTER_X, 
+                          Constants.Vision.RED_HUB_CENTER_Y
+                          )
+      );
       // pid controlling rotation compensation
       double pidOutput = pid.calculate(yawOffset); 
       double clampPid = pidOutput;
-      if (clampPid > Constants.Vision.APRIL_LOCK_PID_CLAMP) {
-        clampPid = Constants.Vision.APRIL_LOCK_PID_CLAMP;
-      } else if (clampPid < -Constants.Vision.APRIL_LOCK_PID_CLAMP) {
-        clampPid = -Constants.Vision.APRIL_LOCK_PID_CLAMP;
+      if (clampPid > aprilLockPIDClamp) {
+        clampPid = aprilLockPIDClamp;
+      } else if (clampPid < -aprilLockPIDClamp) {
+        clampPid = -aprilLockPIDClamp;
       }
 
-      SmartDashboard.putNumber("pidOutput", pidOutput);
-      SmartDashboard.putNumber("clampPid", clampPid);
-      SmartDashboard.putNumber("yawOffset", yawOffset);
+      SmartDashboard.putNumber("AprilLock/pidOutput", pidOutput);
+      SmartDashboard.putNumber("AprilLock/clampPid", clampPid);
+      SmartDashboard.putNumber("AprilLock/yawOffset", yawOffset);
+      SmartDashboard.putNumber("AprilLock/PID Offset", pidClampOffset);
       // double clampPid = MathUtil.clamp(pidOutput, -Constants.Vision.APRIL_LOCK_PID_CLAMP, Constants.Vision.APRIL_LOCK_PID_CLAMP);
       turret.basicSpin(clampPid);
+
+      System.out.println("hello");
+
   } 
 
   // Called once the command ends or is interrupted.
