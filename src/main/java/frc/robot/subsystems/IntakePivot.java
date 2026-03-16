@@ -23,7 +23,7 @@ public class IntakePivot extends SubsystemBase {
     private boolean down;
 
     public IntakePivot() {
-         SmartDashboard.putNumber("intake/Desired Pos", Constants.IntakePivot.OUT);
+        SmartDashboard.putNumber("intake/Desired Pos", Constants.IntakePivot.OUT);
         this.motor = new TalonFX(Constants.IntakePivot.MOTOR_PORT);
         
         var request = new PositionDutyCycle(0.0);
@@ -85,9 +85,14 @@ public class IntakePivot extends SubsystemBase {
         return motor.getPosition().getValueAsDouble();
     }
 
+    public boolean isIntakeDown() {
+        return getEncoderValue() <= Constants.IntakePivot.ENCODER_DOWN;
+    }
+
     
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
+    SmartDashboard.putBoolean("Is intake out:", isIntakeDown());
   }
 }
