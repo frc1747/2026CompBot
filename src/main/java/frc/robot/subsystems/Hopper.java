@@ -61,6 +61,10 @@ public class Hopper extends SubsystemBase {
         return runOnce(() -> setPower(power));
     }
 
+    public boolean reversed() {
+        return (motor.getVelocity().getValueAsDouble()) < 0;
+    }
+
     @Override
     public void periodic() {}
 
