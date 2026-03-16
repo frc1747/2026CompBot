@@ -117,6 +117,10 @@ public class Hood extends SubsystemBase {
     return getCurrentAngle() >= Constants.Hood.MIN_ANGLE && getCurrentAngle() <= Constants.Hood.MIN_ANGLE + Constants.Hood.ANGLE_TOLERANCE;
   }
 
+  public boolean isUp() {
+    return getCurrentAngle() >= Constants.Hood.MAX_ANGLE;
+  }
+
   public void checkSafety() {
     double currentAngle = getCurrentAngle();
 
@@ -142,6 +146,7 @@ public class Hood extends SubsystemBase {
     SmartDashboard.putNumber("hood/DutyCycle", dutyCycle.Output);
     SmartDashboard.putBoolean("hood/hood down", isDown());
     //SmartDashboard.getNumber("hood/Hood Desired Angle")
+    SmartDashboard.putBoolean("Is hood up:", isUp());
 
     if (Math.abs((desiredAngle - getCurrentAngle()) / getCurrentAngle()) <= Constants.Hood.ANGLE_TOLERANCE) {
       SmartDashboard.putBoolean("hood/hood angle Reached", true);
