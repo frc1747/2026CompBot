@@ -35,6 +35,7 @@ public class AprilLock extends Command {
     this.turret = turret;
     this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
     // Use addRequirements() here to declare subsystem dependencies.
+    SmartDashboard.putBoolean("turret/locked on", true);
     addRequirements(turret);
   }
 
@@ -66,6 +67,7 @@ public class AprilLock extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    SmartDashboard.putBoolean("turret/locked on", false);
     turret.basicSpin(0.0);
   }
 
