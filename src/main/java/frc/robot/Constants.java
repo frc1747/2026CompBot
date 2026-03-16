@@ -43,7 +43,7 @@ public final class Constants {
         public static final double FOV_HORIZONTAL = 62.5;
 
         // AprilLock2 rotation compensation pid values
-        public static final double APRIL_LOCK_P = 0.5;
+        public static final double APRIL_LOCK_P = 0.7;
         public static final double APRIL_LOCK_I = 0.003;
         public static final double APRIL_LOCK_D = 0.003;
         // maximum magnitude of PID output
@@ -87,6 +87,7 @@ public final class Constants {
   public static final class Hopper {
     public static final int MOTOR_PORT = 44;
     public static final double MOTOR_POWER = 0.5;
+    public static final double JAM_CURRENT = 30;
   }
 
   public static final class Hood {
