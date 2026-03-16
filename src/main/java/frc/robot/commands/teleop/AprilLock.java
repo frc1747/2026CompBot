@@ -86,8 +86,6 @@ public class AprilLock extends Command {
       // double clampPid = MathUtil.clamp(pidOutput, -Constants.Vision.APRIL_LOCK_PID_CLAMP, Constants.Vision.APRIL_LOCK_PID_CLAMP);
       turret.basicSpin(clampPid);
 
-      System.out.println("hello");
-
   } 
 
   // Called once the command ends or is interrupted.
