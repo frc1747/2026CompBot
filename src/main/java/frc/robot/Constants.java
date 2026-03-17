@@ -184,6 +184,7 @@ public final class Constants {
     public static final double SET_POINT_D = 0.0004; // TODO: tune
     public static final double SET_POINT_PID_CLAMP = 1.0; // TODO: change
     public static final double SET_POINT_TOLERANCE = 0.2; // TODO: tune
+    public static final double ENCODER_DOWN_POINT = - 38; // Boolean to put on elastic to see if intake is out
   }
 
     public static final class Kicker {

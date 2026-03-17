@@ -85,14 +85,14 @@ public class IntakePivot extends SubsystemBase {
         return motor.getPosition().getValueAsDouble();
     }
 
-    public boolean isIntakeDown() {
-        return getEncoderValue() <= Constants.IntakePivot.ENCODER_DOWN;
+    public boolean isDown() {
+        return getEncoderValue() <= Constants.IntakePivot.ENCODER_DOWN_POINT;
     }
 
     
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
-    SmartDashboard.putBoolean("Is intake out:", isIntakeDown());
+    SmartDashboard.putBoolean("intake/Is intake out:", isDown());
   }
 }
