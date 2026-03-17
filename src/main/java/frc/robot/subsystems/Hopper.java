@@ -63,7 +63,7 @@ public class Hopper extends SubsystemBase {
     }
 
     public boolean reversed() {
-        return (motor.getVelocity().getValueAsDouble()) < 0;
+        return (motor.getVelocity().getValueAsDouble()) > 0;
     }
 
     @Override
