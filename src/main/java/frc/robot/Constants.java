@@ -151,7 +151,7 @@ public final class Constants {
     public static final double SURFACE_E = -10.8847; // needs tuning
     public static final double SURFACE_F = 2.9962; // needs tuning
     public static final double MAX_AUTOSHOOT_POWER =4500;
-    public static final int AUTO_SHOOTER_MULT = 110; // this should be remove when we get better auto shoot values 
+    public static final int AUTO_SHOOTER_MULT = 109; // this should be remove when we get better auto shoot values 
     public static final double MAX_HOOD_ANGLE = 43;// degrees
     public static final double MIN_HOOD_ANGLE = 26;// degrees
     public static final double PID_P = .75;// they are half for the two motors 
@@ -178,10 +178,10 @@ public final class Constants {
     public static final double kD = 0.0;  // TODO: VERIFY
     public static final double ENCODER_UP = 0;     // TODO: Verify
     public static final double ENCODER_DOWN = -41;  // TODO: Verify
-    public static final double ENCODER_READY = -22; // TODO: Verify
-    public static final double SET_POINT_P = 0.05;  // TODO: tune
+    public static final double ENCODER_READY = -24; // TODO: Verify
+    public static final double SET_POINT_P = 0.025;  // TODO: tune
     public static final double SET_POINT_I = 0.001; // TODO: tune
-    public static final double SET_POINT_D = 0.0004; // TODO: tune
+    public static final double SET_POINT_D = 0.004; // TODO: tune
     public static final double SET_POINT_PID_CLAMP = 1.0; // TODO: change
     public static final double SET_POINT_TOLERANCE = 0.2; // TODO: tune
   }
@@ -189,7 +189,7 @@ public final class Constants {
     public static final class Kicker {
         public static final int MOTOR_PORT = 43;
         public static final double MOTOR_RPM = 4300; // amount we got on shuffleboard when the kicker was ran at 70% power
-        public static final double MOTOR_POWER = 0.7;
+        public static final double MOTOR_POWER = 0.8;
     }
 }
 
