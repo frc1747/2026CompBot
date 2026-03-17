@@ -134,8 +134,8 @@ public class RobotContainer {
         driver.start().and(driver.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        driver.leftBumper()
-            .onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        // driver.leftBumper()
+        //    .onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         // intake ready
         driver.rightBumper()
