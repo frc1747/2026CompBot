@@ -52,6 +52,8 @@ public final class Constants {
     // VISION_STDDEVS allows us to control how much we trust the values coming from the Limelight(s).
     // The higher the value (distance standard deviations), the less we trust it.
     // 
+
+
     // n1: X Position Standard Deviations in meters
     //     How wrong do we think vision could be about where we am on the field in X?
     // n2: Y Position Standard Deviations in meters
@@ -66,11 +68,15 @@ public final class Constants {
     public static final double FIELD_CENTER_X = 8.7741252;
     public static final double FIELD_CENTER_Y = 4.0259508;
 
-    public static final double RED_HUB_CENTER_X = 11.88;
-    public static final double RED_HUB_CENTER_Y = 4.0259508;
+    public static final double BLUE_HUB_CENTER_X = 4.611624; 
+    public static final double BLUE_HUB_CENTER_Y = FIELD_CENTER_Y;
+
+    public static final double RED_HUB_CENTER_X = 16.5 - BLUE_HUB_CENTER_X;
+    public static final double RED_HUB_CENTER_Y = FIELD_CENTER_Y;
 
     public static final double RED_RIGHT_CORNER_X = 17.5482504;
     public static final double RED_RIGHT_CORNER_Y = 8.0519016;
+
   }
 
   public static final class Controller {
@@ -159,7 +165,7 @@ public final class Constants {
     public static final double PID_D = 0.015;
     public static final double TOLERANCE = .05; // percent tolerance
     public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Vision.RED_HUB_CENTER_X, Vision.RED_HUB_CENTER_Y, new Rotation2d()); // cords hurt my brain  
-    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(- Vision.RED_HUB_CENTER_X,-Vision.RED_HUB_CENTER_Y,new Rotation2d());
+    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(Vision.BLUE_HUB_CENTER_X, Vision.BLUE_HUB_CENTER_Y,new Rotation2d());
     public static final double SHOOTER_SPEED = 0.7;
   }
      
