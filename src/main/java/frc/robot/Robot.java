@@ -15,6 +15,17 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     m_robotContainer = new RobotContainer();
+    System.out.println("===============================");
+    System.out.println("Git information:");
+    System.out.println("SHA: " + BuildConstants.GIT_SHA);
+    System.out.println("Branch: " + BuildConstants.GIT_BRANCH);
+    System.out.println("Commit Date: " + BuildConstants.GIT_DATE);
+    System.out.println("Build Date: " + BuildConstants.BUILD_DATE);
+    
+    if (BuildConstants.DIRTY == 1) {
+      System.out.println("WARNING: The code was built with uncommitted changes!");
+    }
+    System.out.println("===============================");
   }
 
   @Override
