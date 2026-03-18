@@ -17,6 +17,9 @@ import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,6 +33,7 @@ public class AutoAprilLock extends Command {
   /** Creates a new FaceObject. */
   private final Turret turret;
   private final PIDController pid;
+  private Timer timer = new Timer();
 
   // TODO: fix starting pose of robot
   public AutoAprilLock(Turret turret) {
@@ -41,27 +45,33 @@ public class AutoAprilLock extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    timer.reset();
+    timer.start();
+     double yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y));  
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+            yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y));
+        }
 
-  // TODO: reformat to make more readable
-  // Called every time the scheduler runs while the command is scheduled.
+        // pid controlling rotation compensation
+        double pidOutput = pid.calculate(yawOffset); 
+        double clampPid = pidOutput;
+        if (clampPid > Constants.Vision.APRIL_LOCK_PID_CLAMP) {
+            clampPid = Constants.Vision.APRIL_LOCK_PID_CLAMP;
+        } else if (clampPid < -Constants.Vision.APRIL_LOCK_PID_CLAMP) {
+            clampPid = -Constants.Vision.APRIL_LOCK_PID_CLAMP;
+        }
+
+        SmartDashboard.putNumber("pidOutput", pidOutput);
+        SmartDashboard.putNumber("clampPid", clampPid);
+        SmartDashboard.putNumber("yawOffset", yawOffset);
+        // double clampPid = MathUtil.clamp(pidOutput, -Constants.Vision.APRIL_LOCK_PID_CLAMP, Constants.Vision.APRIL_LOCK_PID_CLAMP);
+        turret.basicSpin(clampPid);
+  }
+
   @Override
   public void execute() {
-      double yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y));
-      // pid controlling rotation compensation
-      double pidOutput = pid.calculate(yawOffset); 
-      double clampPid = pidOutput;
-      if (clampPid > Constants.Vision.APRIL_LOCK_PID_CLAMP) {
-        clampPid = Constants.Vision.APRIL_LOCK_PID_CLAMP;
-      } else if (clampPid < -Constants.Vision.APRIL_LOCK_PID_CLAMP) {
-        clampPid = -Constants.Vision.APRIL_LOCK_PID_CLAMP;
-      }
-
-      SmartDashboard.putNumber("pidOutput", pidOutput);
-      SmartDashboard.putNumber("clampPid", clampPid);
-      SmartDashboard.putNumber("yawOffset", yawOffset);
-      // double clampPid = MathUtil.clamp(pidOutput, -Constants.Vision.APRIL_LOCK_PID_CLAMP, Constants.Vision.APRIL_LOCK_PID_CLAMP);
-      turret.basicSpin(clampPid);
+  
   } 
 
   // Called once the command ends or is interrupted.
@@ -73,6 +83,6 @@ public class AutoAprilLock extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.hasElapsed(2.0); // run for 1 second
   }
 }
