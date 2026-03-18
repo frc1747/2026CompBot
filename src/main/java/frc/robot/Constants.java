@@ -22,6 +22,7 @@ import edu.wpi.first.math.numbers.N3;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+ 
   public static final class Vision {
     // Local hostnames of the unique Limelights on the system
     // WARNING: IF YOU CHANGE OUT THE HARDWARE, ENSURE TO PROPERLY
@@ -42,15 +43,17 @@ public final class Constants {
         public static final double FOV_HORIZONTAL = 62.5;
 
         // AprilLock2 rotation compensation pid values
-        public static final double APRIL_LOCK_P = 0.5;
+        public static final double APRIL_LOCK_P = 1.0;
         public static final double APRIL_LOCK_I = 0.003;
         public static final double APRIL_LOCK_D = 0.003;
         // maximum magnitude of PID output
-        public static final double APRIL_LOCK_PID_CLAMP = 0.1;
+        public static final double APRIL_LOCK_PID_CLAMP = 0.5;
 
     // VISION_STDDEVS allows us to control how much we trust the values coming from the Limelight(s).
     // The higher the value (distance standard deviations), the less we trust it.
     // 
+
+
     // n1: X Position Standard Deviations in meters
     //     How wrong do we think vision could be about where we am on the field in X?
     // n2: Y Position Standard Deviations in meters
@@ -65,11 +68,15 @@ public final class Constants {
     public static final double FIELD_CENTER_X = 8.7741252;
     public static final double FIELD_CENTER_Y = 4.0259508;
 
-    public static final double RED_HUB_CENTER_X = 11.88;
-    public static final double RED_HUB_CENTER_Y = 4.0259508;
+    public static final double BLUE_HUB_CENTER_X = 4.611624; 
+    public static final double BLUE_HUB_CENTER_Y = FIELD_CENTER_Y;
+
+    public static final double RED_HUB_CENTER_X = 16.5 - BLUE_HUB_CENTER_X;
+    public static final double RED_HUB_CENTER_Y = FIELD_CENTER_Y;
 
     public static final double RED_RIGHT_CORNER_X = 17.5482504;
     public static final double RED_RIGHT_CORNER_Y = 8.0519016;
+
   }
 
   public static final class Controller {
@@ -127,15 +134,17 @@ public final class Constants {
     // value to divide encoder value by in order to get 360 degress per turret rotation
     public static final double TURRET_RATIO = 41.719;
     public static final int encoderLimit = 5771 / 2; // temporary encoder value limit
-    public static final double PID_P = 0;
+    public static final double PID_P = 0.0;
     public static final double PID_I = 0; // needs tuning
     public static final double PID_D = 0;
-    public static final double GO_TO_ANGLE_LOWER_SAFETY = -1;
-    public static final double GO_TO_ANGLE_HIGHER_SAFETY = 1;
+    public static final double GO_TO_ANGLE_LOWER_SAFETY = -3.0;
+    public static final double GO_TO_ANGLE_HIGHER_SAFETY = 3.0;
     public static final double UPPER_LIMIT = 90;
     public static final double LOWER_LIMIT = -90;
     public static final double DIST_TO_BOT_CENTER = 0.1529842; // meters
-    public static final double TURRET_YAW_LIMIT = 70; // deg
+    public static final double TURRET_YAW_LIMIT_UPPER = 97; // deg
+    public static final double TURRET_YAW_LIMIT_LOWER = -85;
+
   }
 
   public static final class Shooter {
@@ -150,7 +159,7 @@ public final class Constants {
     public static final double SURFACE_E = -10.8847; // needs tuning
     public static final double SURFACE_F = 2.9962; // needs tuning
     public static final double MAX_AUTOSHOOT_POWER =4500;
-    public static final int AUTO_SHOOTER_MULT = 110; // this should be remove when we get better auto shoot values 
+    public static final int AUTO_SHOOTER_MULT = 109; // this should be remove when we get better auto shoot values 
     public static final double MAX_HOOD_ANGLE = 43;// degrees
     public static final double MIN_HOOD_ANGLE = 26;// degrees
     public static final double PID_P = .75;// they are half for the two motors 
@@ -158,7 +167,8 @@ public final class Constants {
     public static final double PID_D = 0.015;
     public static final double TOLERANCE = .05; // percent tolerance
     public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Vision.RED_HUB_CENTER_X, Vision.RED_HUB_CENTER_Y, new Rotation2d()); // cords hurt my brain  
-    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(- Vision.RED_HUB_CENTER_X,-Vision.RED_HUB_CENTER_Y,new Rotation2d());
+    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(Vision.BLUE_HUB_CENTER_X, Vision.BLUE_HUB_CENTER_Y,new Rotation2d());
+    public static final double SHOOTER_SPEED = 0.7;
   }
      
   public static final class Intake {
@@ -176,10 +186,10 @@ public final class Constants {
     public static final double kD = 0.0;  // TODO: VERIFY
     public static final double ENCODER_UP = 0;     // TODO: Verify
     public static final double ENCODER_DOWN = -41;  // TODO: Verify
-    public static final double ENCODER_READY = -22; // TODO: Verify
-    public static final double SET_POINT_P = 0.05;  // TODO: tune
+    public static final double ENCODER_READY = -24; // TODO: Verify
+    public static final double SET_POINT_P = 0.025;  // TODO: tune
     public static final double SET_POINT_I = 0.001; // TODO: tune
-    public static final double SET_POINT_D = 0.0004; // TODO: tune
+    public static final double SET_POINT_D = 0.004; // TODO: tune
     public static final double SET_POINT_PID_CLAMP = 1.0; // TODO: change
     public static final double SET_POINT_TOLERANCE = 0.2; // TODO: tune
   }
@@ -187,7 +197,7 @@ public final class Constants {
     public static final class Kicker {
         public static final int MOTOR_PORT = 43;
         public static final double MOTOR_RPM = 4300; // amount we got on shuffleboard when the kicker was ran at 70% power
-        public static final double MOTOR_POWER = 0.7;
+        public static final double MOTOR_POWER = 0.8;
     }
 }
 
