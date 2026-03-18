@@ -72,6 +72,7 @@ public class RobotContainer {
 
     // Control
     private final CommandXboxController driver = new CommandXboxController(Constants.Controller.DRIVER_PORT);
+    private final XboxController driver_hid = driver.getHID();
     private final CommandXboxController operator = new CommandXboxController(Constants.Controller.OPERATOR_PORT);
     private final DoubleSupplier translationSup = () -> driver.getRawAxis(XboxController.Axis.kLeftY.value); // forward/backward on left stick
     private final DoubleSupplier strafeSup = () -> driver.getRawAxis(XboxController.Axis.kLeftX.value); // right/left on left stick
@@ -115,7 +116,12 @@ public class RobotContainer {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
-            new TeleopSwerve(drivetrain, translationSup, strafeSup, rotationSup)
+            new TeleopSwerve(
+                drivetrain,
+                () -> driver_hid.getLeftY(),
+                () -> driver_hid.getLeftX(),
+                () -> driver_hid.getRightX()
+            )
         );
 
         // always try to go to default
