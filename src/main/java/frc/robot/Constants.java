@@ -190,7 +190,7 @@ public final class Constants {
     public static final double SET_POINT_P = 0.025;  // TODO: tune
     public static final double SET_POINT_I = 0.001; // TODO: tune
     public static final double SET_POINT_D = 0.004; // TODO: tune
-    public static final double SET_POINT_PID_CLAMP = 1.0; // TODO: change
+    public static final double SET_POINT_PID_CLAMP = 0.5; // TODO: change
     public static final double SET_POINT_TOLERANCE = 0.2; // TODO: tune
   }
 
