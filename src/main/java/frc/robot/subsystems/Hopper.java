@@ -68,7 +68,7 @@ public class Hopper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("hopper/is motor reversed", reversed());
+        SmartDashboard.putBoolean("hopper/is motor reversed", isReversed());
         SmartDashboard.putNumber("hopper/velocity", motor.getVelocity().getValueAsDouble());
     }
 
