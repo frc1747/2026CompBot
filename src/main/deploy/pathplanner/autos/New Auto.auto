@@ -13,7 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "IntakeOut"
+            "name": "IntakeReverseCollect"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCollect"
           }
         }
       ]

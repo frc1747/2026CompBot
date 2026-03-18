@@ -1,19 +1,24 @@
 package frc.robot.commands.autosCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
 public class AutoIntakeCollect extends Command {
     private Intake intake;
     private double power;
+    private Timer timer = new Timer();
 
     public AutoIntakeCollect(Intake intake, double power) {
         this.intake = intake;
         this.power = power;
+        addRequirements(intake);
     }
 
     @Override
     public void initialize() {
+        timer.reset();
+        timer.start();
         intake.intakeSpin(power);
     }
 
@@ -27,6 +32,6 @@ public class AutoIntakeCollect extends Command {
     }
 
     public boolean isFinished() {
-        return false;
+        return timer.hasElapsed(1.0); // run for 1 second
     }
 }
