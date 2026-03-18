@@ -62,8 +62,8 @@ public class Hopper extends SubsystemBase {
         return runOnce(() -> setPower(power));
     }
 
-    public boolean isJammed(){ // no it's jelly
-        return (motor.getSupplyCurrent().getValueAsDouble() > Constants.Hopper.JAM_CURRENT);
+    public boolean isJammed() { // no it's jelly
+        return motor.getSupplyCurrent().getValueAsDouble() > Constants.Hopper.JAM_CURRENT;
     }
 
     @Override
