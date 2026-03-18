@@ -85,8 +85,8 @@ public final class Constants {
   }
 
   public static final class Drivetrain {
-    public static final double DRIVER_SLOW_DOWN = 0.6;
-    public static final double MAX_SPEED = 4.1 * 0.5;  // Max speed in m/s  half-speed for now
+    public static final double DRIVER_SLOW_DOWN = 1.0;
+    public static final double MAX_SPEED = 4.1;  // Max speed in m/s
     public static final double MAX_ACCEL = 4.1;  // Max acceleration in m/s
     public static final double MAX_ANGULAR_VELOCITY = 10.0;  // Rad/s
   }
@@ -190,7 +190,7 @@ public final class Constants {
     public static final double SET_POINT_P = 0.025;  // TODO: tune
     public static final double SET_POINT_I = 0.001; // TODO: tune
     public static final double SET_POINT_D = 0.004; // TODO: tune
-    public static final double SET_POINT_PID_CLAMP = 1.0; // TODO: change
+    public static final double SET_POINT_PID_CLAMP = 0.5; // TODO: change
     public static final double SET_POINT_TOLERANCE = 0.2; // TODO: tune
   }
 
