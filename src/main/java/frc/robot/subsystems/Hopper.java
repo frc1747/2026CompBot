@@ -63,12 +63,13 @@ public class Hopper extends SubsystemBase {
     }
 
     public boolean reversed() {
-        return (motor.getVelocity().getValueAsDouble()) > 0;
+        return (motor.getVelocity().getValueAsDouble()) < 0;
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.setDefaultBoolean("hopper/is motor reversed", reversed());
+        SmartDashboard.putBoolean("hopper/is motor reversed", reversed());
+        SmartDashboard.putNumber("hopper/velocity", motor.getVelocity().getValueAsDouble());
     }
 
 }
