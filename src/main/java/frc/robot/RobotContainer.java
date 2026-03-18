@@ -17,7 +17,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -29,14 +28,18 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.teleop.AprilLock;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
+import frc.robot.commands.autosCommands.AutoAprilLock;
 import frc.robot.commands.autosCommands.AutoIntakeCollect;
 import frc.robot.commands.autosCommands.AutoIntakeOut;
 import frc.robot.commands.autosCommands.AutoIntakeReverseCollect;
+import frc.robot.commands.autosCommands.AutoKicker;
+import frc.robot.commands.autosCommands.AutoShooter;
 import frc.robot.commands.teleop.IntakeOut;
 import frc.robot.commands.teleop.IntakeSpin;
 import frc.robot.commands.teleop.TeleopSwerve;
@@ -74,7 +77,6 @@ public class RobotContainer {
     private final DoubleSupplier strafeSup = () -> driver.getRawAxis(XboxController.Axis.kLeftX.value); // right/left on left stick
     private final DoubleSupplier rotationSup = () -> driver.getRawAxis(XboxController.Axis.kRightX.value); // right/left on right stick 
 
-
     public static final Kicker kicker = new Kicker();
     public static final Hood hood = new Hood();
 
@@ -97,6 +99,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("IntakeOut", new AutoIntakeOut(intakePivot, 6000));
         NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7));
         NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7));
+        NamedCommands.registerCommand("Kicker",new AutoKicker(Constants.Kicker.MOTOR_RPM));
+        NamedCommands.registerCommand("Shoot", new AutoShooter(0.7));
+        NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -114,21 +119,17 @@ public class RobotContainer {
         );
 
         // always try to go to default
-
         intakePivot.setDefaultCommand(new IntakeGoToDefault(intakePivot));
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
         final var idle = new SwerveRequest.Idle();
         RobotModeTriggers.disabled().whileTrue(
-            drivetrain.applyRequest(() -> idle)
-            .ignoringDisable(true)
+            drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        driver.a()
-            .whileTrue(drivetrain.applyRequest(() -> brake));
-        driver.b()
-            .whileTrue(drivetrain.applyRequest(() ->
+        driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        driver.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))
         ));
 
@@ -140,75 +141,74 @@ public class RobotContainer {
         driver.start().and(driver.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        // driver.leftBumper()
-        //    .onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        driver.povDown().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        // intake ready
-        driver.rightBumper()
-            .whileTrue(new ToggleIntakeReady(intakePivot))
-            .onFalse(new IntakeGoToDefault(intakePivot));
-
-        // intake put up
-        driver.rightTrigger()
-            .whileTrue(new GrabFuel( intakePivot))
-            .onFalse(new IntakeGoToDefault(intakePivot));
+        // intake commands
+        // this is broken cause no encoder
+        // driver.rightTrigger().whileTrue(intakePivot.moveOutCommand().alongWith(intake.SetPowerCommand()))
+        // .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
         
-        driver.rightTrigger()
-            .whileTrue(intake.spin(false))
+        driver.leftTrigger().onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
+
+        // much slower for the moment
+        driver.rightBumper().whileTrue(new TurretRotate(turret, 0.025));
+        driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
+
+        operator.x().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(true))  // down
+                    .onFalse(hood.stopCommand());
+        operator.y().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(false))  // up
+                    .onFalse(hood.stopCommand());
+
+        // TODO: change controls for better driver and operator convenience
+        operator.leftTrigger()
+            .whileTrue(new GrabFuel(intakePivot))
+            .onFalse(new IntakeGoToDefault(intakePivot));
+
+        // TODO: change controls for better driver and operator convenience
+        operator.povLeft()
+            .onTrue(new ToggleIntakeReady(intakePivot))
+            .onTrue(new IntakeGoToDefault(intakePivot));
+
+        // safe middle angle
+        // operator.rightBumper().whileTrue(hood.goToDesiredAngleCommand().alongWith(shooter.setSpeedToDesired()))
+        //                       .onFalse(hood.stopCommand().alongWith(shooter.stopCommand()));
+        operator.rightBumper().whileTrue(shooter.setSpeedToDesired())
+                .onFalse(shooter.stopCommand());
+
+        operator.rightTrigger().whileTrue(shooter.SetDesiredPowerCommand())
+                .onFalse(shooter.stopCommand());
+                
+        operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER).alongWith(hopper.run()))
+            .onTrue(kicker.setRPMCommand())
+            .onFalse(kicker.stop().alongWith(hopper.stop()));
+
+        operator.leftTrigger().whileTrue(hopper.run(true))
+            .onFalse(hopper.stop());
+
+
+        // operator.leftTrigger().whileTrue(hopper.run())
+        //                       .onFalse(hopper.stop());
+        operator.povRight().whileTrue(intake.spin(true))
             .onFalse(intake.StopCommand());
 
-        // intake eject
-        driver.leftTrigger()
-            .whileTrue(intake.spin(true))
-            .onFalse(intake.StopCommand());
+
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        // operater
+        operator.b().whileTrue(new AprilLock(turret));
 
-        // intake hopper 
-
-        operator.leftBumper()
-            .whileTrue(hopper.run(false)
-            .alongWith(intake.spin(false)))
-            .onFalse(hopper.stop()
-            .alongWith(intake.StopCommand()));
-
-        operator.rightBumper()
-            .whileTrue(hopper.run(true)
-            .alongWith(intake.spin(true)))
-            .onFalse(hopper.stop()
-            .alongWith(intake.StopCommand()));
-
-        operator.x().whileTrue(hood.setPowerCommand(true))
-            .onFalse(hopper.stop());
-        
-        operator.y().whileTrue(hood.setPowerCommand(false))
-            .onFalse(hopper.stop());
-
-        // turret operator
-
-        operator.povDown()
-            .toggleOnTrue(new AprilLock(turret));
-
-        // this needs to be refactors to the inline standerds
-        operator.rightTrigger()
-            .onTrue(shooter.setPowerCommand(Constants.Shooter.SHOOTER_SPEED))
-            .onFalse(shooter.setPowerCommand(0));
+        operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
 
         // 2 TODO: CHECK if conflics with 1
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            operator.b()
+            operator.a()
                 .whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D))
                 .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
-        }
-
-        else {
-            operator.b()
+        } else {
+            operator.a()
                 .whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D))
                 .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
         }
-
     }
 
     public Command getAutonomousCommand() {
