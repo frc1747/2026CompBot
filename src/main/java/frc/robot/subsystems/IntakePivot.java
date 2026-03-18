@@ -86,7 +86,7 @@ public class IntakePivot extends SubsystemBase {
     }
 
     public boolean isDown() {
-        return getEncoderValue() <= Constants.IntakePivot.ENCODER_DOWN_POINT;
+        return getEncoderValue() <= Constants.IntakePivot.ENCODER_DOWN_POINT_ELASTIC;
     }
 
     
