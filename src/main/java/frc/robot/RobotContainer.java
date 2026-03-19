@@ -34,6 +34,12 @@ import frc.robot.commands.teleop.AprilLock;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
+import frc.robot.commands.autosCommands.AutoAprilLock;
+import frc.robot.commands.autosCommands.AutoIntakeCollect;
+import frc.robot.commands.autosCommands.AutoIntakeOut;
+import frc.robot.commands.autosCommands.AutoIntakeReverseCollect;
+import frc.robot.commands.autosCommands.AutoKicker;
+import frc.robot.commands.autosCommands.AutoShooter;
 import frc.robot.commands.teleop.IntakeOut;
 import frc.robot.commands.teleop.IntakeSpin;
 import frc.robot.commands.teleop.TeleopSwerve;
@@ -88,6 +94,12 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
+        NamedCommands.registerCommand("IntakeOut", new AutoIntakeOut(intakePivot, 6000));
+        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7));
+        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7));
+        NamedCommands.registerCommand("Kicker",new AutoKicker(Constants.Kicker.MOTOR_RPM));
+        NamedCommands.registerCommand("Shoot", new AutoShooter(0.7));
+        NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 

@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
+            "pathName": "Auton Command Testing B"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeReverseCollect"
+            "name": "Kicker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {

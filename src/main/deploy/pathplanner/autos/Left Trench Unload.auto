@@ -7,19 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
+            "pathName": "Left Trench Unload"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeReverseCollect"
+            "name": "AutoLock"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeCollect"
+            "name": "Kicker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]
