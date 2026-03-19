@@ -33,14 +33,14 @@ public class Robot extends TimedRobot {
       warning
     );
     System.out.print(info);
+        
+    // Add Scheduler to Elastic
+    SmartDashboard.putData(CommandScheduler.getInstance());
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    
-    // Add Scheduler to Elastic
-    SmartDashboard.putData(CommandScheduler.getInstance());
   }
 
   @Override
