@@ -166,14 +166,18 @@ public class RobotContainer {
 
         operator.leftBumper()
             .whileTrue(hopper.run(false)
-            .alongWith(intake.spin(false)))
+            .alongWith(intake.spin(false))
+            .alongWith(kicker.setRPMCommand()))
             .onFalse(hopper.stop()
+            .alongWith(kicker.stopCommand())
             .alongWith(intake.StopCommand()));
 
         operator.rightBumper()
             .whileTrue(hopper.run(true)
-            .alongWith(intake.spin(true)))
+            .alongWith(intake.spin(true))
+            .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
+            .alongWith(kicker.stopCommand())
             .alongWith(intake.StopCommand()));
 
         operator.x().whileTrue(hood.setPowerCommand(true))
