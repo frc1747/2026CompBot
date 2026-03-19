@@ -54,15 +54,15 @@ public class Kicker extends SubsystemBase {
         motor.optimizeBusUtilization();
     }
 
-    public Command run() {
-        return runOnce(() -> setPower(Constants.Kicker.MOTOR_POWER));
+    public Command run(boolean reverse) {
+        return runOnce(() -> setPower((reverse ? -1 : 1) * Constants.Intake.POWER));
     }
 
     public Command setRPMCommand() {
         return runOnce(() -> setRPM(Constants.Kicker.MOTOR_RPM));
     }
 
-    public Command stop() {
+    public Command stopCommand() {
         return runOnce(() -> setPower(0.0));
     }
     
