@@ -179,8 +179,7 @@ public class RobotContainer {
         operator.x().whileTrue(hood.setPowerCommand(true))
             .onFalse(hood.stopCommand());
         
-        operator.y().toggleOnTrue(hood.setPowerCommand(false))
-            .onFalse(hood.stopCommand());
+        operator.y().onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         // turret operator
 
