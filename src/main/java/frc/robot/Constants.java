@@ -93,6 +93,7 @@ public final class Constants {
   public static final class Hopper {
     public static final int MOTOR_PORT = 44;
     public static final double MOTOR_POWER = 0.5;
+    public static final double JAM_CURRENT = 30;
   }
 
   public static final class Hood {

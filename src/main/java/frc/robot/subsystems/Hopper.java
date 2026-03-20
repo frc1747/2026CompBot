@@ -62,12 +62,17 @@ public class Hopper extends SubsystemBase {
         return runOnce(() -> setPower(power));
     }
 
+    public boolean isJammed() { // no it's jelly
+        return motor.getSupplyCurrent().getValueAsDouble() > Constants.Hopper.JAM_CURRENT;
+    }
+    
     public boolean isReversed() {
         return motor.getVelocity().getValueAsDouble() < 0;
     }
 
     @Override
     public void periodic() {
+        SmartDashboard.putBoolean("Hopper/isJammed", isJammed());
         SmartDashboard.putBoolean("hopper/is motor reversed", isReversed());
         SmartDashboard.putNumber("hopper/velocity", motor.getVelocity().getValueAsDouble());
     }
