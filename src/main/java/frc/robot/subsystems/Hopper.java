@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -61,8 +62,15 @@ public class Hopper extends SubsystemBase {
         return runOnce(() -> setPower(power));
     }
 
+    public boolean isReversed() {
+        return motor.getVelocity().getValueAsDouble() < 0;
+    }
+
     @Override
-    public void periodic() {}
+    public void periodic() {
+        SmartDashboard.putBoolean("hopper/is motor reversed", isReversed());
+        SmartDashboard.putNumber("hopper/velocity", motor.getVelocity().getValueAsDouble());
+    }
 
 }
 
