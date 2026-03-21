@@ -95,10 +95,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
         NamedCommands.registerCommand("IntakeOut", new AutoIntakeOut(intakePivot, 6000));
-        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7));
+        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 1.0));
         NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7));
-        NamedCommands.registerCommand("Kicker",new AutoKicker(Constants.Kicker.MOTOR_RPM));
-        NamedCommands.registerCommand("Shoot", new AutoShooter(1));
+        NamedCommands.registerCommand("Kicker",new AutoKicker(kicker));
+        NamedCommands.registerCommand("Shoot", new AutoShooter(1,1));
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
@@ -200,6 +200,11 @@ public class RobotContainer {
         // turret moved to driver
         driver.leftBumper()
             .toggleOnTrue(new AprilLock(turret));
+
+        operator.povLeft()
+            .onTrue(turret.changeYawOffSetCommand(.5));
+        operator.povRight()
+            .onTrue(turret.changeYawOffSetCommand(-.5));
 
         // this needs to be refactors to the inline standerds
         operator.rightTrigger()

@@ -11,55 +11,23 @@ import edu.wpi.first.wpilibj.Timer;
 
 
 import frc.robot.Constants;
+import frc.robot.subsystems.Kicker;
 
 public class AutoKicker extends Command{
 
-    private TalonFX motor;
-    private VelocityVoltage velocityKicker = new VelocityVoltage(0).withSlot(0);
-    private DutyCycleOut dutyControl = new DutyCycleOut(0.0);
-    private double rpm;
-    private double power;
-    private Timer timer = new Timer();
+    private Kicker kicker;
+    private Timer timer;
 
-    public AutoKicker(double power){
-        this.power = power;
-         motor = new TalonFX(Constants.Kicker.MOTOR_PORT);
-
-        TalonFXConfiguration config = new TalonFXConfiguration();
-        
-        config.Voltage
-            .withPeakForwardVoltage(12.0)
-            .withPeakReverseVoltage(-12.0);
-
-        config.Slot0.kP = 0.5;
-        config.Slot0.kI = 0.0;
-        config.Slot0.kD = 0.0;
-        
-        config.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
-        config.CurrentLimits
-            .withStatorCurrentLimit(60)
-            .withStatorCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(40)
-            .withSupplyCurrentLowerLimit(40)
-            .withSupplyCurrentLimitEnable(true);
-
-        config.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
-                
-        motor.getConfigurator().apply(config);
-        motor.getStatorCurrent().setUpdateFrequency(50);
-        motor.getSupplyVoltage().setUpdateFrequency(50);
-        motor.getVelocity().setUpdateFrequency(50);
-        motor.getDutyCycle().setUpdateFrequency(100);
-        motor.getMotorVoltage().setUpdateFrequency(50);
-        motor.getSupplyCurrent().setUpdateFrequency(50);
-        motor.optimizeBusUtilization();
+    public AutoKicker(Kicker kicker){
+        this.timer = new Timer();
+        this.kicker = kicker;
     }
     @Override
     public void initialize(){
         timer.reset();
         timer.start(); 
-        dutyControl.Output = power;
-        motor.setControl(dutyControl);
+        kicker.setRPM(Constants.Kicker.MOTOR_RPM);
+        
     }
     @Override
     public void execute() {
@@ -67,8 +35,7 @@ public class AutoKicker extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        dutyControl.Output = 0.0;
-        motor.setControl(dutyControl);
+        kicker.setPower(0);
 
     }
     public boolean isFinished() {

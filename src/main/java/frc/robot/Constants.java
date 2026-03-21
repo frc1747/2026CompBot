@@ -92,7 +92,7 @@ public final class Constants {
   }
   public static final class Hopper {
     public static final int MOTOR_PORT = 44;
-    public static final double MOTOR_POWER = 0.5;
+    public static final double MOTOR_POWER = 0.65;
     public static final double JAM_CURRENT = 30;
   }
 
@@ -174,7 +174,7 @@ public final class Constants {
      
   public static final class Intake {
     public static final int MOTOR_PORT = 46;
-    public static final double POWER = 0.3;
+    public static final double POWER = 0.25;
     public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
   }
 
