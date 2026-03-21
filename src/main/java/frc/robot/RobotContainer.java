@@ -192,13 +192,14 @@ public class RobotContainer {
             .alongWith(kicker.stopCommand())
             .alongWith(intake.StopCommand()));
         
-        operator.x().whileTrue(hood.setPowerCommand(false))
+        operator.x()
+            .whileTrue(hood.setPowerCommand(false))
             .onFalse(hood.stopCommand());
          
-        operator.y().onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
+        operator.y()
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         // turret operator
-
         operator.povDown()
             .toggleOnTrue(new AprilLock(turret));
 
@@ -208,17 +209,9 @@ public class RobotContainer {
             .onFalse(shooter.setPowerCommand(0));
 
         // 2 TODO: CHECK if conflics with 1
-        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            operator.b()
-                .whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D))
-                .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
-        }
-
-        else {
-            operator.b()
-                .whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D))
-                .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
-        }
+        operator.b()
+            .whileTrue(new AutoAim(shooter, hood))
+            .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
 
     }
 

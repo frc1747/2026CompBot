@@ -7,6 +7,8 @@ package frc.robot.commands;
 import java.lang.constant.Constable;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,15 +23,19 @@ public class AutoAim extends Command {
     private Pose2d target;
     private double[] hoodAngleAndShooterPower = {-1,-1};
 
-    public AutoAim(Shooter shooter, Hood hood, Pose2d target) {
+    public AutoAim(Shooter shooter, Hood hood) {
         this.shooter = shooter;
         this.hood = hood;
-        this.target = target;
+        this.target = Constants.Shooter.BLUE_HUB_CENTER_POSE2D; // we default to blue like the cordnet system.
         addRequirements(shooter, hood);
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+            this.target = Constants.Shooter.RED_HUB_CENTER_POSE2D;
+        }
+    }
 
     @Override
     public void execute() {
