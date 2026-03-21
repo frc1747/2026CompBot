@@ -160,7 +160,7 @@ public final class Constants {
     public static final double SURFACE_E = -10.8847; // needs tuning
     public static final double SURFACE_F = 2.9962; // needs tuning
     public static final double MAX_AUTOSHOOT_POWER =4500;
-    public static final int AUTO_SHOOTER_MULT = 109; // this should be remove when we get better auto shoot values 
+    public static final int AUTO_SHOOTER_MULT = 80; // this should be remove when we get better auto shoot values 
     public static final double MAX_HOOD_ANGLE = 43;// degrees
     public static final double MIN_HOOD_ANGLE = 26;// degrees
     public static final double PID_P = .75;// they are half for the two motors 
@@ -169,7 +169,7 @@ public final class Constants {
     public static final double TOLERANCE = .05; // percent tolerance
     public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Vision.RED_HUB_CENTER_X, Vision.RED_HUB_CENTER_Y, new Rotation2d()); // cords hurt my brain  
     public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(Vision.BLUE_HUB_CENTER_X, Vision.BLUE_HUB_CENTER_Y,new Rotation2d());
-    public static final double SHOOTER_SPEED = 0.7;
+    public static final double SHOOTER_SPEED = 0.3;
   }
      
   public static final class Intake {
@@ -186,7 +186,7 @@ public final class Constants {
     public static final double kI = 0.0;  // TODO: VERIFY
     public static final double kD = 0.0;  // TODO: VERIFY
     public static final double ENCODER_UP = 0;     // TODO: Verify
-    public static final double ENCODER_DOWN = -37;  // TODO: Verify
+    public static final double ENCODER_DOWN = -42;  // TODO: Verify
     public static final double ENCODER_READY = -22; // TODO: Verify
     public static final double SET_POINT_P = 0.05;  // TODO: tune
     public static final double SET_POINT_I = 0.001; // TODO: tune

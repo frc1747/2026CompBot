@@ -104,7 +104,7 @@ public class Shooter extends SubsystemBase {
 
     // in RPM
     public void setRPM(double rpm) {
-        System.out.println("I am being commanded to " + rpm);
+      //  System.out.println("I am being commanded to " + rpm);
         //velocityShooter.Velocity * 60 = //pid.calculate(getRPM(), rpm);
         motorLeft.setControl(velocityShooter.withVelocity(rpm/60.0));
     }
