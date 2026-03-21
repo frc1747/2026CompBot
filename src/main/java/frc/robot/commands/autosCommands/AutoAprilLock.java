@@ -76,6 +76,6 @@ public class AutoAprilLock extends Command {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(2.0); // run for 1 second
+        return timer.hasElapsed(1.0); // run for 1 second
     }
 }

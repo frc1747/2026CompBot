@@ -13,12 +13,6 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoLock"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Shoot"
           }
         },

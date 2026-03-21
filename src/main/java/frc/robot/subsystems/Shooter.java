@@ -188,8 +188,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.getNumber("Shooter/Desired Power?", desiredPower) ;
 
         // auto shoot
-        SmartDashboard.putNumber("Shooter/RPM for auto aim", findSpeedAndAngleFromDistance(RobotContainer.turret.distanceToHub)[1]);
-        SmartDashboard.putNumber("Shooter/hood for auto aim", findSpeedAndAngleFromDistance(RobotContainer.turret.distanceToHub)[0]);
+        
 
         // pids yay!!!!
         PID_P = SmartDashboard.getNumber("Shooter/Shooter pid P", PID_P);

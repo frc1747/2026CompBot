@@ -40,13 +40,15 @@ public class AutoAim extends Command {
     @Override
     public void execute() {
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
-        SmartDashboard.putNumber("Shooter/distance from hub from autoAim", distance);
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
 
         hood.goToAngleCommand(hoodAngleAndShooterPower[0]);
         if (hood.atAngle(hoodAngleAndShooterPower[0])){
             shooter.setRPM(hoodAngleAndShooterPower[1]);
         }
+        SmartDashboard.putNumber("Shooter/distance from hub from autoAim", distance);
+        SmartDashboard.putNumber("Shooter/RPM for auto aim", hoodAngleAndShooterPower[1]);
+        SmartDashboard.putNumber("Shooter/hood for auto aim", hoodAngleAndShooterPower[0]);
     }
 
     @Override

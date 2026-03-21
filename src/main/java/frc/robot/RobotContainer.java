@@ -98,7 +98,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7));
         NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7));
         NamedCommands.registerCommand("Kicker",new AutoKicker(Constants.Kicker.MOTOR_RPM));
-        NamedCommands.registerCommand("Shoot", new AutoShooter(0.7));
+        NamedCommands.registerCommand("Shoot", new AutoShooter(1));
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
@@ -181,16 +181,14 @@ public class RobotContainer {
             .alongWith(intake.spin(false))
             .alongWith(kicker.setRPMCommand()))
             .onFalse(hopper.stop()
-            .alongWith(kicker.stopCommand())
-            .alongWith(intake.StopCommand()));
+            .alongWith(kicker.stopCommand()));
 
         operator.rightBumper()
             .whileTrue(hopper.run(true)
             .alongWith(intake.spin(true))
             .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
-            .alongWith(kicker.stopCommand())
-            .alongWith(intake.StopCommand()));
+            .alongWith(kicker.stopCommand()));
         
         operator.x()
             .whileTrue(hood.setPowerCommand(false))
@@ -199,8 +197,8 @@ public class RobotContainer {
         operator.y()
             .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
-        // turret operator
-        operator.povDown()
+        // turret moved to driver
+        driver.leftBumper()
             .toggleOnTrue(new AprilLock(turret));
 
         // this needs to be refactors to the inline standerds

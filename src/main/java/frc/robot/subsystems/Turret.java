@@ -188,7 +188,7 @@ public class Turret extends SubsystemBase {
 
     Translation2d hubLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
     distanceToHub = getAbsTurretPose().getTranslation().getDistance(hubLoc);
-    SmartDashboard.putNumber("Hub Distance From Turret", distanceToHub);
+    //SmartDashboard.putNumber("Hub Distance From Turret", distanceToHub);
     //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
   }
 }

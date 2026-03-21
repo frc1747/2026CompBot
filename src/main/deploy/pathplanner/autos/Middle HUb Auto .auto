@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Trench Unload"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Kicker"
+            "pathName": "Middle Hub Unload"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Kicker"
           }
         },
         {

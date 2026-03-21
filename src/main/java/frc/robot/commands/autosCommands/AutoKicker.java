@@ -16,11 +16,13 @@ public class AutoKicker extends Command{
 
     private TalonFX motor;
     private VelocityVoltage velocityKicker = new VelocityVoltage(0).withSlot(0);
+    private DutyCycleOut dutyControl = new DutyCycleOut(0.0);
     private double rpm;
+    private double power;
     private Timer timer = new Timer();
 
-    public AutoKicker(double rpm){
-        this.rpm = rpm;
+    public AutoKicker(double power){
+        this.power = power;
          motor = new TalonFX(Constants.Kicker.MOTOR_PORT);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
@@ -56,7 +58,8 @@ public class AutoKicker extends Command{
     public void initialize(){
         timer.reset();
         timer.start(); 
-        motor.setControl(velocityKicker.withVelocity(rpm / 60.0));
+        dutyControl.Output = power;
+        motor.setControl(dutyControl);
     }
     @Override
     public void execute() {
@@ -64,7 +67,9 @@ public class AutoKicker extends Command{
 
     @Override
     public void end(boolean interrupted) {
-       motor.setControl(velocityKicker.withVelocity(0.0 / 60.0));
+        dutyControl.Output = 0.0;
+        motor.setControl(dutyControl);
+
     }
     public boolean isFinished() {
         return timer.hasElapsed(1.0); // run for 1 second
