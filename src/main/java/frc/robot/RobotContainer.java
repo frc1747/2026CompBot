@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.teleop.AprilLock;
+import frc.robot.commands.teleop.AprilLockShuttle;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
@@ -172,9 +173,9 @@ public class RobotContainer {
             .onFalse(intake.StopCommand());
 
         // intake eject
-        driver.leftTrigger()
-            .whileTrue(intake.spin(true))
-            .onFalse(intake.StopCommand());
+        // driver.leftTrigger()
+        //     .whileTrue(intake.spin(true))
+        //     .onFalse(intake.StopCommand());
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -206,6 +207,9 @@ public class RobotContainer {
         // turret moved to driver
         driver.leftBumper()
             .toggleOnTrue(new AprilLock(turret));
+
+        driver.leftTrigger()
+            .toggleOnTrue(new AprilLockShuttle(turret));
 
         operator.povLeft()
             .onTrue(turret.changeYawOffSetCommand(.01));

@@ -70,9 +70,11 @@ public final class Constants {
 
     public static final double BLUE_HUB_CENTER_X = 4.611624; 
     public static final double BLUE_HUB_CENTER_Y = FIELD_CENTER_Y;
+    public static final double BLUE_SHUTTLE_CENTER_X = 3;
 
     public static final double RED_HUB_CENTER_X = 16.5 - BLUE_HUB_CENTER_X;
     public static final double RED_HUB_CENTER_Y = FIELD_CENTER_Y;
+    public static final double RED_SHUTTLE_CENTER_X = 16.5 - BLUE_HUB_CENTER_X;
 
     public static final double RED_RIGHT_CORNER_X = 17.5482504;
     public static final double RED_RIGHT_CORNER_Y = 8.0519016;
@@ -92,7 +94,7 @@ public final class Constants {
   }
   public static final class Hopper {
     public static final int MOTOR_PORT = 44;
-    public static final double MOTOR_POWER = 0.65;
+    public static final double MOTOR_POWER = 0.85;
     public static final double JAM_CURRENT = 30;
   }
 
@@ -174,7 +176,7 @@ public final class Constants {
      
   public static final class Intake {
     public static final int MOTOR_PORT = 46;
-    public static final double POWER = 0.5;
+    public static final double POWER = 0.6;
     public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
   }
 
