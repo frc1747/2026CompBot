@@ -191,10 +191,10 @@ public class RobotContainer {
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand())
             .alongWith(intake.StopCommand()));
-
-        operator.x().whileTrue(hood.setPowerCommand(true))
-            .onFalse(hood.stopCommand());
         
+        operator.x().whileTrue(hood.setPowerCommand(false))
+            .onFalse(hood.stopCommand());
+         
         operator.y().onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         // turret operator

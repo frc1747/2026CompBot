@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -46,6 +47,8 @@ public class Turret extends SubsystemBase {
       .withPeakForwardVoltage(12)
       .withPeakReverseVoltage(-12);
     
+    config.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
+      
     config.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
     motor.getConfigurator().apply(config);
     
@@ -105,6 +108,7 @@ public class Turret extends SubsystemBase {
     // 8196 / 4 = 2048
     // 2048 * 7.333 ~= 15018.667 resulting pulses per full turret rotation
     // 15018.667 / 360 degrees ~= 41.719
+    // fix plz my soul hurts for constants
     return encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
   }
 
