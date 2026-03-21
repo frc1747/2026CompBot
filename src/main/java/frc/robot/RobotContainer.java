@@ -40,6 +40,7 @@ import frc.robot.commands.autosCommands.AutoIntakeOut;
 import frc.robot.commands.autosCommands.AutoIntakeReverseCollect;
 import frc.robot.commands.autosCommands.AutoKicker;
 import frc.robot.commands.autosCommands.AutoShooter;
+import frc.robot.commands.autosCommands.AutoAutoAim;
 import frc.robot.commands.teleop.IntakeOut;
 import frc.robot.commands.teleop.IntakeSpin;
 import frc.robot.commands.teleop.TeleopSwerve;
@@ -94,12 +95,17 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
-        NamedCommands.registerCommand("IntakeOut", new AutoIntakeOut(intakePivot, 6000));
-        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 1.0));
-        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7));
-        NamedCommands.registerCommand("Kicker",new AutoKicker(kicker));
-        NamedCommands.registerCommand("Shoot", new AutoShooter(1,1));
+        NamedCommands.registerCommand("IntakeOut", new GrabFuel( intakePivot));
+        NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
+        NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
+        NamedCommands.registerCommand("Kicker", kicker.run(false));
+        NamedCommands.registerCommand("Hopper", hopper.run(false));
+        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter, hood));
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
+        NamedCommands.registerCommand("StopIntake", intake.StopCommand());
+        NamedCommands.registerCommand("StopKicker", kicker.stopCommand());
+        NamedCommands.registerCommand("StopHopper", hopper.stop());
+        NamedCommands.registerCommand("StopShooter", shooter.stopCommand());
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -202,9 +208,9 @@ public class RobotContainer {
             .toggleOnTrue(new AprilLock(turret));
 
         operator.povLeft()
-            .onTrue(turret.changeYawOffSetCommand(.5));
+            .onTrue(turret.changeYawOffSetCommand(.01));
         operator.povRight()
-            .onTrue(turret.changeYawOffSetCommand(-.5));
+            .onTrue(turret.changeYawOffSetCommand(-.01));
 
         // this needs to be refactors to the inline standerds
         operator.rightTrigger()
