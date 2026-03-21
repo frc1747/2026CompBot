@@ -19,13 +19,19 @@
         {
           "type": "named",
           "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Kicker"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "IntakeCollect"
           }
         },
         {
@@ -37,7 +43,13 @@
         {
           "type": "named",
           "data": {
-            "name": "IntakeCollect"
+            "name": "AutoLock"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
@@ -49,7 +61,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "IntakeCollect"
           }
         }
       ]
