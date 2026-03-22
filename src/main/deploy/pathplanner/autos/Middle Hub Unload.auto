@@ -84,12 +84,6 @@
           "data": {
             "name": "StopIntake"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeOut"
-          }
         }
       ]
     }

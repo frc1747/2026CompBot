@@ -213,6 +213,7 @@ public class RobotContainer {
 
         operator.povLeft()
             .onTrue(turret.changeYawOffSetCommand(.01));
+            
         operator.povRight()
             .onTrue(turret.changeYawOffSetCommand(-.01));
 
