@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Trench Unload"
+            "pathName": "Middle Hub Unload"
           }
         },
         {
@@ -83,6 +83,12 @@
           "type": "named",
           "data": {
             "name": "StopIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeOut"
           }
         }
       ]
