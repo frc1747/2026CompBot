@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -18,6 +19,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -30,6 +32,7 @@ public class Turret extends SubsystemBase {
   private DigitalInput rightLimitSwitch;
   private double targetPower;
   public double distanceToHub;
+  private double yawOffsetFudge;
 
   // optimization for not creating new control object 50/sec
   private DutyCycleOut dutyCycle = new DutyCycleOut(0);
@@ -46,6 +49,8 @@ public class Turret extends SubsystemBase {
       .withPeakForwardVoltage(12)
       .withPeakReverseVoltage(-12);
     
+    config.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
+      
     config.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
     motor.getConfigurator().apply(config);
     
@@ -58,6 +63,7 @@ public class Turret extends SubsystemBase {
 
     pid.enableContinuousInput(0.0, 360.0);
     pid.setTolerance(1.0);
+    yawOffsetFudge = 0;
   }
 
   // left from perspective of a person facing turret side of robot
@@ -105,6 +111,7 @@ public class Turret extends SubsystemBase {
     // 8196 / 4 = 2048
     // 2048 * 7.333 ~= 15018.667 resulting pulses per full turret rotation
     // 15018.667 / 360 degrees ~= 41.719
+    // fix plz my soul hurts for constants
     return encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
   }
 
@@ -127,7 +134,15 @@ public class Turret extends SubsystemBase {
     return absoluteTurretPose;
   }
 
-    public double getYawOffset(Translation2d targetLoc) {
+  public void changeYawOffSet(double angle) {
+    yawOffsetFudge += angle ;
+  }
+
+  public Command changeYawOffSetCommand(double angle) {
+    return runOnce(() -> changeYawOffSet(angle));
+  }
+
+  public double getYawOffset(Translation2d targetLoc) {
     Pose2d turretPose = getAbsTurretPose();
       
     // difference between robot and april tag poses
@@ -137,7 +152,7 @@ public class Turret extends SubsystemBase {
     double phi = Math.atan2(diff.getY(), diff.getX());
     double yawOffset = phi - turretPose.getRotation().getRadians() - Math.PI;
     double wrappedYaw = Math.atan2(Math.sin(yawOffset), Math.cos(yawOffset));
-    return wrappedYaw;
+    return wrappedYaw + yawOffsetFudge;
   }
 
 
@@ -181,10 +196,6 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putBoolean("Left Limit Switch", getLeftLimitSwitchPressed());
     SmartDashboard.putBoolean("Right Limit Switch", getRightLimitSwitchPressed());
     SmartDashboard.putNumber("Turret/speed:", dutyCycle.Output);
-
-    Translation2d hubLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
-    distanceToHub = getAbsTurretPose().getTranslation().getDistance(hubLoc);
-    SmartDashboard.putNumber("Hub Distance From Turret", distanceToHub);
     //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
   }
 }
