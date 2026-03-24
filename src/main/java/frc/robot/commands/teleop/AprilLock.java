@@ -63,7 +63,7 @@ public class AprilLock extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // Pull in the current preference value
+      // Pull in the current preference value
       pidClampOffset = Preferences.getDouble(APRIL_LOCK_PID_CLAMP_KEY, pidClampOffset);
 
       // Determine the clamp based on the offset from the preference
@@ -72,26 +72,23 @@ public class AprilLock extends Command {
       double yawOffset = turret.getYawOffset(
         new Translation2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y));  
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.RED_HUB_CENTER_X, 
-                          Constants.Vision.RED_HUB_CENTER_Y
-                          )
-      );
+            yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y));
         }
 
         // pid controlling rotation compensation
         double pidOutput = pid.calculate(yawOffset); 
         double clampPid = pidOutput;
         if (clampPid > aprilLockPIDClamp) {
-            clampPid = aprilLockPIDClamp;
+          clampPid = aprilLockPIDClamp;
         } else if (clampPid < -aprilLockPIDClamp) {
-            clampPid = -aprilLockPIDClamp;
+          clampPid = -aprilLockPIDClamp;
         }
 
       SmartDashboard.putNumber("AprilLock/pidOutput", pidOutput);
       SmartDashboard.putNumber("AprilLock/clampPid", clampPid);
       SmartDashboard.putNumber("AprilLock/yawOffset", yawOffset);
       SmartDashboard.putNumber("AprilLock/PID Offset", pidClampOffset);
-      // double clampPid = MathUtil.clamp(pidOutput, -Constants.Vision.APRIL_LOCK_PID_CLAMP, Constants.Vision.APRIL_LOCK_PID_CLAMP);
+
       turret.basicSpin(clampPid);
 
   } 
