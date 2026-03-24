@@ -96,7 +96,8 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
-        NamedCommands.registerCommand("IntakeOut", new GrabFuel( intakePivot));
+        NamedCommands.registerCommand("IntakeOut", new GrabFuel(intakePivot));
+        NamedCommands.registerCommand("IntakeIn", new IntakeGoToDefault(intakePivot));
         NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
         NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
         NamedCommands.registerCommand("Kicker", kicker.run(false));
