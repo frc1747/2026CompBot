@@ -3,13 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot.commands.autosCommands;
 
-import java.lang.constant.Constable;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -42,7 +40,7 @@ public class AutoAutoAim extends Command {
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
 
-    
+
         shooter.setRPM(hoodAngleAndShooterPower[1]);
     }
 
@@ -65,7 +63,7 @@ public class AutoAutoAim extends Command {
 
     @Override
     public boolean isFinished() {
-        // better way of doing this idk 
+        // better way of doing this idk
         return timer.hasElapsed(20.0);
     }
 }
