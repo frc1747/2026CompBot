@@ -34,6 +34,12 @@ import frc.robot.commands.teleop.AprilLock;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
+import frc.robot.commands.autosCommands.AutoAprilLock;
+import frc.robot.commands.autosCommands.AutoIntakeCollect;
+import frc.robot.commands.autosCommands.AutoIntakeOut;
+import frc.robot.commands.autosCommands.AutoIntakeReverseCollect;
+import frc.robot.commands.autosCommands.AutoKicker;
+import frc.robot.commands.autosCommands.AutoShooter;
 import frc.robot.commands.teleop.IntakeOut;
 import frc.robot.commands.teleop.IntakeSpin;
 import frc.robot.commands.teleop.TeleopSwerve;
@@ -66,11 +72,8 @@ public class RobotContainer {
 
     // Control
     private final CommandXboxController driver = new CommandXboxController(Constants.Controller.DRIVER_PORT);
+    private final XboxController driver_hid = driver.getHID();
     private final CommandXboxController operator = new CommandXboxController(Constants.Controller.OPERATOR_PORT);
-    private final DoubleSupplier translationSup = () -> driver.getRawAxis(XboxController.Axis.kLeftY.value); // forward/backward on left stick
-    private final DoubleSupplier strafeSup = () -> driver.getRawAxis(XboxController.Axis.kLeftX.value); // right/left on left stick
-    private final DoubleSupplier rotationSup = () -> driver.getRawAxis(XboxController.Axis.kRightX.value); // right/left on right stick 
-
 
     public static final Kicker kicker = new Kicker();
     public static final Hood hood = new Hood();
@@ -91,6 +94,12 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
+        NamedCommands.registerCommand("IntakeOut", new AutoIntakeOut(intakePivot, 6000));
+        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7));
+        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7));
+        NamedCommands.registerCommand("Kicker",new AutoKicker(Constants.Kicker.MOTOR_RPM));
+        NamedCommands.registerCommand("Shoot", new AutoShooter(0.7));
+        NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -104,7 +113,12 @@ public class RobotContainer {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
-            new TeleopSwerve(drivetrain, translationSup, strafeSup, rotationSup)
+            new TeleopSwerve(
+                drivetrain,
+                () -> driver_hid.getLeftY(),
+                () -> driver_hid.getLeftX(),
+                () -> driver_hid.getRightX()
+            )
         );
 
         // always try to go to default
@@ -164,21 +178,24 @@ public class RobotContainer {
 
         operator.leftBumper()
             .whileTrue(hopper.run(false)
-            .alongWith(intake.spin(false)))
+            .alongWith(intake.spin(false))
+            .alongWith(kicker.setRPMCommand()))
             .onFalse(hopper.stop()
+            .alongWith(kicker.stopCommand())
             .alongWith(intake.StopCommand()));
 
         operator.rightBumper()
             .whileTrue(hopper.run(true)
-            .alongWith(intake.spin(true)))
+            .alongWith(intake.spin(true))
+            .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
+            .alongWith(kicker.stopCommand())
             .alongWith(intake.StopCommand()));
 
         operator.x().whileTrue(hood.setPowerCommand(true))
-            .onFalse(hopper.stop());
+            .onFalse(hood.stopCommand());
         
-        operator.y().whileTrue(hood.setPowerCommand(false))
-            .onFalse(hopper.stop());
+        operator.y().onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         // turret operator
 

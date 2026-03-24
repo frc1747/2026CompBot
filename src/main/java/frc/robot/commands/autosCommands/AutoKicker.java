@@ -1,28 +1,27 @@
-package frc.robot.subsystems;
+package frc.robot.commands.autosCommands;
 
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Timer;
+
+
 import frc.robot.Constants;
 
-public class Kicker extends SubsystemBase {
+public class AutoKicker extends Command{
 
     private TalonFX motor;
     private VelocityVoltage velocityKicker = new VelocityVoltage(0).withSlot(0);
-    private DutyCycleOut dutyControl = new DutyCycleOut(0.0);
-    private double desiredRPM = 0.0;
-    private boolean reverse = true;
+    private double rpm;
+    private Timer timer = new Timer();
 
-    public Kicker() {
-        motor = new TalonFX(Constants.Kicker.MOTOR_PORT);
+    public AutoKicker(double rpm){
+        this.rpm = rpm;
+         motor = new TalonFX(Constants.Kicker.MOTOR_PORT);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
         
@@ -53,38 +52,22 @@ public class Kicker extends SubsystemBase {
         motor.getSupplyCurrent().setUpdateFrequency(50);
         motor.optimizeBusUtilization();
     }
-
-    public Command run(boolean reverse) {
-        return runOnce(() -> setPower((reverse ? -1 : 1) * Constants.Intake.POWER));
-    }
-
-    public Command setRPMCommand() {
-        return runOnce(() -> setRPM(Constants.Kicker.MOTOR_RPM));
-    }
-
-    public Command stopCommand() {
-        return runOnce(() -> setPower(0.0));
-    }
-    
-    public void setPower(double power) {
-        dutyControl.Output = power;
-        motor.setControl(dutyControl);
-    }
-
-    public Command setSpeedToDesired() {
-        return runOnce(() -> setRPM(desiredRPM));
-    }
-
-    public void setRPM(double rpm) {
+    @Override
+    public void initialize(){
+        timer.reset();
+        timer.start(); 
         motor.setControl(velocityKicker.withVelocity(rpm / 60.0));
     }
-
-    public double getRPM() {
-        return motor.getVelocity().getValueAsDouble() * 60;
+    @Override
+    public void execute() {
     }
 
     @Override
-    public void periodic() {
-        SmartDashboard.putNumber("kicker/kicker rpm", getRPM());
+    public void end(boolean interrupted) {
+       motor.setControl(velocityKicker.withVelocity(0.0 / 60.0));
     }
+    public boolean isFinished() {
+        return timer.hasElapsed(1.0); // run for 1 second
+    }
+
 }

@@ -16,11 +16,14 @@ import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.LimeLight;
@@ -35,49 +38,54 @@ public class AprilLock extends Command {
   // Default value
   private double pidClampOffset = 0.0;
 
-  /** Creates a new FaceObject. */
-  private final Turret turret;
-  private final PIDController pid;
+    /** Creates a new FaceObject. */
+    private final Turret turret;
+    private final PIDController pid;
 
-  // TODO: fix starting pose of robot
-  public AprilLock(Turret turret) {
-    this.turret = turret;
-    this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(turret);
+    // TODO: fix starting pose of robot
+    public AprilLock(Turret turret) {
+      this.turret = turret;
+      this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
 
-    // Initialize the Preferences on the bot (this is non-destructive)
-    Preferences.initDouble(APRIL_LOCK_PID_CLAMP_KEY, pidClampOffset);
+      // Use addRequirements() here to declare subsystem dependencies.
+      addRequirements(turret);
+  
+      // Initialize the Preferences on the bot (this is non-destructive)
+      Preferences.initDouble(APRIL_LOCK_PID_CLAMP_KEY, pidClampOffset);
 
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {}
 
-  // TODO: reformat to make more readable
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-      // Pull in the current preference value
+    // TODO: reformat to make more readable
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        // Pull in the current preference value
       pidClampOffset = Preferences.getDouble(APRIL_LOCK_PID_CLAMP_KEY, pidClampOffset);
 
       // Determine the clamp based on the offset from the preference
       double aprilLockPIDClamp = Constants.Vision.APRIL_LOCK_PID_CLAMP + pidClampOffset;
 
       double yawOffset = turret.getYawOffset(
-        new Translation2d(Constants.Vision.RED_HUB_CENTER_X, 
+        new Translation2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y));  
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+            yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.RED_HUB_CENTER_X, 
                           Constants.Vision.RED_HUB_CENTER_Y
                           )
       );
-      // pid controlling rotation compensation
-      double pidOutput = pid.calculate(yawOffset); 
-      double clampPid = pidOutput;
-      if (clampPid > aprilLockPIDClamp) {
-        clampPid = aprilLockPIDClamp;
-      } else if (clampPid < -aprilLockPIDClamp) {
-        clampPid = -aprilLockPIDClamp;
-      }
+        }
+
+        // pid controlling rotation compensation
+        double pidOutput = pid.calculate(yawOffset); 
+        double clampPid = pidOutput;
+        if (clampPid > aprilLockPIDClamp) {
+            clampPid = aprilLockPIDClamp;
+        } else if (clampPid < -aprilLockPIDClamp) {
+            clampPid = -aprilLockPIDClamp;
+        }
 
       SmartDashboard.putNumber("AprilLock/pidOutput", pidOutput);
       SmartDashboard.putNumber("AprilLock/clampPid", clampPid);
@@ -88,15 +96,15 @@ public class AprilLock extends Command {
 
   } 
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    turret.basicSpin(0.0);
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        turret.basicSpin(0.0);
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
