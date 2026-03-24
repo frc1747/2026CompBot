@@ -32,7 +32,6 @@ public class Turret extends SubsystemBase {
   private DigitalInput rightLimitSwitch;
   private double targetPower;
   public double distanceToHub;
-  private double yawOffsetFudge;
 
   // optimization for not creating new control object 50/sec
   private DutyCycleOut dutyCycle = new DutyCycleOut(0);
@@ -63,7 +62,6 @@ public class Turret extends SubsystemBase {
 
     pid.enableContinuousInput(0.0, 360.0);
     pid.setTolerance(1.0);
-    yawOffsetFudge = 0;
   }
 
   // left from perspective of a person facing turret side of robot
@@ -134,12 +132,8 @@ public class Turret extends SubsystemBase {
     return absoluteTurretPose;
   }
 
-  public void changeYawOffSet(double angle) {
-    yawOffsetFudge += angle ;
-  }
-
-  public Command changeYawOffSetCommand(double angle) {
-    return runOnce(() -> changeYawOffSet(angle));
+  public Command aimAtPose(Pose2d target){
+    return run(() -> goToAngle(Math.toDegrees(getYawOffset(target.getTranslation()))));
   }
 
   public double getYawOffset(Translation2d targetLoc) {
@@ -152,9 +146,8 @@ public class Turret extends SubsystemBase {
     double phi = Math.atan2(diff.getY(), diff.getX());
     double yawOffset = phi - turretPose.getRotation().getRadians() - Math.PI;
     double wrappedYaw = Math.atan2(Math.sin(yawOffset), Math.cos(yawOffset));
-    return wrappedYaw + yawOffsetFudge;
+    return wrappedYaw;
   }
-
 
   // TODO: Tune PID
   public void goToAngle(double targetAngle) {

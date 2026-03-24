@@ -22,6 +22,23 @@ import edu.wpi.first.math.numbers.N3;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static final class TargetPoses {
+
+    public static final double BLUE_DEADZONE_MIN = 2;
+    public static final double BLUE_DEADZONE_MAX = 3;
+
+    public static final double RED_DEADZONE_MIN = 2;
+    public static final double RED_DEADZONE_MAX = 3;
+
+    public static final Pose2d blueHubCenter = new Pose2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d redHubCenter = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d blueLeftShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d blueRightShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+
+    public static final Pose2d redLeftShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d redRightShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+  }
  
   public static final class Vision {
     // Local hostnames of the unique Limelights on the system

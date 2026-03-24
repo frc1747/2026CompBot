@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -16,6 +17,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.XboxController;
@@ -27,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -75,7 +78,7 @@ public class RobotContainer {
     // Control
     private final CommandXboxController driver = new CommandXboxController(Constants.Controller.DRIVER_PORT);
     private final XboxController driver_hid = driver.getHID();
-    private final CommandXboxController operator = new CommandXboxController(Constants.Controller.OPERATOR_PORT);
+    private final Joystick operator = new Joystick(Constants.Controller.OPERATOR_PORT);
 
     public static final Kicker kicker = new Kicker();
     public static final Hood hood = new Hood();
@@ -90,8 +93,15 @@ public class RobotContainer {
     public static final Shooter shooter = new Shooter();
     public static final Hopper hopper = new Hopper();
     public static final Turret turret = new Turret();
-
+    
+    public static final TargetPoses target = new TargetPoses();
     public static final Field2d field = new Field2d();
+    public static Trigger tmJoystickFaceButtonRight;
+    public static Trigger tmJoystickFaceButtonLeft;
+    public static Trigger tmJoystickTrigger;
+    public static Trigger tmJoystickPovUp;
+    public static Trigger tmJoystickPovDown;
+
 
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
@@ -114,6 +124,14 @@ public class RobotContainer {
 
         // Warmup PathPlanner to avoid Java pauses
         CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
+
+        // booo I don't like this
+        // thrustmaster controls
+        tmJoystickFaceButtonRight = new Trigger((() -> operator.getRawButtonPressed(4)));
+        tmJoystickFaceButtonLeft = new Trigger((() -> operator.getRawButtonPressed(3)));
+        tmJoystickTrigger = new Trigger((() -> operator.getRawButtonPressed(0)));
+        tmJoystickPovUp = new POVButton(operator, 0);
+        tmJoystickPovDown = new POVButton(operator, 180);
     }
 
     private void configureBindings() {
@@ -183,50 +201,36 @@ public class RobotContainer {
 
         // intake hopper 
 
-        operator.leftBumper()
+        tmJoystickPovUp
             .whileTrue(hopper.run(false)
             .alongWith(intake.spin(false))
             .alongWith(kicker.setRPMCommand()))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
-        operator.rightBumper()
+        tmJoystickPovDown
             .whileTrue(hopper.run(true)
             .alongWith(intake.spin(true))
             .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
+
+        tmJoystickFaceButtonRight
+            .onTrue(target.setScoringCommand());
+        tmJoystickFaceButtonRight
+            .toggleOnTrue(turret.aimAtPose(target.getTargetPose()));
         
-        operator.x()
-            .whileTrue(hood.setPowerCommand(false))
-            .onFalse(hood.stopCommand());
-         
-        operator.y()
-            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
-
-        // turret moved to driver
-        driver.leftBumper()
-            .toggleOnTrue(new AprilLock(turret));
-
-        driver.leftTrigger()
-            .toggleOnTrue(new AprilLockShuttle(turret));
-
-        operator.povLeft()
-            .onTrue(turret.changeYawOffSetCommand(.01));
-            
-        operator.povRight()
-            .onTrue(turret.changeYawOffSetCommand(-.01));
-
+        tmJoystickFaceButtonLeft
+            .onTrue(target.setShuttlingCommand());
+        tmJoystickFaceButtonLeft
+            .toggleOnTrue(turret.aimAtPose(target.getTargetPose())); 
         // this needs to be refactors to the inline standerds
-        operator.rightTrigger()
-            .onTrue(shooter.setPowerCommand(Constants.Shooter.SHOOTER_SPEED))
-            .onFalse(shooter.setPowerCommand(0));
 
-        // 2 TODO: CHECK if conflics with 1
-        operator.b()
-            .whileTrue(new AutoAim(shooter, hood))
-            .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
+        // Hub shot
 
+        // set to shuttling
+        
+        
     }
 
     public Command getAutonomousCommand() {
