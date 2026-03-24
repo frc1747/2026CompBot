@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost Load A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoLock"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Kicker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCollect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost Load B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoLock"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Kicker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCollect"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
