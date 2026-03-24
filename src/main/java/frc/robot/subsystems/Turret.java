@@ -134,12 +134,12 @@ public class Turret extends SubsystemBase {
     return absoluteTurretPose;
   }
 
-  public void changeYawOffSet(double angle){
+  public void changeYawOffSet(double angle) {
     yawOffsetFudge += angle ;
   }
 
-  public Command changeYawOffSetCommand(double angle){
-    return runOnce( () -> changeYawOffSet(angle));
+  public Command changeYawOffSetCommand(double angle) {
+    return runOnce(() -> changeYawOffSet(angle));
   }
 
   public double getYawOffset(Translation2d targetLoc) {
@@ -196,10 +196,6 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putBoolean("Left Limit Switch", getLeftLimitSwitchPressed());
     SmartDashboard.putBoolean("Right Limit Switch", getRightLimitSwitchPressed());
     SmartDashboard.putNumber("Turret/speed:", dutyCycle.Output);
-
-    Translation2d hubLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
-    distanceToHub = getAbsTurretPose().getTranslation().getDistance(hubLoc);
-    //SmartDashboard.putNumber("Hub Distance From Turret", distanceToHub);
     //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
   }
 }

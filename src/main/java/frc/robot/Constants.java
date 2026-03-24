@@ -138,7 +138,7 @@ public final class Constants {
     public static final double TURRET_RATIO = 41.719;
     public static final int encoderLimit = 5771 / 2; // temporary encoder value limit
     public static final double PID_P = 0.0;
-    public static final double PID_I = 0; // needs tuning
+    public static final double PID_I = 0;
     public static final double PID_D = 0;
     public static final double GO_TO_ANGLE_LOWER_SAFETY = -3.0;
     public static final double GO_TO_ANGLE_HIGHER_SAFETY = 3.0;
