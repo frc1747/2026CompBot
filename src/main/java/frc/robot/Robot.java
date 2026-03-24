@@ -5,71 +5,92 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+    private Command m_autonomousCommand;
 
-  private final RobotContainer m_robotContainer;
+    private final RobotContainer m_robotContainer;
 
-  public Robot() {
-    m_robotContainer = new RobotContainer();
+    public Robot() {
+        m_robotContainer = new RobotContainer();
+        String warning = BuildConstants.DIRTY == 1 ? "WARNING: The code was built with uncommitted changes!\n" : "";
+        String info = String.format("""
+        ===============================
+        Git information:
+        SHA: %s
+        Branch: %s
+        Commit Date: %s
+        Build Date: %s
+        %s==============================
+        """,
+        BuildConstants.GIT_SHA,
+        BuildConstants.GIT_BRANCH,
+        BuildConstants.GIT_DATE,
+        BuildConstants.BUILD_DATE,
+        warning
+        );
+        System.out.print(info);
+
+    // Add Scheduler to Elastic
+    SmartDashboard.putData(CommandScheduler.getInstance());
   }
 
-  @Override
-  public void robotPeriodic() {
-    CommandScheduler.getInstance().run(); 
-  }
-
-  @Override
-  public void disabledInit() {}
-
-  @Override
-  public void disabledPeriodic() {}
-
-  @Override
-  public void disabledExit() {}
-
-  @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    if (m_autonomousCommand != null) {
-      CommandScheduler.getInstance().schedule(m_autonomousCommand);
+    @Override
+    public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
     }
-  }
 
-  @Override
-  public void autonomousPeriodic() {}
+    @Override
+    public void disabledInit() {}
 
-  @Override
-  public void autonomousExit() {}
+    @Override
+    public void disabledPeriodic() {}
 
-  @Override
-  public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      CommandScheduler.getInstance().cancel(m_autonomousCommand);
+    @Override
+    public void disabledExit() {}
+
+    @Override
+    public void autonomousInit() {
+        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+        if (m_autonomousCommand != null) {
+        CommandScheduler.getInstance().schedule(m_autonomousCommand);
+        }
     }
-  }
 
-  @Override
-  public void teleopPeriodic() {}
+    @Override
+    public void autonomousPeriodic() {}
 
-  @Override
-  public void teleopExit() {}
+    @Override
+    public void autonomousExit() {}
 
-  @Override
-  public void testInit() {
-    CommandScheduler.getInstance().cancelAll();
-  }
+    @Override
+    public void teleopInit() {
+        if (m_autonomousCommand != null) {
+        CommandScheduler.getInstance().cancel(m_autonomousCommand);
+        }
+    }
 
-  @Override
-  public void testPeriodic() {}
+    @Override
+    public void teleopPeriodic() {}
 
-  @Override
-  public void testExit() {}
+    @Override
+    public void teleopExit() {}
 
-  @Override
-  public void simulationPeriodic() {}
+    @Override
+    public void testInit() {
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    @Override
+    public void testPeriodic() {}
+
+    @Override
+    public void testExit() {}
+
+    @Override
+    public void simulationPeriodic() {}
 }

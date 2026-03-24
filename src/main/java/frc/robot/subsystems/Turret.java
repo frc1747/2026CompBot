@@ -9,7 +9,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
-
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -18,126 +18,141 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class Turret extends SubsystemBase {
-  private TalonFXS motor;
-  private Encoder encoder;
-  // left from perspective of someone facing the turret sie of bot
-  private DigitalInput leftLimitSwitch;
-  private DigitalInput rightLimitSwitch;
-  private double targetPower;
+    private TalonFXS motor;
+    private Encoder encoder;
+    // left from perspective of someone facing the turret sie of bot
+    private DigitalInput leftLimitSwitch;
+    private DigitalInput rightLimitSwitch;
+    private double targetPower;
+    public double distanceToHub;
+    private double yawOffsetFudge;
 
-  // optimization for not creating new control object 50/sec
-  private DutyCycleOut dutyCycle = new DutyCycleOut(0);
+    // optimization for not creating new control object 50/sec
+    private DutyCycleOut dutyCycle = new DutyCycleOut(0);
 
-  private final PIDController pid = new PIDController(Constants.Turret.PID_D, Constants.Turret.PID_D, Constants.Turret.PID_D);
+    private final PIDController pid = new PIDController(Constants.Turret.PID_P, Constants.Turret.PID_I, Constants.Turret.PID_D);
 
-  public Turret() {
-    motor = new TalonFXS(Constants.Turret.MOTOR_PORT);
-    TalonFXSConfiguration config = new TalonFXSConfiguration();
-    
-    config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    public Turret() {
+        motor = new TalonFXS(Constants.Turret.MOTOR_PORT);
+        TalonFXSConfiguration config = new TalonFXSConfiguration();
 
-    config.Voltage
-      .withPeakForwardVoltage(12)
-      .withPeakReverseVoltage(-12);
-    
-    config.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
-    motor.getConfigurator().apply(config);
-    
-    encoder = new Encoder(Constants.Turret.ENCODER_PORT_A, Constants.Turret.ENCODER_PORT_B);
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
-    leftLimitSwitch = new DigitalInput(Constants.Turret.LEFT_LIMIT_PORT);
-    rightLimitSwitch = new DigitalInput(Constants.Turret.RIGHT_LIMIT_PORT);
+        config.Voltage
+            .withPeakForwardVoltage(12)
+            .withPeakReverseVoltage(-12);
 
-    targetPower = 0.0;
+        config.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
 
-    pid.enableContinuousInput(0.0, 360.0);
-    pid.setTolerance(1.0);
-  }
+        config.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
+        motor.getConfigurator().apply(config);
 
-  // left from perspective of a person facing turret side of robot
-  public boolean getLeftLimitSwitchPressed() {
-    // not (!) operator used because limit switch is normally open
-    return !leftLimitSwitch.get();
-  }
+        encoder = new Encoder(Constants.Turret.ENCODER_PORT_A, Constants.Turret.ENCODER_PORT_B);
 
-  // right from perspective of a person facing turret side of robot
-  public boolean getRightLimitSwitchPressed() {
-    // not (!) operator used because limit switch is normally open
-    return !rightLimitSwitch.get();
-  }
+        leftLimitSwitch = new DigitalInput(Constants.Turret.LEFT_LIMIT_PORT);
+        rightLimitSwitch = new DigitalInput(Constants.Turret.RIGHT_LIMIT_PORT);
 
-  // supplies power to spin turret but stops at limit switches
-  // public void basicSpin(double power) {
-  //  dutyCycle.Output = power;
-  //  if (leftLimitSwitch.get()) {
-  //    if (power > 0) { // > or <
-  //      dutyCycle.Output = power;
-  //    } else {
-  //      dutyCycle.Output = 0.0;
-  //    }
-  //  } else if (rightLimitSwitch.get()) {
-  //    if (power < 0) { // > or <
-  //      dutyCycle.Output = power;
-  //    } else {
-  //      dutyCycle.Output = 0.0;
-  //    }
-  //  }
-  //  motor.setControl(dutyCycle);
-  //  return;
-  // }
+        targetPower = 0.0;
 
-  public void basicSpin(double power) {
-    // dutyCycle.Output = power;
-    targetPower = power;
-  }
+        pid.enableContinuousInput(0.0, 360.0);
+        pid.setTolerance(1.0);
+        yawOffsetFudge = 0;
+    }
 
-  // TODO: also rename and refactor to getRelativeTurretAngle
-  public double getTurretAngle() {
-    // gear ratio 15 to 110, 110/15 ~= 7.333
-    // 8196 pulses from encoder per rotation
-    // 4x quadrature
-    // 8196 / 4 = 2048
-    // 2048 * 7.333 ~= 15018.667 resulting pulses per full turret rotation
-    // 15018.667 / 360 degrees ~= 41.719
-    return -encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
-  }
+    // left from perspective of a person facing turret side of robot
+    public boolean getLeftLimitSwitchPressed() {
+        // not (!) operator used because limit switch is normally open
+        return !leftLimitSwitch.get();
+    }
 
-  // returns pose of turret relative to field (absolute)
-  public Pose2d getAbsTurretPose() {
-    Pose2d robotPose = RobotContainer.drivetrain.getState().Pose;
-    Rotation2d robotRotation = robotPose.getRotation();
-    Translation2d robotLoc = robotPose.getTranslation();
-    // unit vector pointing in the direction the robot is facing
-    Translation2d robotDirVector = new Translation2d(Math.cos(robotRotation.getRadians()), Math.sin(robotRotation.getRadians()));
-    // location of turret relative to bot center
-    Translation2d relativeTurretLoc = robotDirVector.times(-Constants.Turret.DIST_TO_BOT_CENTER);
-    // location of turret relative to field
-    Translation2d absoluteTurretLoc = robotLoc.plus(relativeTurretLoc);
-    // rotation of turret relative to field
-    Rotation2d relativeTurretRotation = new Rotation2d(getTurretAngle() * Math.PI / 180.0); // how?
-    // System.out.println("relativeTurretAngle: " + relativeTurretRotation);
-    Rotation2d absoluteTurretRotation = robotRotation.plus(relativeTurretRotation);
-    Pose2d absoluteTurretPose = new Pose2d(absoluteTurretLoc, absoluteTurretRotation);
-    return absoluteTurretPose;
-  }
+    // right from perspective of a person facing turret side of robot
+    public boolean getRightLimitSwitchPressed() {
+        // not (!) operator used because limit switch is normally open
+        return !rightLimitSwitch.get();
+    }
 
-  public double getYawOffset(Translation2d targetLoc) {
-    Pose2d turretPose = getAbsTurretPose();
-      
-    // difference between robot and april tag poses
-    Translation2d diff = turretPose.getTranslation().minus(targetLoc);
-        
-    // yaw offset between target and robot vector pointing directly out from robot-front
-    double phi = Math.atan2(diff.getY(), diff.getX());
-    double yawOffset = phi - turretPose.getRotation().getRadians() - Math.PI;
-    double wrappedYaw = Math.atan2(Math.sin(yawOffset), Math.cos(yawOffset));
-    return wrappedYaw;
-  }
+    // supplies power to spin turret but stops at limit switches
+    // public void basicSpin(double power) {
+    //  dutyCycle.Output = power;
+    //  if (leftLimitSwitch.get()) {
+    //    if (power > 0) { // > or <
+    //      dutyCycle.Output = power;
+    //    } else {
+    //      dutyCycle.Output = 0.0;
+    //    }
+    //  } else if (rightLimitSwitch.get()) {
+    //    if (power < 0) { // > or <
+    //      dutyCycle.Output = power;
+    //    } else {
+    //      dutyCycle.Output = 0.0;
+    //    }
+    //  }
+    //  motor.setControl(dutyCycle);
+    //  return;
+    // }
+
+    public void basicSpin(double power) {
+        // dutyCycle.Output = power;
+        targetPower = power;
+    }
+
+    // TODO: also rename and refactor to getRelativeTurretAngle
+    public double getTurretAngle() {
+        // gear ratio 15 to 110, 110/15 ~= 7.333
+        // 8196 pulses from encoder per rotation
+        // 4x quadrature
+        // 8196 / 4 = 2048
+        // 2048 * 7.333 ~= 15018.667 resulting pulses per full turret rotation
+        // 15018.667 / 360 degrees ~= 41.719
+        // fix plz my soul hurts for constants
+        return encoder.get() / 41.719;//Constants.Turret.TURRET_RATIO;
+    }
+
+    // returns pose of turret relative to field (absolute)
+    public Pose2d getAbsTurretPose() {
+        Pose2d robotPose = RobotContainer.drivetrain.getState().Pose;
+        Rotation2d robotRotation = robotPose.getRotation();
+        Translation2d robotLoc = robotPose.getTranslation();
+        // unit vector pointing in the direction the robot is facing
+        Translation2d robotDirVector = new Translation2d(Math.cos(robotRotation.getRadians()), Math.sin(robotRotation.getRadians()));
+        // location of turret relative to bot center
+        Translation2d relativeTurretLoc = robotDirVector.times(-Constants.Turret.DIST_TO_BOT_CENTER);
+        // location of turret relative to field
+        Translation2d absoluteTurretLoc = robotLoc.plus(relativeTurretLoc);
+        // rotation of turret relative to field
+        Rotation2d relativeTurretRotation = new Rotation2d(getTurretAngle() * Math.PI / 180.0); // how?
+        // System.out.println("relativeTurretAngle: " + relativeTurretRotation);
+        Rotation2d absoluteTurretRotation = robotRotation.plus(relativeTurretRotation);
+        Pose2d absoluteTurretPose = new Pose2d(absoluteTurretLoc, absoluteTurretRotation);
+        return absoluteTurretPose;
+    }
+
+    public void changeYawOffSet(double angle) {
+        yawOffsetFudge += angle ;
+    }
+
+    public Command changeYawOffSetCommand(double angle) {
+        return runOnce(() -> changeYawOffSet(angle));
+    }
+
+    public double getYawOffset(Translation2d targetLoc) {
+        Pose2d turretPose = getAbsTurretPose();
+
+        // difference between robot and april tag poses
+        Translation2d diff = turretPose.getTranslation().minus(targetLoc);
+
+        // yaw offset between target and robot vector pointing directly out from robot-front
+        double phi = Math.atan2(diff.getY(), diff.getX());
+        double yawOffset = phi - turretPose.getRotation().getRadians() - Math.PI;
+        double wrappedYaw = Math.atan2(Math.sin(yawOffset), Math.cos(yawOffset));
+        return wrappedYaw + yawOffsetFudge;
+    }
 
   // returns turret tangential velocity of turret relative to bot center
   // rotated to field space
@@ -180,49 +195,46 @@ public class Turret extends SubsystemBase {
     }
   }
 
-  // TODO: Tune PID
-  public void goToAngle(double targetAngle) {
-    double currentAngle = getTurretAngle();
-    double output = pid.calculate(currentAngle, targetAngle);
+    // TODO: Tune PID
+    public void goToAngle(double targetAngle) {
+        double currentAngle = getTurretAngle();
+        double output = pid.calculate(currentAngle, targetAngle);
 
-    // Safety
-    output = MathUtil.clamp(output, Constants.Turret.GO_TO_ANGLE_LOWER_SAFETY, Constants.Turret.GO_TO_ANGLE_HIGHER_SAFETY);
-    dutyCycle.Output = output;
+        // Safety
+        output = MathUtil.clamp(output, Constants.Turret.GO_TO_ANGLE_LOWER_SAFETY, Constants.Turret.GO_TO_ANGLE_HIGHER_SAFETY);
+        dutyCycle.Output = output;
 
-    if ((Constants.Turret.LOWER_LIMIT <= targetAngle) && (targetAngle <= Constants.Turret.UPPER_LIMIT)){
-      dutyCycle.Output = 0;
+        if ((Constants.Turret.LOWER_LIMIT <= targetAngle) && (targetAngle <= Constants.Turret.UPPER_LIMIT)){
+            dutyCycle.Output = 0;
+        }
+        motor.setControl(dutyCycle);
     }
-    motor.setControl(dutyCycle);
-  }
 
-  @Override
-  public void periodic() {
-    dutyCycle.Output = targetPower;
-    // soft limits and limit switches
-    if (getLeftLimitSwitchPressed() && targetPower < 0) {
-      dutyCycle.Output = 0.0;
-    } 
-    if (getRightLimitSwitchPressed() && targetPower > 0) {
-      dutyCycle.Output = 0.0;
-    }
-    if (getTurretAngle() > Constants.Turret.TURRET_YAW_LIMIT && targetPower < 0) {
-      dutyCycle.Output = 0.0;
-    }
-    if (getTurretAngle() < -Constants.Turret.TURRET_YAW_LIMIT && targetPower > 0) {
-      dutyCycle.Output = 0.0;
-    }
-    motor.setControl(dutyCycle);
+    @Override
+    public void periodic() {
+        dutyCycle.Output = targetPower;
+        // soft limits and limit switches
+        if (getLeftLimitSwitchPressed() && targetPower > 0) {
+            dutyCycle.Output = 0.0;
+        }
+        if (getRightLimitSwitchPressed() && targetPower < 0) {
+            dutyCycle.Output = 0.0;
+        }
+        if (getTurretAngle() > Constants.Turret.TURRET_YAW_LIMIT_UPPER && targetPower < 0) {
+            dutyCycle.Output = 0.0;
+        }
+        if (getTurretAngle() < Constants.Turret.TURRET_YAW_LIMIT_LOWER && targetPower > 0) {
+            dutyCycle.Output = 0.0;
+        }
+        motor.setControl(dutyCycle);
 
-    // SmartDashboard
-    SmartDashboard.putNumber("Turret/encoder value", encoder.get());
-    SmartDashboard.putNumber("Turret/encoder angle", getTurretAngle());
-    SmartDashboard.putNumber("Turret/turret degrees", getAbsTurretPose().getRotation().getDegrees());
-    SmartDashboard.putBoolean("Left Limit Switch", getLeftLimitSwitchPressed());
-    SmartDashboard.putBoolean("Right Limit Switch", getRightLimitSwitchPressed());
-
-    Translation2d hubLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
-    double distanceToHub = getAbsTurretPose().getTranslation().getDistance(hubLoc);
-    SmartDashboard.putNumber("Hub Distance From Turret", distanceToHub);
-    //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
-  }
+        // SmartDashboard
+        SmartDashboard.putNumber("Turret/encoder value", encoder.get());
+        SmartDashboard.putNumber("Turret/encoder angle", getTurretAngle());
+        SmartDashboard.putNumber("Turret/turret degrees", getAbsTurretPose().getRotation().getDegrees());
+        SmartDashboard.putBoolean("Left Limit Switch", getLeftLimitSwitchPressed());
+        SmartDashboard.putBoolean("Right Limit Switch", getRightLimitSwitchPressed());
+        SmartDashboard.putNumber("Turret/speed:", dutyCycle.Output);
+        //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
+    }
 }
