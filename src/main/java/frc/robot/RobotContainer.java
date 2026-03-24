@@ -90,6 +90,10 @@ public class RobotContainer {
     public static final Shooter shooter = new Shooter();
     public static final Hopper hopper = new Hopper();
     public static final Turret turret = new Turret();
+    
+    //fudge factor
+    public double fudgeFactorTurret = 0;
+    public double fudgeFactorShooter = 0;
 
     public static final Field2d field = new Field2d();
 
@@ -206,16 +210,20 @@ public class RobotContainer {
 
         // turret moved to driver
         driver.leftBumper()
-            .toggleOnTrue(new AprilLock(turret));
+            .toggleOnTrue(new AprilLock(turret, fudgeFactorTurret));
 
         driver.leftTrigger()
             .toggleOnTrue(new AprilLockShuttle(turret));
 
-        operator.povLeft()
-            .onTrue(turret.changeYawOffSetCommand(.01));
-            
-        operator.povRight()
-            .onTrue(turret.changeYawOffSetCommand(-.01));
+        if (operator.povLeft().getAsBoolean())
+            fudgeFactorTurret += Constants.Turret.FUDGE_FACTOR_TURRET;
+        if (operator.povRight().getAsBoolean())
+            fudgeFactorTurret -= Constants.Turret.FUDGE_FACTOR_TURRET;
+        
+        if (operator.povUp().getAsBoolean())
+            fudgeFactorTurret += Constants.Shooter.FUDGE_FACTOR_SHOOTER;    
+         if (operator.povDown().getAsBoolean())
+            fudgeFactorTurret -= Constants.Shooter.FUDGE_FACTOR_SHOOTER; 
 
         // this needs to be refactors to the inline standerds
         operator.rightTrigger()
@@ -224,7 +232,7 @@ public class RobotContainer {
 
         // 2 TODO: CHECK if conflics with 1
         operator.b()
-            .whileTrue(new AutoAim(shooter, hood))
+            .whileTrue(new AutoAim(shooter, hood, fudgeFactorShooter))
             .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
 
     }

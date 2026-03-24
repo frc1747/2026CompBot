@@ -24,10 +24,9 @@ public class AutoAim extends Command {
     private double[] hoodAngleAndShooterPower = {-1,-1};
     private double fudgeFactor;
 
-    public AutoAim(Shooter shooter, Hood hood, double fudgeFactor ,Pose2d target) {
+    public AutoAim(Shooter shooter, Hood hood, double fudgeFactor) {
         this.shooter = shooter;
         this.hood = hood;
-        this.target = target;
         this.fudgeFactor = fudgeFactor;
         addRequirements(shooter, hood);
     }
