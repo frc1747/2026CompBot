@@ -32,11 +32,13 @@ public class AprilLock extends Command {
     /** Creates a new FaceObject. */
     private final Turret turret;
     private final PIDController pid;
+    private final double fudgeFactor;
 
     // TODO: fix starting pose of robot
-    public AprilLock(Turret turret) {
+    public AprilLock(Turret turret, double fudgeFactor) {
         this.turret = turret;
         this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
+        this.fudgeFactor = fudgeFactor;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(turret);
     }

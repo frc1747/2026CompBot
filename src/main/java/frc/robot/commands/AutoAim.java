@@ -20,11 +20,13 @@ public class AutoAim extends Command {
     private Hood hood;
     private Pose2d target;
     private double[] hoodAngleAndShooterPower = {-1,-1};
+    private double fudgeFactor;
 
-    public AutoAim(Shooter shooter, Hood hood, Pose2d target) {
+    public AutoAim(Shooter shooter, Hood hood, double fudgeFactor ,Pose2d target) {
         this.shooter = shooter;
         this.hood = hood;
         this.target = target;
+        this.fudgeFactor = fudgeFactor;
         addRequirements(shooter, hood);
     }
 
@@ -39,12 +41,14 @@ public class AutoAim extends Command {
 
         hood.goToAngleCommand(hoodAngleAndShooterPower[0]);
         if (hood.atAngle(hoodAngleAndShooterPower[0])){
-            shooter.setRPM(hoodAngleAndShooterPower[1]);
+            shooter.setRPM(hoodAngleAndShooterPower[1]*fudgeFactor);
         }
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        shooter.setRPM(0);
+    }
 
     @Override
     public boolean isFinished() {
