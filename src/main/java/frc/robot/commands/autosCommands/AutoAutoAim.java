@@ -1,14 +1,14 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
-package frc.robot.commands;
+package frc.robot.commands.autosCommands;
 
 import java.lang.constant.Constable;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,23 +17,24 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 
-public class AutoAim extends Command {
+public class AutoAutoAim extends Command {
     private Shooter shooter;
     private Hood hood;
     private Pose2d target;
     private double[] hoodAngleAndShooterPower = {-1,-1};
-    private double fudgeFactor;
+    private Timer timer = new Timer();
 
-    public AutoAim(Shooter shooter, Hood hood, double fudgeFactor ,Pose2d target) {
+    public AutoAutoAim(Shooter shooter, Hood hood) {
         this.shooter = shooter;
         this.hood = hood;
-        this.target = target;
-        this.fudgeFactor = fudgeFactor;
+        this.target = Constants.Shooter.BLUE_HUB_CENTER_POSE2D; // we default to blue like the cordnet system.
         addRequirements(shooter, hood);
     }
 
     @Override
     public void initialize() {
+        timer.reset();
+        timer.start();
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             this.target = Constants.Shooter.RED_HUB_CENTER_POSE2D;
         }
@@ -52,7 +53,7 @@ public class AutoAim extends Command {
 
         hood.goToAngleCommand(hoodAngleAndShooterPower[0]);
         if (hood.atAngle(hoodAngleAndShooterPower[0])){
-            shooter.setRPM(hoodAngleAndShooterPower[1]*fudgeFactor);
+            shooter.setRPM(hoodAngleAndShooterPower[1]);
         }
         SmartDashboard.putNumber("Shooter/distance from hub from autoAim", distance);
         SmartDashboard.putNumber("Shooter/RPM for auto aim", hoodAngleAndShooterPower[1]);
@@ -60,13 +61,11 @@ public class AutoAim extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {
-        shooter.setRPM(0);
-    }
+    public void end(boolean interrupted) {}
 
     @Override
     public boolean isFinished() {
         // better way of doing this idk 
-        return (shooter.getRPM() <= hoodAngleAndShooterPower[1] + hoodAngleAndShooterPower[1]*Constants.Shooter.TOLERANCE && shooter.getRPM() >= hoodAngleAndShooterPower[1] - hoodAngleAndShooterPower[1]*Constants.Shooter.TOLERANCE);
+        return timer.hasElapsed(20.0);
     }
 }

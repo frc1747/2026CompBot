@@ -33,8 +33,9 @@ public class AutoShooter extends Command{
     private Timer timer = new Timer();
     private double rpm;
     private double power;
-    public AutoShooter(double power){
+    public AutoShooter(double power , double rpm){
         this.power = power;
+        this.rpm = rpm;
          motorLeft = new TalonFX(Constants.Shooter.MOTOR_LEFT_PORT);
         follower = new TalonFX(Constants.Shooter.MOTOR_RIGHT_PORT);
         dutyCycleShooter.Output = power;
@@ -75,6 +76,7 @@ public class AutoShooter extends Command{
         timer.reset();
         timer.start();
         motorLeft.setControl(dutyCycleShooter);
+        motorLeft.setControl(velocityShooter.withVelocity(rpm/60.0));
     }
     @Override
     public void execute() {

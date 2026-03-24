@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.teleop.AprilLock;
+import frc.robot.commands.teleop.AprilLockShuttle;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
@@ -40,6 +41,7 @@ import frc.robot.commands.autosCommands.AutoIntakeOut;
 import frc.robot.commands.autosCommands.AutoIntakeReverseCollect;
 import frc.robot.commands.autosCommands.AutoKicker;
 import frc.robot.commands.autosCommands.AutoShooter;
+import frc.robot.commands.autosCommands.AutoAutoAim;
 import frc.robot.commands.teleop.IntakeOut;
 import frc.robot.commands.teleop.IntakeSpin;
 import frc.robot.commands.teleop.TeleopSwerve;
@@ -94,12 +96,17 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
-        NamedCommands.registerCommand("IntakeOut", new AutoIntakeOut(intakePivot, 6000));
-        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeCollect(intake, 0.7));
-        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseCollect(intake, -0.7));
-        NamedCommands.registerCommand("Kicker",new AutoKicker(Constants.Kicker.MOTOR_RPM));
-        NamedCommands.registerCommand("Shoot", new AutoShooter(0.7));
+        NamedCommands.registerCommand("IntakeOut", new GrabFuel( intakePivot));
+        NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
+        NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
+        NamedCommands.registerCommand("Kicker", kicker.run(false));
+        NamedCommands.registerCommand("Hopper", hopper.run(false));
+        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter, hood));
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
+        NamedCommands.registerCommand("StopIntake", intake.StopCommand());
+        NamedCommands.registerCommand("StopKicker", kicker.stopCommand());
+        NamedCommands.registerCommand("StopHopper", hopper.stop());
+        NamedCommands.registerCommand("StopShooter", shooter.stopCommand());
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -166,9 +173,9 @@ public class RobotContainer {
             .onFalse(intake.StopCommand());
 
         // intake eject
-        driver.leftTrigger()
-            .whileTrue(intake.spin(true))
-            .onFalse(intake.StopCommand());
+        // driver.leftTrigger()
+        //     .whileTrue(intake.spin(true))
+        //     .onFalse(intake.StopCommand());
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -181,26 +188,34 @@ public class RobotContainer {
             .alongWith(intake.spin(false))
             .alongWith(kicker.setRPMCommand()))
             .onFalse(hopper.stop()
-            .alongWith(kicker.stopCommand())
-            .alongWith(intake.StopCommand()));
+            .alongWith(kicker.stopCommand()));
 
         operator.rightBumper()
             .whileTrue(hopper.run(true)
             .alongWith(intake.spin(true))
             .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
-            .alongWith(kicker.stopCommand())
-            .alongWith(intake.StopCommand()));
-
-        operator.x().whileTrue(hood.setPowerCommand(true))
-            .onFalse(hood.stopCommand());
+            .alongWith(kicker.stopCommand()));
         
-        operator.y().onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
+        operator.x()
+            .whileTrue(hood.setPowerCommand(false))
+            .onFalse(hood.stopCommand());
+         
+        operator.y()
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
-        // turret operator
-
-        operator.povDown()
+        // turret moved to driver
+        driver.leftBumper()
             .toggleOnTrue(new AprilLock(turret));
+
+        driver.leftTrigger()
+            .toggleOnTrue(new AprilLockShuttle(turret));
+
+        operator.povLeft()
+            .onTrue(turret.changeYawOffSetCommand(.01));
+            
+        operator.povRight()
+            .onTrue(turret.changeYawOffSetCommand(-.01));
 
         // this needs to be refactors to the inline standerds
         operator.rightTrigger()
@@ -208,17 +223,9 @@ public class RobotContainer {
             .onFalse(shooter.setPowerCommand(0));
 
         // 2 TODO: CHECK if conflics with 1
-        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            operator.b()
-                .whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D))
-                .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
-        }
-
-        else {
-            operator.b()
-                .whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D))
-                .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
-        }
+        operator.b()
+            .whileTrue(new AutoAim(shooter, hood))
+            .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
 
     }
 
