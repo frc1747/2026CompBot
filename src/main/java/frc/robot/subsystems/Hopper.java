@@ -14,9 +14,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants;
+import monologue.Logged;
 
 
-public class Hopper extends SubsystemBase {
+public class Hopper extends SubsystemBase implements Logged{
     private TalonFX motor;
     private DutyCycleOut dutyControl = new DutyCycleOut(0.0);
 
@@ -72,9 +73,9 @@ public class Hopper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Hopper/isJammed", isJammed());
-        SmartDashboard.putBoolean("hopper/is motor reversed", isReversed());
-        SmartDashboard.putNumber("hopper/velocity", motor.getVelocity().getValueAsDouble());
+        log("Hopper/isJammed", isJammed());
+        log("hopper/is motor reversed", isReversed());
+        log("hopper/velocity", motor.getVelocity().getValueAsDouble());
     }
 
 }

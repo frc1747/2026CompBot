@@ -3,13 +3,13 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
-
+import monologue.Logged;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class LimeLight extends SubsystemBase {
+public class LimeLight extends SubsystemBase implements Logged{
 
     String name;
     NetworkTable table;
@@ -67,6 +67,6 @@ public class LimeLight extends SubsystemBase {
     @Override
     public void periodic() {
         boolean targetValidity = hasValidTarget();
-        SmartDashboard.putBoolean("Valid Target", targetValidity);
+        log("Valid Target", targetValidity);
     }    
 }

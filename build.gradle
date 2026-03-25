@@ -74,6 +74,7 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'com.github.shueja:Monologue:v1.0.0-beta6'
 }
 
 test {
@@ -115,4 +116,8 @@ gversion {
   dateFormat   = "yyyy-MM-dd HH:mm:ss z"
   timeZone     = "America/New_York" // Use preferred time zone
   indent       = "  "
+}
+
+repositories {
+    maven { url 'https://jitpack.io' }
 }
