@@ -5,26 +5,15 @@
 
 package frc.robot.commands.teleop;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
-import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.PoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.Constants.Drivetrain;
-import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.LimeLight;
+import java.util.function.DoubleSupplier;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AprilLockDrive extends Command {
@@ -41,8 +30,8 @@ public class AprilLockDrive extends Command {
     this.translationSup = translationSup;
     this.strafeSup = strafeSup;
     this.swerveRequest = new FieldCentric();
-    this.pid = new PIDController(Constants.Vision.APRIL_LOCK_DRIVE_P, 
-                                 Constants.Vision.APRIL_LOCK_DRIVE_I, 
+    this.pid = new PIDController(Constants.Vision.APRIL_LOCK_DRIVE_P,
+                                 Constants.Vision.APRIL_LOCK_DRIVE_I,
                                  Constants.Vision.APRIL_LOCK_DRIVE_D);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -63,14 +52,14 @@ public class AprilLockDrive extends Command {
     SmartDashboard.putNumber("pidOutputDrive", pidOutput);
     SmartDashboard.putNumber("clampPidDrive", clampPid);
     SmartDashboard.putNumber("yawOffsetDrive", yawOffset);
-      
+
     drivetrain.setControl(
       swerveRequest
         .withVelocityX(-translationSup.getAsDouble() * Constants.Drivetrain.MAX_SPEED)
         .withVelocityY(-strafeSup.getAsDouble() * Constants.Drivetrain.MAX_SPEED)
         .withRotationalRate(clampPid) // May want to make a percent to multiply by max power
     );
-  } 
+  }
 
   // Called once the command ends or is interrupted.
   @Override

@@ -358,10 +358,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public double getYawOffset(Translation2d targetLoc) {
         Pose2d currentPose = getState().Pose;
-      
+
         // difference between robot and april tag poses
         Translation2d diff = currentPose.getTranslation().minus(targetLoc);
-        
+
         // yaw offset between target and robot vector pointing directly out from robot-front
         double phi = Math.atan2(diff.getY(), diff.getX());
         double yawOffset = phi - currentPose.getRotation().getRadians() - Math.PI;

@@ -104,7 +104,7 @@ public final class Constants {
 
         public static final double BLUE_SHUTTLE_RIGHT_X = 2.84;
         public static final double BLUE_SHUTTLE_RIGHT_Y = 2.01;
-    
+
         public static final double BLUE_SHUTTLE_LEFT_X = 2.84;
         public static final double BLUE_SHUTTLE_LEFT_Y = 6.039;
 
@@ -156,8 +156,9 @@ public final class Constants {
 
         public static final double MAX_PID_OUTPUT = 0.875;
         public static final double MANUAL_MOTOR_POWER = 0.2;
+    }
 
-  
+
 
     public static final class Turret {
         public static final int MOTOR_PORT = 59;

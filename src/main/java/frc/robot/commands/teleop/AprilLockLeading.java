@@ -4,30 +4,21 @@
 
 package frc.robot.commands.teleop;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 
-import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.PoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.LimeLight;
 
 /*
- * This extra logic is needed in order to decide where to aim the 
- * turret while the robot is moving because the velocity of the 
+ * This extra logic is needed in order to decide where to aim the
+ * turret while the robot is moving because the velocity of the
  * bot will transfer to the fuel, meaning that if the turret only
  * aims directly at the target, the fuel will fly off further
  * in the direction of the velocity of the bot and miss
@@ -56,7 +47,7 @@ public class AprilLockLeading extends Command {
   }
 
   // takes the previous approximation for location to target
-  // with the turret in order for the ball to hit the final 
+  // with the turret in order for the ball to hit the final
   // target, and returns the next improved approximation
   // as well as the calculated travel time to the previous
   // approximation
@@ -66,9 +57,9 @@ public class AprilLockLeading extends Command {
 
     // gets current hood angle in radians
     double hoodAngleRad = RobotContainer.hood.getCurrentAngle() * Math.PI / 180;
-    
+
     // predicted amount of time between when the fuel leaves the
-    // turret and when it reaches the height of the fuel hub 
+    // turret and when it reaches the height of the fuel hub
     // on its way down. should return null if the fuel
     // is predicted not to ever surpass the height of the top of
     // the hub
@@ -96,7 +87,7 @@ public class AprilLockLeading extends Command {
     // time tolerance to determine when to stop.
     // Constants.Vision.LEADING_TRAVEL_TIME_TOLERANCE
     // currently the approximation is always applied 6
-    // times per scheduler loop, travelTime ignored 
+    // times per scheduler loop, travelTime ignored
     Translation2d approxA;
     Translation2d approxB = startApprox;
     for (int i = 0; i < 6; i++) {
@@ -140,20 +131,20 @@ public class AprilLockLeading extends Command {
     // TODO: move magic number to constants
     // first iteration of approximation of point to aim turret at
     targetLocPrime = getTargetApprox(targetLocPrime);
-    
+
     // ensures the belly pan falls off in the middle of the match
     RobotContainer.bellyPan.fallOff();
-    
+
     double yawOffset = turret.getYawOffset(targetLocPrime);
     // pid controlling rotation compensation
-    double pidOutput = pid.calculate(yawOffset); 
+    double pidOutput = pid.calculate(yawOffset);
     double clampPid = MathUtil.clamp(pidOutput, -Constants.Vision.APRIL_LOCK_PID_CLAMP, Constants.Vision.APRIL_LOCK_PID_CLAMP);
 
     SmartDashboard.putNumber("pidOutput", pidOutput);
     SmartDashboard.putNumber("clampPid", clampPid);
     SmartDashboard.putNumber("yawOffset", yawOffset);
     turret.basicSpin(clampPid);
-  } 
+  }
 
   // Called once the command ends or is interrupted.
   @Override

@@ -167,7 +167,7 @@ public class Turret extends SubsystemBase {
     Translation2d tangentialVelocity = new Translation2d(Math.cos(tangentialDirRadians), Math.sin(tangentialDirRadians)).times(speed);
     return tangentialVelocity;
   }
-  
+
   // returns time in seconds (uses kinematics, ignores air resistance)
   //           hood angle in radians please   V             V   distance in meters please
   public Double getFuelTravelTime(double hoodAngle, double dist) {
