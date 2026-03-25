@@ -178,7 +178,8 @@ public final class Constants {
     public static final double SURFACE_D = 12.4826; // needs tuning
     public static final double SURFACE_E = -10.8847; // needs tuning
     public static final double SURFACE_F = 2.9962; // needs tuning
-    public static final double MAX_AUTOSHOOT_POWER =4500;
+    public static final double MAX_AUTOSHOOT_POWER = 4500;
+    public static final double AUTOSHOOT_OFFSET_INCREMENT = 100;
     public static final int AUTO_SHOOTER_MULT = 111; // this should be remove when we get better auto shoot values 
     public static final double MAX_HOOD_ANGLE = 43;// degrees
     public static final double MIN_HOOD_ANGLE = 26;// degrees

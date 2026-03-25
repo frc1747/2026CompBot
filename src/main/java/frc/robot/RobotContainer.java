@@ -101,7 +101,12 @@ public class RobotContainer {
     public static Trigger tmJoystickTrigger;
     public static Trigger tmJoystickPovUp;
     public static Trigger tmJoystickPovDown;
-
+    public static Trigger tmJoystickRightHandBottomRight;
+    public static Trigger tmJoystickRightHandBottomMiddle;
+    public static Trigger tmJoystickRightHandBottomLeft;
+    public static Trigger tmJoystickRightHandTopRight;
+    public static Trigger tmJoystickRightHandTopMiddle;
+    public static Trigger tmJoystickRightHandTopLeft;
 
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
@@ -132,6 +137,12 @@ public class RobotContainer {
         tmJoystickTrigger = new Trigger((() -> operator.getRawButtonPressed(0)));
         tmJoystickPovUp = new POVButton(operator, 0);
         tmJoystickPovDown = new POVButton(operator, 180);
+        tmJoystickRightHandBottomLeft = new Trigger((() -> operator.getRawButtonPressed(8)));
+        tmJoystickRightHandBottomMiddle = new Trigger((() -> operator.getRawButtonPressed(9)));
+        tmJoystickRightHandBottomRight = new Trigger((() -> operator.getRawButtonPressed(10)));
+        tmJoystickRightHandTopLeft = new Trigger((() -> operator.getRawButtonPressed(7)));
+        tmJoystickRightHandTopMiddle = new Trigger((() -> operator.getRawButtonPressed(6)));
+        tmJoystickRightHandTopRight = new Trigger((() -> operator.getRawButtonPressed(5)));
     }
 
     private void configureBindings() {
@@ -229,6 +240,25 @@ public class RobotContainer {
             .whileTrue(new AutoAim(shooter, hood ,target.getTargetPose()))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
+
+        // Manual Turret movement code
+        tmJoystickRightHandBottomLeft
+            .whileTrue(new TurretRotate(turret, -0.025));
+        tmJoystickRightHandBottomMiddle
+            .whileTrue(new TurretRotate(turret, 0.025));
+
+        // Manual Hood movement code
+        tmJoystickRightHandTopLeft
+            .whileTrue(hood.setPowerCommand(false));
+        tmJoystickRightHandTopMiddle
+            .whileTrue(hood.setPowerCommand(true));
+
+        // Shooter speed manual change
+        tmJoystickRightHandTopRight
+            .onTrue(shooter.offsetIncrement());
+        tmJoystickRightHandBottomRight
+            .onTrue(shooter.offsetDecrement());
+
         // this needs to be refactors to the inline standerds
 
         // Hub shot

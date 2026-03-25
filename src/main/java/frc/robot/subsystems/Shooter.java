@@ -39,6 +39,7 @@ public class Shooter extends SubsystemBase {
     public double PID_P = Constants.Shooter.PID_P ;
     public double PID_I = Constants.Shooter.PID_I;
     public double PID_D = Constants.Shooter.PID_D;
+    private double shooterOffset = 0.0;
   
 
     public Shooter() {
@@ -95,6 +96,14 @@ public class Shooter extends SubsystemBase {
 
     public Command setSpeedToDesired() {
         return run(() -> setRPM(desiredRPM));
+    }
+
+    public Command offsetDecrement() {
+        return run(() -> shooterOffset -= Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
+    }
+
+    public Command offsetIncrement() {
+        return run(() -> shooterOffset += Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
     }
 
     public void setPower(double power) {
