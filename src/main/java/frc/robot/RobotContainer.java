@@ -224,6 +224,11 @@ public class RobotContainer {
             .onTrue(target.setShuttlingCommand());
         tmJoystickFaceButtonLeft
             .toggleOnTrue(turret.aimAtPose(target.getTargetPose())); 
+
+        tmJoystickTrigger
+            .whileTrue(new AutoAim(shooter, hood ,target.getTargetPose()))
+            .onFalse(shooter.stopCommand()
+            .alongWith(hood.stopCommand()));
         // this needs to be refactors to the inline standerds
 
         // Hub shot
