@@ -133,13 +133,9 @@ public class Turret extends SubsystemBase {
         return absoluteTurretPose;
     }
 
-    public void changeYawOffSet(double angle) {
-        yawOffsetFudge += angle ;
-    }
-
-    public Command changeYawOffSetCommand(double angle) {
-        return runOnce(() -> changeYawOffSet(angle));
-    }
+  public Command aimAtPose(Pose2d target){
+    return run(() -> goToAngle(Math.toDegrees(getYawOffset(target.getTranslation()))));
+  }
 
     public double getYawOffset(Translation2d targetLoc) {
         Pose2d turretPose = getAbsTurretPose();

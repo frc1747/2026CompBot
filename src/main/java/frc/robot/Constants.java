@@ -22,14 +22,31 @@ import java.util.List;
  */
 public final class Constants {
 
-    public static final class Vision {
-        // Local hostnames of the unique Limelights on the system
-        // WARNING: IF YOU CHANGE OUT THE HARDWARE, ENSURE TO PROPERLY
-        // SET THE HOSTNAME ON THE LIMELIGHT TO COORESPOND WITH ITS
-        // LOCATION ON THE BOT!!!
-        public static final String LIMELIGHT_LEFT = "limelight-left";
-        public static final String LIMELIGHT_RIGHT = "limelight-right";
-        public static final String LIMELIGHT_TURRET = "limelight-turret";
+  public static final class TargetPoses {
+
+    public static final double BLUE_DEADZONE_MIN = 2;
+    public static final double BLUE_DEADZONE_MAX = 3;
+
+    public static final double RED_DEADZONE_MIN = 2;
+    public static final double RED_DEADZONE_MAX = 3;
+
+    public static final Pose2d blueHubCenter = new Pose2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d redHubCenter = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d blueLeftShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d blueRightShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+
+    public static final Pose2d redLeftShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d redRightShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+  }
+ 
+  public static final class Vision {
+    // Local hostnames of the unique Limelights on the system
+    // WARNING: IF YOU CHANGE OUT THE HARDWARE, ENSURE TO PROPERLY
+    // SET THE HOSTNAME ON THE LIMELIGHT TO COORESPOND WITH ITS 
+    // LOCATION ON THE BOT!!! 
+    public static final String LIMELIGHT_LEFT = "limelight-left";
+    public static final String LIMELIGHT_RIGHT = "limelight-right";
+    public static final String LIMELIGHT_TURRET = "limelight-turret";
 
         // List of the active Limelights on the system to be used for Pose2D estimation
         // Add any Limelights defined above to this list.

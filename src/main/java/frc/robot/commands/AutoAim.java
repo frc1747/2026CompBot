@@ -21,18 +21,15 @@ public class AutoAim extends Command {
     private Pose2d target;
     private double[] hoodAngleAndShooterPower = {-1,-1};
 
-    public AutoAim(Shooter shooter, Hood hood) {
+    public AutoAim(Shooter shooter, Hood hood, Pose2d target) {
         this.shooter = shooter;
         this.hood = hood;
-        this.target = Constants.Shooter.BLUE_HUB_CENTER_POSE2D; // we default to blue like the cordnet system.
+        this.target = target; // we default to blue like the cordnet system.
         addRequirements(shooter, hood);
     }
 
     @Override
     public void initialize() {
-        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            this.target = Constants.Shooter.RED_HUB_CENTER_POSE2D;
-        }
         // yes I am a hack
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
