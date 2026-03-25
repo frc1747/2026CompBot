@@ -5,27 +5,17 @@
 package frc.robot.commands.autosCommands;
 
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 
-import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.PoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.LimeLight;
 
 public class AutoAprilLock extends Command {
     private final Turret turret;
@@ -43,13 +33,13 @@ public class AutoAprilLock extends Command {
     public void initialize() {
         timer.reset();
         timer.start();
-        double yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y));  
+        double yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y));
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y));
         }
 
         // pid controlling rotation compensation
-        double pidOutput = pid.calculate(yawOffset); 
+        double pidOutput = pid.calculate(yawOffset);
         double clampPid = pidOutput;
         if (clampPid > Constants.Vision.APRIL_LOCK_PID_CLAMP) {
             clampPid = Constants.Vision.APRIL_LOCK_PID_CLAMP;
@@ -66,8 +56,8 @@ public class AutoAprilLock extends Command {
 
     @Override
     public void execute() {
-    
-    } 
+
+    }
 
     @Override
     public void end(boolean interrupted) {
@@ -76,6 +66,6 @@ public class AutoAprilLock extends Command {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(2.0); // run for 1 second
+        return timer.hasElapsed(1.0); // run for 1 second
     }
 }

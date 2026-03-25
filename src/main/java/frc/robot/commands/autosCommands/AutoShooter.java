@@ -8,11 +8,10 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 
 public class AutoShooter extends Command{
@@ -33,8 +32,9 @@ public class AutoShooter extends Command{
     private Timer timer = new Timer();
     private double rpm;
     private double power;
-    public AutoShooter(double power){
+    public AutoShooter(double power , double rpm){
         this.power = power;
+        this.rpm = rpm;
          motorLeft = new TalonFX(Constants.Shooter.MOTOR_LEFT_PORT);
         follower = new TalonFX(Constants.Shooter.MOTOR_RIGHT_PORT);
         dutyCycleShooter.Output = power;
@@ -45,7 +45,7 @@ public class AutoShooter extends Command{
         configShooter.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);
-        
+
         configShooter.Slot0.kP = Constants.Shooter.PID_P;
         configShooter.Slot0.kI = Constants.Shooter.PID_I;
         configShooter.Slot0.kD = Constants.Shooter.PID_D;
@@ -75,6 +75,7 @@ public class AutoShooter extends Command{
         timer.reset();
         timer.start();
         motorLeft.setControl(dutyCycleShooter);
+        motorLeft.setControl(velocityShooter.withVelocity(rpm/60.0));
     }
     @Override
     public void execute() {

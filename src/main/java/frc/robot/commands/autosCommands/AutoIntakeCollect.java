@@ -32,6 +32,6 @@ public class AutoIntakeCollect extends Command {
     }
 
     public boolean isFinished() {
-        return timer.hasElapsed(1.0); // run for 1 second
+        return timer.hasElapsed(3.0); // run for 1 second
     }
 }
