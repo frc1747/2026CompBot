@@ -9,13 +9,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TargetPoses extends SubsystemBase{
 
-    public Pose2d CurrentTarget;
+    private Pose2d CurrentTarget;
 
     private final double blueShuttleX = 0.0;
     private final double redShuttleX = 0.0;
 
-    public TargetPoses(){
+    public TargetPoses() {}
 
+    public void setTargetPose(Pose2d currentTarget) {
+        this.CurrentTarget = currentTarget;
     }
 
     public Pose2d getTargetPose(){

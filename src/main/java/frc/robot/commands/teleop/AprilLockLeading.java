@@ -9,11 +9,14 @@ package frc.robot.commands.teleop;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.TargetPoses;
 import frc.robot.subsystems.Turret;
 
 /*
@@ -27,15 +30,17 @@ import frc.robot.subsystems.Turret;
 public class AprilLockLeading extends Command {
   /** Creates a new FaceObject. */
   private final Turret turret;
+  private final TargetPoses targetPoses;
   private final PIDController pid;
-  private final Translation2d targetLoc;
+  private Translation2d targetLoc;
   private Translation2d targetLocPrime;
   private Translation2d totalTurretVelocity;
   private Translation2d turretLoc;
 
   // TODO: fix starting pose of robot
-  public AprilLockLeading(Turret turret) {
+  public AprilLockLeading(Turret turret, TargetPoses targetPoses) {
     this.turret = turret;
+    this.targetPoses = targetPoses;
     this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
     // actual location of the target the fuel should hit
     targetLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
@@ -44,6 +49,14 @@ public class AprilLockLeading extends Command {
     totalTurretVelocity = new Translation2d();
     turretLoc = new Translation2d();
     addRequirements(turret);
+  }
+
+
+  // TODO: finish
+  // should grab the TargetPoses choice of location
+  // to target when completed
+  private void updateTargetLoc() {
+    this.targetLoc = new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y);
   }
 
   // takes the previous approximation for location to target
@@ -128,19 +141,23 @@ public class AprilLockLeading extends Command {
   public void execute() {
     // update turret velocity and location
     updateTurretVelAndLoc();
+    // need to make sure this restarts the approximation loop if targetLoc changes
+    updateTargetLoc();
     // TODO: move magic number to constants
-    // first iteration of approximation of point to aim turret at
+    // approximation of point to aim turret at
     targetLocPrime = getTargetApprox(targetLocPrime);
 
-    double yawOffset = turret.getYawOffset(targetLocPrime);
-    // pid controlling rotation compensation
-    double pidOutput = pid.calculate(yawOffset);
-    double clampPid = MathUtil.clamp(pidOutput, -Constants.Vision.APRIL_LOCK_PID_CLAMP, Constants.Vision.APRIL_LOCK_PID_CLAMP);
+    targetPoses.setTargetPose(new Pose2d(targetLocPrime, new Rotation2d(0.0)));
 
-    SmartDashboard.putNumber("pidOutput", pidOutput);
-    SmartDashboard.putNumber("clampPid", clampPid);
-    SmartDashboard.putNumber("yawOffset", yawOffset);
-    turret.basicSpin(clampPid);
+    // double yawOffset = turret.getYawOffset(targetLocPrime);
+    // pid controlling rotation compensation
+    // double pidOutput = pid.calculate(yawOffset);
+    // double clampPid = MathUtil.clamp(pidOutput, -Constants.Vision.APRIL_LOCK_PID_CLAMP, Constants.Vision.APRIL_LOCK_PID_CLAMP);
+
+    // SmartDashboard.putNumber("pidOutput", pidOutput);
+    // SmartDashboard.putNumber("clampPid", clampPid);
+    // SmartDashboard.putNumber("yawOffset", yawOffset);
+    // turret.basicSpin(clampPid);
   }
 
   // Called once the command ends or is interrupted.
