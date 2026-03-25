@@ -132,9 +132,6 @@ public class AprilLockLeading extends Command {
     // first iteration of approximation of point to aim turret at
     targetLocPrime = getTargetApprox(targetLocPrime);
 
-    // ensures the belly pan falls off in the middle of the match
-    RobotContainer.bellyPan.fallOff();
-
     double yawOffset = turret.getYawOffset(targetLocPrime);
     // pid controlling rotation compensation
     double pidOutput = pid.calculate(yawOffset);
