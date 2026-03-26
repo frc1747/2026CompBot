@@ -114,7 +114,7 @@ public class Shooter extends SubsystemBase {
     // in RPM
     public void setRPM(double rpm) {
         //velocityShooter.Velocity * 60 = //pid.calculate(getRPM(), rpm);
-        motorLeft.setControl(velocityShooter.withVelocity(rpm/60.0));
+        motorLeft.setControl(velocityShooter.withVelocity((rpm + shooterOffset) / 60.0));
     }
 
     public double getRPM() {
