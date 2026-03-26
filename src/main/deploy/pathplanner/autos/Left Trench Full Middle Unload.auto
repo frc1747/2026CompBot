@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Trench Full Middle Unload A"
+            "pathName": "Left Trench Half Middle Unload A"
           }
         },
         {
@@ -88,7 +88,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Trench Full Middle Unload B"
+            "pathName": "Left Trench Half Middle B"
           }
         },
         {
