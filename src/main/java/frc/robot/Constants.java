@@ -22,23 +22,6 @@ import edu.wpi.first.math.numbers.N3;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
-  public static final class TargetPoses {
-
-    public static final double BLUE_DEADZONE_MIN = 2;
-    public static final double BLUE_DEADZONE_MAX = 3;
-
-    public static final double RED_DEADZONE_MIN = 2;
-    public static final double RED_DEADZONE_MAX = 3;
-
-    public static final Pose2d blueHubCenter = new Pose2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d redHubCenter = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d blueLeftShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d blueRightShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-
-    public static final Pose2d redLeftShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d redRightShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-  }
  
   public static final class Vision {
     // Local hostnames of the unique Limelights on the system
@@ -221,6 +204,29 @@ public final class Constants {
         public static final double MOTOR_RPM = 4300; // amount we got on shuffleboard when the kicker was ran at 70% power
         public static final double MOTOR_POWER = 0.8;
     }
+    
+  public static final class TargetPosesConstants {
+
+    public static final double SHOOTER_SLIDER_VALUE = 2;
+    public static final double SHOOTER_BASE_VALUE = .5;
+
+    public static final double TURRET_SLIDER_VALUE = 2;
+    public static final double TURRET_BASE_VALUE = .001;
+
+    public static final double BLUE_DEADZONE_MIN = 2;
+    public static final double BLUE_DEADZONE_MAX = 3;
+
+    public static final double RED_DEADZONE_MIN = 2;
+    public static final double RED_DEADZONE_MAX = 3;
+
+    public static final Pose2d blueHubCenter = new Pose2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d redHubCenter = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d blueLeftShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d blueRightShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+
+    public static final Pose2d redLeftShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d redRightShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+  }
 }
 
 

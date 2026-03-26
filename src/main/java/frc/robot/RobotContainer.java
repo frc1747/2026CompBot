@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -80,6 +81,7 @@ public class RobotContainer {
     private final XboxController driver_hid = driver.getHID();
     private final Joystick operator = new Joystick(Constants.Controller.OPERATOR_PORT);
 
+
     public static final Kicker kicker = new Kicker();
     public static final Hood hood = new Hood();
 
@@ -94,19 +96,22 @@ public class RobotContainer {
     public static final Hopper hopper = new Hopper();
     public static final Turret turret = new Turret();
     
-    public static final TargetPoses target = new TargetPoses();
     public static final Field2d field = new Field2d();
-    public static Trigger tmJoystickFaceButtonRight;
-    public static Trigger tmJoystickFaceButtonLeft;
-    public static Trigger tmJoystickTrigger;
-    public static Trigger tmJoystickPovUp;
-    public static Trigger tmJoystickPovDown;
-    public static Trigger tmJoystickRightHandBottomRight;
-    public static Trigger tmJoystickRightHandBottomMiddle;
-    public static Trigger tmJoystickRightHandBottomLeft;
-    public static Trigger tmJoystickRightHandTopRight;
-    public static Trigger tmJoystickRightHandTopMiddle;
-    public static Trigger tmJoystickRightHandTopLeft;
+
+    public final TargetPoses target = new TargetPoses();
+    public final JoystickButton tmJoystickFaceButtonRight = new JoystickButton(operator , 5);
+    public final JoystickButton tmJoystickFaceButtonLeft = new JoystickButton(operator , 4);
+    public final JoystickButton tmJoystickTrigger = new JoystickButton(operator , 1);
+    public final POVButton tmJoystickPovUp = new POVButton(operator, 0);
+    public final POVButton tmJoystickPovDown = new POVButton(operator, 180);
+    public final JoystickButton tmJoystickRightHandBottomLeft = new JoystickButton(operator , 9);
+    public final JoystickButton tmJoystickRightHandBottomMiddle = new JoystickButton(operator , 10);
+    public final JoystickButton tmJoystickRightHandBottomRight = new JoystickButton(operator , 11);
+    public final JoystickButton tmJoystickRightHandTopLeft = new JoystickButton(operator , 8);
+    public final JoystickButton tmJoystickRightHandTopMiddle = new JoystickButton(operator , 7);
+    public final JoystickButton tmJoystickRightHandTopRight = new JoystickButton(operator , 6);
+    public double shooterFudgeFactor;
+    public double turretFudgeFactor;
 
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
@@ -125,24 +130,19 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
-        configureBindings();
+        
+        
+        
 
         // Warmup PathPlanner to avoid Java pauses
         CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
 
         // booo I don't like this
         // thrustmaster controls
-        tmJoystickFaceButtonRight = new Trigger((() -> operator.getRawButtonPressed(4)));
-        tmJoystickFaceButtonLeft = new Trigger((() -> operator.getRawButtonPressed(3)));
-        tmJoystickTrigger = new Trigger((() -> operator.getRawButtonPressed(0)));
-        tmJoystickPovUp = new POVButton(operator, 0);
-        tmJoystickPovDown = new POVButton(operator, 180);
-        tmJoystickRightHandBottomLeft = new Trigger((() -> operator.getRawButtonPressed(8)));
-        tmJoystickRightHandBottomMiddle = new Trigger((() -> operator.getRawButtonPressed(9)));
-        tmJoystickRightHandBottomRight = new Trigger((() -> operator.getRawButtonPressed(10)));
-        tmJoystickRightHandTopLeft = new Trigger((() -> operator.getRawButtonPressed(7)));
-        tmJoystickRightHandTopMiddle = new Trigger((() -> operator.getRawButtonPressed(6)));
-        tmJoystickRightHandTopRight = new Trigger((() -> operator.getRawButtonPressed(5)));
+
+        this.shooterFudgeFactor = 0;
+        this.turretFudgeFactor = 0;
+        configureBindings();
     }
 
     private void configureBindings() {
@@ -211,7 +211,6 @@ public class RobotContainer {
         // operater
 
         // intake hopper 
-
         tmJoystickPovUp
             .whileTrue(hopper.run(false)
             .alongWith(intake.spin(false))
@@ -226,13 +225,18 @@ public class RobotContainer {
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
-        tmJoystickFaceButtonRight
-            .onTrue(target.setScoringCommand());
+        
+        
+
+        if (tmJoystickFaceButtonRight.getAsBoolean()) 
+            target.setScoring();
+
         tmJoystickFaceButtonRight
             .toggleOnTrue(turret.aimAtPose(target.getTargetPose()));
         
-        tmJoystickFaceButtonLeft
-            .onTrue(target.setShuttlingCommand());
+        if (tmJoystickFaceButtonLeft.getAsBoolean()) 
+            target.setShuttling();
+
         tmJoystickFaceButtonLeft
             .toggleOnTrue(turret.aimAtPose(target.getTargetPose())); 
 
@@ -241,6 +245,10 @@ public class RobotContainer {
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 
+
+        
+
+        
         // Manual Turret movement code
         tmJoystickRightHandBottomLeft
             .whileTrue(new TurretRotate(turret, -0.025));
@@ -259,13 +267,28 @@ public class RobotContainer {
         tmJoystickRightHandBottomRight
             .onTrue(shooter.offsetDecrement());
 
+        
+        
+
         // this needs to be refactors to the inline standerds
 
         // Hub shot
 
         // set to shuttling
+
+        //fudge it
+
+
+        // target.fudgeShooterFactor(drivetrain.getState().Pose ,operator.getY() * shooterFudgeFactor);
+
+        // target.fudgeTurretFactor(operator.getTwist()* turretFudgeFactor);
+       // shooterFudgeFactor = Constants.TargetPosesConstants.SHOOTER_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.SHOOTER_BASE_VALUE;
+        //turretFudgeFactor = Constants.TargetPosesConstants.TURRET_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.TURRET_BASE_VALUE;
+        field.getObject("target").setPoses(target.CurrentTarget);
+
+        SmartDashboard.putBoolean("thustmaster" ,driver.a().getAsBoolean());
         
-        
+
     }
 
     public Command getAutonomousCommand() {

@@ -2,19 +2,23 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
-public class TargetPoses extends SubsystemBase{
+public class TargetPoses{
 
     public Pose2d CurrentTarget;
 
-    private final double blueShuttleX = 0.0;
-    private final double redShuttleX = 0.0;
+    private final double blueShuttleX = 2.0;
+    private final double redShuttleX = 14.0;
 
     public TargetPoses(){
+        setScoring();
 
     }
 
@@ -22,18 +26,11 @@ public class TargetPoses extends SubsystemBase{
         return CurrentTarget;
     }
 
-    public Command setScoringCommand() {
-        return runOnce(() -> setScoring());
-    }
-
-    public Command setShuttlingCommand() {
-        return runOnce(() -> setShuttling());
-    }
-
     public void setScoring(){
-        CurrentTarget = Constants.TargetPoses.blueHubCenter;
+        System.out.println(Constants.TargetPosesConstants.blueHubCenter);
+        CurrentTarget = Constants.TargetPosesConstants.blueHubCenter;
          if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            CurrentTarget = Constants.TargetPoses.redHubCenter;
+            CurrentTarget = Constants.TargetPosesConstants.redHubCenter;
         }
     }
 
@@ -46,26 +43,39 @@ public class TargetPoses extends SubsystemBase{
 
     private Pose2d blueShuttling() {
         Pose2d turretPose = RobotContainer.turret.getAbsTurretPose();
-        Pose2d shuttlePose = new Pose2d(blueShuttleX, turretPose.getY(), new Rotation2d());
-        if (turretPose.getX() > Constants.TargetPoses.BLUE_DEADZONE_MIN && turretPose.getX() < Constants.TargetPoses.BLUE_DEADZONE_MAX ){
-            if (turretPose.getX() - Constants.TargetPoses.BLUE_DEADZONE_MIN > turretPose.getX() - Constants.TargetPoses.BLUE_DEADZONE_MAX ) {
-                turretPose = Constants.TargetPoses.blueLeftShuttlePose2d;
+        if (turretPose.getX() > Constants.TargetPosesConstants.BLUE_DEADZONE_MIN && turretPose.getX() < Constants.TargetPosesConstants.BLUE_DEADZONE_MAX ){
+            if (turretPose.getX() - Constants.TargetPosesConstants.BLUE_DEADZONE_MIN > turretPose.getX() - Constants.TargetPosesConstants.BLUE_DEADZONE_MAX ) {
+                turretPose = Constants.TargetPosesConstants.blueLeftShuttlePose2d;
             }
-            turretPose = Constants.TargetPoses.blueRightShuttlePose2d;
+            turretPose = Constants.TargetPosesConstants.blueRightShuttlePose2d;
         }   
         return turretPose;
     }
 
     private Pose2d redshuttling() {
         Pose2d turretPose = RobotContainer.turret.getAbsTurretPose();
-        Pose2d shuttlePose = new Pose2d(redShuttleX, turretPose.getY(), new Rotation2d());
-        if (turretPose.getX() > Constants.TargetPoses.RED_DEADZONE_MIN && turretPose.getX() < Constants.TargetPoses.RED_DEADZONE_MAX ){
-            if (turretPose.getX() - Constants.TargetPoses.RED_DEADZONE_MIN > turretPose.getX() - Constants.TargetPoses.RED_DEADZONE_MAX ) {
-                turretPose = Constants.TargetPoses.redLeftShuttlePose2d;
+        if (turretPose.getX() > Constants.TargetPosesConstants.RED_DEADZONE_MIN && turretPose.getX() < Constants.TargetPosesConstants.RED_DEADZONE_MAX ){
+            if (turretPose.getX() - Constants.TargetPosesConstants.RED_DEADZONE_MIN > turretPose.getX() - Constants.TargetPosesConstants.RED_DEADZONE_MAX ) {
+                turretPose = Constants.TargetPosesConstants.redLeftShuttlePose2d;
             }
-            turretPose = Constants.TargetPoses.redRightShuttlePose2d;
+            turretPose = Constants.TargetPosesConstants.redRightShuttlePose2d;
         }   
         return turretPose;
+    }
+
+    public void ShootOnTheMove() {
+        
+    }
+
+    public void fudgeTurretFactor(double radian) { // radians not dergees
+        CurrentTarget = CurrentTarget.rotateAround(RobotContainer.drivetrain.getState().Pose.getTranslation(), new Rotation2d(radian));
+    }
+
+    public void fudgeShooterFactor(Pose2d botCurrentPose, double distance) { // distance in meters
+        double theta = Math.atan2(CurrentTarget.getX() - botCurrentPose.getX() , CurrentTarget.getX()- botCurrentPose.getX() );
+        double xPart = distance * Math.cos(theta);
+        double yPart = distance * Math.sin(theta);
+        CurrentTarget = new Pose2d(CurrentTarget.getX() + xPart, CurrentTarget.getY() + yPart, new Rotation2d());
     }
     
 }
