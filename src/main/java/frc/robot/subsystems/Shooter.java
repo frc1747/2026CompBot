@@ -80,7 +80,7 @@ public class Shooter extends SubsystemBase {
     follower.setControl(new Follower(motorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
     SmartDashboard.putNumber("Shooter/Desired RPM", 0.0);
     SmartDashboard.putNumber("Shooter/Desired Power", 0.0);
-    double[][] listOfPoints = {{1,2,3,4,5,6,10,8,9},{1,4,9,16,25,36,49,64,81}};
+    double[][] listOfPoints = {{1,2,3,4,5,6,7,8,9},{1,2,3,4,5,6,7,8,9},{2,5,10,17,26,37,50,65,82}};
 
     Matrix<N6,N1> martrix = GetCoeffients(listOfPoints);
   }
@@ -168,50 +168,54 @@ public class Shooter extends SubsystemBase {
 
   }
 
-  private double SumOfPoints(double[] listOfPoints,int pow){
+  private double SumOfPoints(double[] listOfPoints, double pow){
     double total = 0;
     for (int i = 0; i < listOfPoints.length ; i ++ ){
       total += Math.pow(listOfPoints[i], pow);
     }
     return total;
   }
+  // I get to be dumb for writing the rest of this
+  private double[] MultList(double[] listA , double[] listB) {
+    double[] build = new double[listA.length];
+    for (int i =0 ; i < listA.length ; i++ ){
+      build[i] = listA[i]*listB[i];
+    } 
+    return build;
+  }
 
   private Matrix<N6,N6> MatrixOfSumOfXpoints(double[][] listOfPoints){
+    // x y z
     Matrix<N6,N6> matrix = new Matrix<>(Nat.N6(), Nat.N6() );
     System.out.print(matrix.getNumCols() );
     for (int i = 0 ; i < matrix.getNumCols(); i++){
-
-      for (int j = 0 ; j < matrix.getNumCols(); j++){
-        // soo how this works is we are sending all of the x values of because the array is set up like this
-        // [ x0 ]   [ y0 ]
-        // [ x1 ]   [ y1 ]
-        // [ x2 ]   [ y2 ]
-        // [ x3 ] , [ y3 ]
-        // by sending the array of points
-        matrix.set(i,j,
-        SumOfPoints(listOfPoints[0],j+i));
-      }
-      
+      matrix.set(i, 0, 1);
+      matrix.set(i, 1, SumOfPoints(listOfPoints[0], 1));
+      matrix.set(i, 2, SumOfPoints(listOfPoints[0], 2));
+      matrix.set(i, 3, SumOfPoints(listOfPoints[1], 1));
+      matrix.set(i, 4, SumOfPoints(listOfPoints[1], 1));
+      matrix.set(i, 5, SumOfPoints(MultList(listOfPoints[0],listOfPoints[1]) , 1));
     }
+
+    matrix = matrix.elementTimes(matrix.transpose());
     return matrix;
   }
 
-  private Matrix<N6,N1> MatrixOfSumOfYXpoints(double[][] listOfPoints){
+  private Matrix<N6,N1> MatrixOfSumOfYXpoints(double[][] listOfPoints, Matrix<N6,N6> matrixbase){
     double total = 0;
     Matrix<N6,N1> matrix = new Matrix<N6,N1>(Nat.N6(),Nat.N1());
     for(int i = 0 ; i < matrix.getNumRows(); i++){
       total = 0;
-      for(int j = 0; j < listOfPoints[0].length; j++ ){
-        total += listOfPoints[0][j] + listOfPoints[1][j];
-      }
+      total = SumOfPoints(listOfPoints[2], 0) * matrixbase.get(1, i);
       matrix.set(i,0,total);
     }
     return matrix;
   }
 
-  private Matrix<N6,N1> GetCoeffients(double[][] listOfPoints){
-    System.out.print("inv matrix" + MatrixOfSumOfXpoints(listOfPoints) + "dem" + MatrixOfSumOfXpoints(listOfPoints).det());
-    return MatrixOfSumOfXpoints(listOfPoints).solve(MatrixOfSumOfYXpoints(listOfPoints));
+  private Matrix<N6,N1> GetCoeffients(double[][] listOfPoints) {
+    Matrix<N6,N6> baseMartix = MatrixOfSumOfXpoints(listOfPoints); 
+    System.out.println(MatrixOfSumOfYXpoints(listOfPoints, baseMartix));
+    return baseMartix.inv().times(MatrixOfSumOfYXpoints(listOfPoints, baseMartix));
   }
 
 
