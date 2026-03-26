@@ -159,13 +159,13 @@ public class Shooter extends SubsystemBase {
         }
         desiredRPM = SmartDashboard.getNumber("Shooter/Desired RPM", 0.0) ;
         SmartDashboard.putNumber("number I am putting on smartdashbard", desiredRPM);
-        
+
         //setRPM(desiredRPM);
         SmartDashboard.putNumber("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity);
         SmartDashboard.getNumber("Shooter/Desired RPM?", desiredRPM) ;
 
         // auto shoot
-        
+
 
         // pids yay!!!!
         PID_P = SmartDashboard.getNumber("Shooter/Shooter pid P", PID_P);
@@ -182,7 +182,7 @@ public class Shooter extends SubsystemBase {
         }
 
         if(configShooter.Slot0.kD != PID_D)  {
-            configShooter.Slot0.kD = PID_D; 
+            configShooter.Slot0.kD = PID_D;
         }
     }
 }

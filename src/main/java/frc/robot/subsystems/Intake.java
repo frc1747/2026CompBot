@@ -4,7 +4,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -15,9 +14,9 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         this.motor = new TalonFX(Constants.Intake.MOTOR_PORT);
-        
+
         TalonFXConfiguration config = new TalonFXConfiguration();
-        
+
         config.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);

@@ -4,12 +4,10 @@
 
 package frc.robot.commands;
 
-import java.lang.constant.Constable;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -36,7 +34,7 @@ public class AutoAim extends Command {
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
 
-    
+
         shooter.setRPM(hoodAngleAndShooterPower[1]);
     }
 
@@ -59,7 +57,7 @@ public class AutoAim extends Command {
 
     @Override
     public boolean isFinished() {
-        // better way of doing this idk 
+        // better way of doing this idk
         return (shooter.getRPM() <= hoodAngleAndShooterPower[1] + hoodAngleAndShooterPower[1]*Constants.Shooter.TOLERANCE && shooter.getRPM() >= hoodAngleAndShooterPower[1] - hoodAngleAndShooterPower[1]*Constants.Shooter.TOLERANCE);
     }
 }
