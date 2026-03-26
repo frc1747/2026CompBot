@@ -11,7 +11,6 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,7 +29,7 @@ public class Shooter extends SubsystemBase {
     public double PID_I = Constants.Shooter.PID_I;
     public double PID_D = Constants.Shooter.PID_D;
     private double shooterOffset = 0.0;
-  
+
 
     public Shooter() {
         motorLeft = new TalonFX(Constants.Shooter.MOTOR_LEFT_PORT);
@@ -42,7 +41,7 @@ public class Shooter extends SubsystemBase {
         configShooter.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);
-        
+
         configShooter.Slot0.kP = PID_P;
         configShooter.Slot0.kI = PID_I;
         configShooter.Slot0.kD = PID_D;
@@ -121,7 +120,7 @@ public class Shooter extends SubsystemBase {
         double currentAngle = RobotContainer.hood.getCurrentAngle();
         double wantedRPM = getRPMNeededFromDistanceAndAngle(Distance, currentAngle);
         double[] array = {-1,-1};
-        // this could be refactor 
+        // this could be refactor
         if (wantedRPM <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
             double[] angleAndSpeed = {currentAngle, wantedRPM*Constants.Shooter.AUTO_SHOOTER_MULT};
             return angleAndSpeed;

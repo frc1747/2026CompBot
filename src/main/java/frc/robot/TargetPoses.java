@@ -52,7 +52,7 @@ public class TargetPoses extends SubsystemBase{
                 turretPose = Constants.TargetPoses.blueLeftShuttlePose2d;
             }
             turretPose = Constants.TargetPoses.blueRightShuttlePose2d;
-        }   
+        }
         return turretPose;
     }
 
@@ -64,8 +64,8 @@ public class TargetPoses extends SubsystemBase{
                 turretPose = Constants.TargetPoses.redLeftShuttlePose2d;
             }
             turretPose = Constants.TargetPoses.redRightShuttlePose2d;
-        }   
+        }
         return turretPose;
     }
-    
+
 }

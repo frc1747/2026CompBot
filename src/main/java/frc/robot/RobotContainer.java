@@ -12,10 +12,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -32,8 +29,6 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
 import frc.robot.commands.autosCommands.AutoAutoAim;
-import frc.robot.commands.teleop.AprilLock;
-import frc.robot.commands.teleop.AprilLockShuttle;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.ToggleIntakeReady;
@@ -78,7 +73,7 @@ public class RobotContainer {
     public static final Shooter shooter = new Shooter();
     public static final Hopper hopper = new Hopper();
     public static final Turret turret = new Turret();
-    
+
     public static final TargetPoses target = new TargetPoses();
     public static final Field2d field = new Field2d();
     public static Trigger tmJoystickFaceButtonRight;
@@ -215,11 +210,11 @@ public class RobotContainer {
             .onTrue(target.setScoringCommand());
         tmJoystickFaceButtonRight
             .toggleOnTrue(turret.aimAtPose(target.getTargetPose()));
-        
+
         tmJoystickFaceButtonLeft
             .onTrue(target.setShuttlingCommand());
         tmJoystickFaceButtonLeft
-            .toggleOnTrue(turret.aimAtPose(target.getTargetPose())); 
+            .toggleOnTrue(turret.aimAtPose(target.getTargetPose()));
 
         tmJoystickTrigger
             .whileTrue(new AutoAim(shooter, hood ,target.getTargetPose()))
@@ -243,8 +238,8 @@ public class RobotContainer {
         // Hub shot
 
         // set to shuttling
-        
-        
+
+
     }
 
     public Command getAutonomousCommand() {
