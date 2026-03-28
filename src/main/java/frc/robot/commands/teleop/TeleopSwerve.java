@@ -4,55 +4,53 @@
 
 package frc.robot.commands.teleop;
 
-import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import java.util.function.DoubleSupplier;
 
 public class TeleopSwerve extends Command {
-  private final CommandSwerveDrivetrain drivetrain;
-  private final DoubleSupplier translationSup;
-  private final DoubleSupplier strafeSup;
-  private final DoubleSupplier rotationSup;
-  private final FieldCentric swerveRequest;
-  
-  public TeleopSwerve(CommandSwerveDrivetrain drivetrain, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup) {
-    this.drivetrain = drivetrain;
-    this.translationSup = translationSup;
-    this.strafeSup = strafeSup;
-    this.rotationSup = rotationSup;
-    this.swerveRequest = new FieldCentric();
-    addRequirements(drivetrain);
-  }
+    private final CommandSwerveDrivetrain drivetrain;
+    private final DoubleSupplier translationSup;
+    private final DoubleSupplier strafeSup;
+    private final DoubleSupplier rotationSup;
+    private final FieldCentric swerveRequest;
 
-  @Override
-  public void initialize() {}
+    public TeleopSwerve(CommandSwerveDrivetrain drivetrain, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup) {
+        this.drivetrain = drivetrain;
+        this.translationSup = translationSup;
+        this.strafeSup = strafeSup;
+        this.rotationSup = rotationSup;
+        this.swerveRequest = new FieldCentric();
+        addRequirements(drivetrain);
+    }
 
-  @Override
-  public void execute() {
-    drivetrain.setControl(
-      swerveRequest
-        .withVelocityX(translationSup.getAsDouble() * -Constants.Drivetrain.MAX_SPEED)
-        .withVelocityY(strafeSup.getAsDouble() * -Constants.Drivetrain.MAX_SPEED)
-        .withRotationalRate(rotationSup.getAsDouble() * -Constants.Drivetrain.MAX_ANGULAR_VELOCITY * Constants.Drivetrain.DRIVER_SLOW_DOWN)
-    );
-  }
+    @Override
+    public void initialize() {}
 
-  @Override
-  public void end(boolean interrupted) {
-    drivetrain.setControl(
-      swerveRequest
-        .withVelocityX(0.0)
-        .withVelocityY(0.0)
-        .withRotationalRate(0.0)
-    );
-  }
+    @Override
+    public void execute() {
+        drivetrain.setControl(
+        swerveRequest
+            .withVelocityX(translationSup.getAsDouble() * -Constants.Drivetrain.MAX_SPEED)
+            .withVelocityY(strafeSup.getAsDouble() * -Constants.Drivetrain.MAX_SPEED)
+            .withRotationalRate(rotationSup.getAsDouble() * -Constants.Drivetrain.MAX_ANGULAR_VELOCITY * Constants.Drivetrain.DRIVER_SLOW_DOWN)
+        );
+    }
 
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    @Override
+    public void end(boolean interrupted) {
+        drivetrain.setControl(
+        swerveRequest
+            .withVelocityX(0.0)
+            .withVelocityY(0.0)
+            .withRotationalRate(0.0)
+        );
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

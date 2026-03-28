@@ -1,11 +1,8 @@
 package frc.robot.subsystems;
-import java.lang.invoke.ConstantCallSite;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,14 +20,14 @@ public class IntakePivot extends SubsystemBase {
     private boolean down;
 
     public IntakePivot() {
-         SmartDashboard.putNumber("intake/Desired Pos", Constants.IntakePivot.OUT);
+        SmartDashboard.putNumber("intake/Desired Pos", Constants.IntakePivot.OUT);
         this.motor = new TalonFX(Constants.IntakePivot.MOTOR_PORT);
-        
+
         var request = new PositionDutyCycle(0.0);
         motor.setControl(request);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
-        
+
         config.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);
@@ -43,7 +40,7 @@ public class IntakePivot extends SubsystemBase {
     // TODO: rename method and refactor
     public void intakePivot(double tick) {
         //tick = MathUtil.clamp(tick, -0.05, 0.05);
-        
+
        // double currentCounts = encoder.get();
         double currentCounts = motor.getPosition().getValueAsDouble();
         dutyCycle.Output = pid.calculate(currentCounts, tick);
@@ -85,9 +82,14 @@ public class IntakePivot extends SubsystemBase {
         return motor.getPosition().getValueAsDouble();
     }
 
-    
+    public boolean isDown() {
+        return getEncoderValue() <= Constants.IntakePivot.ENCODER_DOWN_POINT_ELASTIC;
+    }
+
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
+    SmartDashboard.putBoolean("intake/Is intake out:", isDown());
   }
 }
