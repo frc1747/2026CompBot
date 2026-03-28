@@ -102,7 +102,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
         NamedCommands.registerCommand("Kicker", kicker.run(false));
         NamedCommands.registerCommand("Hopper", hopper.run(false));
-        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter, hood));
+        NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         NamedCommands.registerCommand("StopIntake", intake.StopCommand());
         NamedCommands.registerCommand("StopKicker", kicker.stopCommand());
