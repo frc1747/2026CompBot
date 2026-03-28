@@ -1,7 +1,7 @@
 package frc.robot.commands.autosCommands;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakePivot;
-import edu.wpi.first.wpilibj.Timer;
 
 public class AutoIntakeOut extends Command {
     private IntakePivot intakePivot;
@@ -27,7 +27,7 @@ public class AutoIntakeOut extends Command {
     @Override
     public void end(boolean interrupted) {
         intakePivot.intakePivot(0);
-    } 
+    }
     @Override
     public boolean isFinished() {
         return timer.hasElapsed(1.0); // run for 1 second
