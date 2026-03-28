@@ -9,35 +9,35 @@ import frc.robot.subsystems.Turret;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TurretRotate extends Command {
-    private final Turret turret;
-    private final double power;
+  private final Turret turret;
+  private final double power;
+  
+  /** Creates a new TurretRotate. */
+  public TurretRotate(Turret turret, double power) {
+    this.turret = turret;
+    this.power = power;
+    // Use addRequirements() here to declare subsystem dependencies.
+  }
 
-    /** Creates a new TurretRotate. */
-    public TurretRotate(Turret turret, double power) {
-        this.turret = turret;
-        this.power = power;
-        // Use addRequirements() here to declare subsystem dependencies.
-    }
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    turret.basicSpin(power);
+  }
 
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {
-        turret.basicSpin(power);
-    }
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {}
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {}
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    turret.basicSpin(0.0);
+  }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-        turret.basicSpin(0.0);
-    }
-
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }

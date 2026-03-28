@@ -1,12 +1,13 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
+
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.LimelightHelpers;
 
 public class LimeLight extends SubsystemBase {
 
@@ -62,10 +63,10 @@ public class LimeLight extends SubsystemBase {
         var mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);
         return mt2;
     }
-
+    
     @Override
     public void periodic() {
         boolean targetValidity = hasValidTarget();
         SmartDashboard.putBoolean("Valid Target", targetValidity);
-    }
+    }    
 }
