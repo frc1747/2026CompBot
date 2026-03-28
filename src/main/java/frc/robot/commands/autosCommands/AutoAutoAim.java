@@ -14,12 +14,12 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
+import frc.robot.util.TargetingMath;
 
 public class AutoAutoAim extends Command {
     private Shooter shooter;
     private Hood hood;
     private Translation2d target;
-    private double[] hoodAngleAndShooterPower = {-1,-1};
     private Timer timer = new Timer();
 
     public AutoAutoAim(Shooter shooter, Hood hood) {
@@ -38,7 +38,10 @@ public class AutoAutoAim extends Command {
         }
         // yes I am a hack
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target);
-        double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
+        double[] hoodAngleAndShooterPower = TargetingMath.findSpeedAndAngleFromDistance(
+            RobotContainer.hood.getCurrentAngle(),
+            distance
+        );
 
 
         shooter.setRPM(hoodAngleAndShooterPower[1]);
@@ -47,7 +50,10 @@ public class AutoAutoAim extends Command {
     @Override
     public void execute() {
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target);
-        double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
+        double[] hoodAngleAndShooterPower = TargetingMath.findSpeedAndAngleFromDistance(
+            RobotContainer.hood.getCurrentAngle(),
+            distance
+        );
 
         hood.goToAngleCommand(hoodAngleAndShooterPower[0]);
         if (hood.atAngle(hoodAngleAndShooterPower[0])){

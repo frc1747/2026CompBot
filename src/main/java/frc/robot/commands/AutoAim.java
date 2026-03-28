@@ -14,6 +14,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
+import frc.robot.util.TargetingMath;
 
 public class AutoAim extends Command {
     private Shooter shooter;
@@ -33,7 +34,10 @@ public class AutoAim extends Command {
         double distance = RobotContainer.turret.getAbsTurretPose()
             .getTranslation()
             .getDistance(targetSupplier.get());
-        hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
+        hoodAngleAndShooterPower = TargetingMath.findSpeedAndAngleFromDistance(
+            RobotContainer.hood.getCurrentAngle(), 
+            distance
+        );
         shooter.setRPM(hoodAngleAndShooterPower[1]);
     }
 
@@ -42,7 +46,10 @@ public class AutoAim extends Command {
         double distance = RobotContainer.turret.getAbsTurretPose()
             .getTranslation()
             .getDistance(targetSupplier.get());
-        hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
+        hoodAngleAndShooterPower = TargetingMath.findSpeedAndAngleFromDistance(
+            RobotContainer.hood.getCurrentAngle(),
+            distance
+        );
 
         hood.goToAngle(hoodAngleAndShooterPower[0]);
         if (hood.atAngle(hoodAngleAndShooterPower[0])) {
