@@ -193,7 +193,7 @@ public class Shooter extends SubsystemBase {
       matrix.set(i, 1, SumOfPoints(listOfPoints[0], 1));
       matrix.set(i, 2, SumOfPoints(listOfPoints[0], 2));
       matrix.set(i, 3, SumOfPoints(listOfPoints[1], 1));
-      matrix.set(i, 4, SumOfPoints(listOfPoints[1], 1));
+      matrix.set(i, 4, SumOfPoints(listOfPoints[1], 2));
       matrix.set(i, 5, SumOfPoints(MultList(listOfPoints[0],listOfPoints[1]) , 1));
     }
 
@@ -214,8 +214,8 @@ public class Shooter extends SubsystemBase {
 
   private Matrix<N6,N1> GetCoeffients(double[][] listOfPoints) {
     Matrix<N6,N6> baseMartix = MatrixOfSumOfXpoints(listOfPoints); 
-    System.out.println(MatrixOfSumOfYXpoints(listOfPoints, baseMartix));
-    return baseMartix.inv().times(MatrixOfSumOfYXpoints(listOfPoints, baseMartix));
+    System.out.println(baseMartix.inv());
+    return baseMartix.solve(MatrixOfSumOfYXpoints(listOfPoints, baseMartix));
   }
 
 
