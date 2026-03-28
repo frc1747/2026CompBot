@@ -72,7 +72,7 @@ public class RobotContainer {
     public static final Shooter shooter = new Shooter();
     public static final Hopper hopper = new Hopper();
     public static final Turret turret = new Turret();
-    
+
     //fudge factor
     public double fudgeFactorTurret = 0;
     public double fudgeFactorShooter = 0;
@@ -201,11 +201,11 @@ public class RobotContainer {
             fudgeFactorTurret += Constants.Turret.FUDGE_FACTOR_TURRET;
         if (operator.povRight().getAsBoolean())
             fudgeFactorTurret -= Constants.Turret.FUDGE_FACTOR_TURRET;
-        
+
         if (operator.povUp().getAsBoolean())
-            fudgeFactorTurret += Constants.Shooter.FUDGE_FACTOR_SHOOTER;    
+            fudgeFactorTurret += Constants.Shooter.FUDGE_FACTOR_SHOOTER;
          if (operator.povDown().getAsBoolean())
-            fudgeFactorTurret -= Constants.Shooter.FUDGE_FACTOR_SHOOTER; 
+            fudgeFactorTurret -= Constants.Shooter.FUDGE_FACTOR_SHOOTER;
 
         // this needs to be refactors to the inline standerds
         operator.rightTrigger()

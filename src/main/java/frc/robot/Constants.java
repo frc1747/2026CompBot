@@ -122,10 +122,10 @@ public final class Constants {
 
   }
 
-  
+
 
     public static final class Turret {
-    
+
     public static final double FUDGE_FACTOR_TURRET = .01; // in radians
     public static final int MOTOR_PORT = 59;
         public static final int ENCODER_PORT_A = 0;
@@ -150,7 +150,7 @@ public final class Constants {
     }
 
     public static final class Shooter {
-    
+
     public static final double FUDGE_FACTOR_SHOOTER = 100; // in rpms
     public static final int MOTOR_LEFT_PORT = 41;
         public static final int MOTOR_RIGHT_PORT = 42;
