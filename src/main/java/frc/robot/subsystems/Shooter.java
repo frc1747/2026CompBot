@@ -10,14 +10,10 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.hardware.TalonFXS;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
-import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.units.measure.Distance;
-
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,7 +35,7 @@ public class Shooter extends SubsystemBase {
     public double PID_P = Constants.Shooter.PID_P ;
     public double PID_I = Constants.Shooter.PID_I;
     public double PID_D = Constants.Shooter.PID_D;
-  
+
 
     public Shooter() {
         motorLeft = new TalonFX(Constants.Shooter.MOTOR_LEFT_PORT);
@@ -51,7 +47,7 @@ public class Shooter extends SubsystemBase {
         configShooter.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);
-        
+
         configShooter.Slot0.kP = Constants.Shooter.PID_P;
         configShooter.Slot0.kI = Constants.Shooter.PID_I;
         configShooter.Slot0.kD = Constants.Shooter.PID_D;
@@ -143,7 +139,7 @@ public class Shooter extends SubsystemBase {
         double currentAngle = RobotContainer.hood.getCurrentAngle();
         double wantedPower = getPowerNeededFromDistanceAndAngle(Distance, currentAngle);
         double[] array = {-1,-1};
-        // this could be refactor 
+        // this could be refactor
         if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
             double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};
             return angleAndSpeed;
@@ -181,13 +177,13 @@ public class Shooter extends SubsystemBase {
         }
         desiredPower = SmartDashboard.getNumber("Shooter/Desired Power", 0.0) ;
         SmartDashboard.putNumber("number I am putting on smartdashbard", desiredRPM);
-        
+
         //setRPM(desiredRPM);
         SmartDashboard.putNumber("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity);
         SmartDashboard.getNumber("Shooter/Desired Power?", desiredPower) ;
 
         // auto shoot
-        
+
 
         // pids yay!!!!
         PID_P = SmartDashboard.getNumber("Shooter/Shooter pid P", PID_P);
@@ -204,7 +200,7 @@ public class Shooter extends SubsystemBase {
         }
 
         if(configShooter.Slot0.kD != PID_D)  {
-            configShooter.Slot0.kD = PID_D; 
+            configShooter.Slot0.kD = PID_D;
         }
     }
 }
