@@ -219,13 +219,13 @@ public final class Constants {
     public static final double RED_DEADZONE_MIN = 2;
     public static final double RED_DEADZONE_MAX = 3;
 
-    public static final Pose2d blueHubCenter = new Pose2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d redHubCenter = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d blueLeftShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d blueRightShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d BLUE_LEFT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d()); // need tuning
+    public static final Pose2d BLUE_RIGHT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
 
-    public static final Pose2d redLeftShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d redRightShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d RED_LEFT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d RED_RIGHT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
   }
 }
 

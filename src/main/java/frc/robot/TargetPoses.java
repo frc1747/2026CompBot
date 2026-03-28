@@ -12,32 +12,28 @@ import frc.robot.RobotContainer;
 
 public class TargetPoses{
 
-    public Pose2d CurrentTarget;
+    public Pose2d currentTarget;
 
-    private final double blueShuttleX = 2.0;
-    private final double redShuttleX = 14.0;
-
-    public TargetPoses(){
+    public TargetPoses() {
         setScoring();
-
     }
 
-    public Pose2d getTargetPose(){
-        return CurrentTarget;
+    public Pose2d getTargetPose() {
+        return currentTarget;
     }
 
-    public void setScoring(){
-        System.out.println(Constants.TargetPosesConstants.blueHubCenter);
-        CurrentTarget = Constants.TargetPosesConstants.blueHubCenter;
-         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            CurrentTarget = Constants.TargetPosesConstants.redHubCenter;
+    public void setScoring() {
+        System.out.println(Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D);
+        currentTarget = Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D;
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+            currentTarget = Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D;
         }
     }
 
-    public void setShuttling(){
-        CurrentTarget = blueShuttling();
-         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            CurrentTarget = redshuttling();
+    public void setShuttling() {
+        currentTarget = blueShuttling();
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+            currentTarget = redshuttling();
         }
     }
 
@@ -45,9 +41,9 @@ public class TargetPoses{
         Pose2d turretPose = RobotContainer.turret.getAbsTurretPose();
         if (turretPose.getX() > Constants.TargetPosesConstants.BLUE_DEADZONE_MIN && turretPose.getX() < Constants.TargetPosesConstants.BLUE_DEADZONE_MAX ){
             if (turretPose.getX() - Constants.TargetPosesConstants.BLUE_DEADZONE_MIN > turretPose.getX() - Constants.TargetPosesConstants.BLUE_DEADZONE_MAX ) {
-                turretPose = Constants.TargetPosesConstants.blueLeftShuttlePose2d;
+                turretPose = Constants.TargetPosesConstants.BLUE_LEFT_SHUTTLE_POSE2D;
             }
-            turretPose = Constants.TargetPosesConstants.blueRightShuttlePose2d;
+            turretPose = Constants.TargetPosesConstants.BLUE_RIGHT_SHUTTLE_POSE2D;
         }   
         return turretPose;
     }
@@ -56,9 +52,9 @@ public class TargetPoses{
         Pose2d turretPose = RobotContainer.turret.getAbsTurretPose();
         if (turretPose.getX() > Constants.TargetPosesConstants.RED_DEADZONE_MIN && turretPose.getX() < Constants.TargetPosesConstants.RED_DEADZONE_MAX ){
             if (turretPose.getX() - Constants.TargetPosesConstants.RED_DEADZONE_MIN > turretPose.getX() - Constants.TargetPosesConstants.RED_DEADZONE_MAX ) {
-                turretPose = Constants.TargetPosesConstants.redLeftShuttlePose2d;
+                turretPose = Constants.TargetPosesConstants.RED_LEFT_SHUTTLE_POSE2D;
             }
-            turretPose = Constants.TargetPosesConstants.redRightShuttlePose2d;
+            turretPose = Constants.TargetPosesConstants.RED_RIGHT_SHUTTLE_POSE2D;
         }   
         return turretPose;
     }
@@ -68,14 +64,14 @@ public class TargetPoses{
     }
 
     public void fudgeTurretFactor(double radian) { // radians not dergees
-        CurrentTarget = CurrentTarget.rotateAround(RobotContainer.drivetrain.getState().Pose.getTranslation(), new Rotation2d(radian));
+        currentTarget = currentTarget.rotateAround(RobotContainer.drivetrain.getState().Pose.getTranslation(), new Rotation2d(radian));
     }
 
     public void fudgeShooterFactor(Pose2d botCurrentPose, double distance) { // distance in meters
-        double theta = Math.atan2(CurrentTarget.getX() - botCurrentPose.getX() , CurrentTarget.getX()- botCurrentPose.getX() );
+        double theta = Math.atan2(currentTarget.getX() - botCurrentPose.getX(), currentTarget.getX()- botCurrentPose.getX() );
         double xPart = distance * Math.cos(theta);
         double yPart = distance * Math.sin(theta);
-        CurrentTarget = new Pose2d(CurrentTarget.getX() + xPart, CurrentTarget.getY() + yPart, new Rotation2d());
+        currentTarget = new Pose2d(currentTarget.getX() + xPart, currentTarget.getY() + yPart, new Rotation2d());
     }
     
 }
