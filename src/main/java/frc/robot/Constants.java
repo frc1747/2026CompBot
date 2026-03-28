@@ -6,8 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import java.util.List;
@@ -21,6 +20,33 @@ import java.util.List;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    public static final class Field {
+        // Bottom left corner of the field if looking overhead from the scoring table
+        public static final double MIN_X = 0.0;
+        public static final double MIN_Y = 0.0;
+
+        // Top right corner of the field if looking overhead from the scoring table
+        public static final double MAX_X = 16.513048;
+        public static final double MAX_Y = 8.0519016;
+
+        // Please step in to the dead center of the field...
+        public static final double CENTER_X = MAX_X / 2.0;
+        public static final double CENTER_Y = MAX_Y / 2.0;
+
+        // Special offsets
+        public static final double CENTER_X_HUB_CENTER_OFFSET = 3.6449;
+        public static final double SHUTTLE_LINE_OFFSET = 3.0;
+
+        // Blue Alliance specific points
+        public static final double BLUE_HUB_CENTER_X = CENTER_X - CENTER_X_HUB_CENTER_OFFSET;
+        public static final double BLUE_HUB_CENTER_Y = CENTER_Y;
+
+        // Red Alliance specific points
+        public static final double RED_HUB_CENTER_X = CENTER_X + CENTER_X_HUB_CENTER_OFFSET;
+        public static final double RED_HUB_CENTER_Y = CENTER_Y;
+
+    }
 
     public static final class Vision {
         // Local hostnames of the unique Limelights on the system
@@ -51,8 +77,6 @@ public final class Constants {
         // VISION_STDDEVS allows us to control how much we trust the values coming from the Limelight(s).
         // The higher the value (distance standard deviations), the less we trust it.
         //
-
-
         // n1: X Position Standard Deviations in meters
         //     How wrong do we think vision could be about where we am on the field in X?
         // n2: Y Position Standard Deviations in meters
@@ -63,20 +87,6 @@ public final class Constants {
         // 0.7, 0.7, and 9999999 tells the code that we are somewhat trusting distant april tags
         // and basically completely trusting the Pigeon for Yaw.
         public static final Matrix<N3, N1> VISION_STDDEVS = VecBuilder.fill(0.7, 0.7, 9999999);
-
-        public static final double FIELD_CENTER_X = 8.7741252;
-        public static final double FIELD_CENTER_Y = 4.0259508;
-
-        public static final double BLUE_HUB_CENTER_X = 4.611624;
-        public static final double BLUE_HUB_CENTER_Y = FIELD_CENTER_Y;
-        public static final double BLUE_SHUTTLE_CENTER_X = 3;
-
-        public static final double RED_HUB_CENTER_X = 16.5 - BLUE_HUB_CENTER_X;
-        public static final double RED_HUB_CENTER_Y = FIELD_CENTER_Y;
-        public static final double RED_SHUTTLE_CENTER_X = 16.5 - BLUE_HUB_CENTER_X;
-
-        public static final double RED_RIGHT_CORNER_X = 17.5482504;
-        public static final double RED_RIGHT_CORNER_Y = 8.0519016;
 
     }
 
@@ -91,6 +101,7 @@ public final class Constants {
         public static final double MAX_ACCEL = 4.1;  // Max acceleration in m/s
         public static final double MAX_ANGULAR_VELOCITY = 10.0;  // Rad/s
     }
+
     public static final class Hopper {
         public static final int MOTOR_PORT = 44;
         public static final double MOTOR_POWER = 0.85;
@@ -165,8 +176,6 @@ public final class Constants {
         public static final double PID_I = 0.3;
         public static final double PID_D = 0.015;
         public static final double TOLERANCE = .05; // percent tolerance
-        public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Vision.RED_HUB_CENTER_X, Vision.RED_HUB_CENTER_Y, new Rotation2d()); // cords hurt my brain
-        public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(Vision.BLUE_HUB_CENTER_X, Vision.BLUE_HUB_CENTER_Y,new Rotation2d());
         public static final double SHOOTER_SPEED = 0.6;
     }
 
@@ -200,7 +209,7 @@ public final class Constants {
         public static final double MOTOR_POWER = 0.8;
     }
 
-    public static final class TargetPoses {
+    public static final class TargetTranslation {
 
         public static final double SHOOTER_SLIDER_VALUE = 2;
         public static final double SHOOTER_BASE_VALUE = .5;
@@ -214,12 +223,19 @@ public final class Constants {
         public static final double RED_DEADZONE_MIN = 2;
         public static final double RED_DEADZONE_MAX = 3;
 
-        public static final Pose2d blueHubCenter = new Pose2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y, new Rotation2d());
-        public static final Pose2d redHubCenter = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-        public static final Pose2d blueLeftShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-        public static final Pose2d blueRightShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+        // Shuttle targets
+        public static final double BLUE_SHUTTLE_X = Field.MIN_X + Field.SHUTTLE_LINE_OFFSET;
+        public static final double RED_SHUTTLE_X = Field.MAX_X - Field.SHUTTLE_LINE_OFFSET;
 
-        public static final Pose2d redLeftShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-        public static final Pose2d redRightShuttlePose2d = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+
+        // Translations (coordinates) for the center of each hub
+        public static final Translation2d BLUE_HUB_CENTER = new Translation2d(
+            Field.BLUE_HUB_CENTER_X,
+            Field.BLUE_HUB_CENTER_Y
+        );
+        public static final Translation2d RED_HUB_CENTER = new Translation2d(
+            Field.RED_HUB_CENTER_X,
+            Field.RED_HUB_CENTER_Y
+        );
     }
 }

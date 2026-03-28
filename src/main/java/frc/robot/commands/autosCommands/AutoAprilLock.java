@@ -8,7 +8,6 @@ package frc.robot.commands.autosCommands;
 
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -33,9 +32,12 @@ public class AutoAprilLock extends Command {
     public void initialize() {
         timer.reset();
         timer.start();
-        double yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y));
+
+        // TODO: FIX: There are three states to the field alliance, Red, Blue, and INVALID. If it's
+        //            invalid, you probably don't want to do anything!
+        double yawOffset = turret.getYawOffset(Constants.TargetTranslation.BLUE_HUB_CENTER);
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y));
+            yawOffset = turret.getYawOffset(Constants.TargetTranslation.RED_HUB_CENTER);
         }
 
         // pid controlling rotation compensation

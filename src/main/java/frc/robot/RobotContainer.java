@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -74,19 +75,25 @@ public class RobotContainer {
     public static final Hopper hopper = new Hopper();
     public static final Turret turret = new Turret();
 
-    public static final TargetPoses target = new TargetPoses();
     public static final Field2d field = new Field2d();
     public static Trigger tmJoystickFaceButtonRight;
     public static Trigger tmJoystickFaceButtonLeft;
     public static Trigger tmJoystickTrigger;
-    public static Trigger tmJoystickPovUp;
-    public static Trigger tmJoystickPovDown;
+    public static POVButton tmJoystickPovUp;
+    public static POVButton tmJoystickPovDown;
     public static Trigger tmJoystickRightHandBottomRight;
     public static Trigger tmJoystickRightHandBottomMiddle;
     public static Trigger tmJoystickRightHandBottomLeft;
     public static Trigger tmJoystickRightHandTopRight;
     public static Trigger tmJoystickRightHandTopMiddle;
     public static Trigger tmJoystickRightHandTopLeft;
+
+    // Fields for the automatic targeting via toggle.
+    public static final TargetTranslation target = new TargetTranslation(
+        () -> turret.getAbsTurretPose().getTranslation()
+    );
+    private TargetTranslation.Target currentTarget = TargetTranslation.Target.SCORING;
+
 
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
@@ -105,11 +112,6 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
-        configureBindings();
-
-        // Warmup PathPlanner to avoid Java pauses
-        CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
-
         // booo I don't like this
         // thrustmaster controls
         tmJoystickFaceButtonRight = new Trigger((() -> operator.getRawButtonPressed(4)));
@@ -123,6 +125,12 @@ public class RobotContainer {
         tmJoystickRightHandTopLeft = new Trigger((() -> operator.getRawButtonPressed(7)));
         tmJoystickRightHandTopMiddle = new Trigger((() -> operator.getRawButtonPressed(6)));
         tmJoystickRightHandTopRight = new Trigger((() -> operator.getRawButtonPressed(5)));
+
+        configureBindings();
+
+        // Warmup PathPlanner to avoid Java pauses
+        CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
+
     }
 
     private void configureBindings() {
@@ -138,7 +146,6 @@ public class RobotContainer {
         );
 
         // always try to go to default
-
         intakePivot.setDefaultCommand(new IntakeGoToDefault(intakePivot));
 
         // Idle while the robot is disabled. This ensures the configured
@@ -163,10 +170,6 @@ public class RobotContainer {
         driver.start().and(driver.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         driver.start().and(driver.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-        // reset the field-centric heading on left bumper press
-        // driver.leftBumper()
-        //    .onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-
         // intake ready
         driver.rightBumper()
             .whileTrue(new ToggleIntakeReady(intakePivot))
@@ -181,16 +184,7 @@ public class RobotContainer {
             .whileTrue(intake.spin(false))
             .onFalse(intake.StopCommand());
 
-        // intake eject
-        // driver.leftTrigger()
-        //     .whileTrue(intake.spin(true))
-        //     .onFalse(intake.StopCommand());
-
         drivetrain.registerTelemetry(logger::telemeterize);
-
-        // operater
-
-        // intake hopper
 
         tmJoystickPovUp
             .whileTrue(hopper.run(false)
@@ -206,20 +200,20 @@ public class RobotContainer {
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
+
+        // Turret auto aiming
+        turret.setDefaultCommand(
+            turret.aimAtPoint(() -> target.getTranslation(currentTarget))
+        );
+
         tmJoystickFaceButtonRight
-            .onTrue(target.setScoringCommand());
-        tmJoystickFaceButtonRight
-            .toggleOnTrue(turret.aimAtPose(target.getTargetPose()));
+            .onTrue(Commands.runOnce(() -> currentTarget = TargetTranslation.Target.SCORING));
 
         tmJoystickFaceButtonLeft
-            .onTrue(target.setShuttlingCommand());
-        tmJoystickFaceButtonLeft
-            .toggleOnTrue(turret.aimAtPose(target.getTargetPose()));
+            .onTrue(Commands.runOnce(() -> currentTarget = TargetTranslation.Target.SHUTTLE));
 
         tmJoystickTrigger
-            .whileTrue(new AutoAim(shooter, hood ,target.getTargetPose()))
-            .onFalse(shooter.stopCommand()
-            .alongWith(hood.stopCommand()));
+            .whileTrue(new AutoAim(shooter, hood, () -> target.getTranslation(currentTarget)));
 
         // Manual Hood movement code
         tmJoystickRightHandTopLeft
@@ -232,13 +226,6 @@ public class RobotContainer {
             .onTrue(shooter.offsetIncrement());
         tmJoystickRightHandBottomRight
             .onTrue(shooter.offsetDecrement());
-
-        // this needs to be refactors to the inline standerds
-
-        // Hub shot
-
-        // set to shuttling
-
 
     }
 

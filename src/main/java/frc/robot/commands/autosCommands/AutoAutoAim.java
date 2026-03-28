@@ -4,7 +4,7 @@
 package frc.robot.commands.autosCommands;
 
 
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -18,14 +18,14 @@ import frc.robot.subsystems.Shooter;
 public class AutoAutoAim extends Command {
     private Shooter shooter;
     private Hood hood;
-    private Pose2d target;
+    private Translation2d target;
     private double[] hoodAngleAndShooterPower = {-1,-1};
     private Timer timer = new Timer();
 
     public AutoAutoAim(Shooter shooter, Hood hood) {
         this.shooter = shooter;
         this.hood = hood;
-        this.target = Constants.Shooter.BLUE_HUB_CENTER_POSE2D; // we default to blue like the cordnet system.
+        this.target = Constants.TargetTranslation.BLUE_HUB_CENTER; // we default to blue like the cordnet system.
         addRequirements(shooter, hood);
     }
 
@@ -34,10 +34,10 @@ public class AutoAutoAim extends Command {
         timer.reset();
         timer.start();
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            this.target = Constants.Shooter.RED_HUB_CENTER_POSE2D;
+            this.target = Constants.TargetTranslation.RED_HUB_CENTER;
         }
         // yes I am a hack
-        double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
+        double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target);
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
 
 
@@ -46,7 +46,7 @@ public class AutoAutoAim extends Command {
 
     @Override
     public void execute() {
-        double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
+        double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target);
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
 
         hood.goToAngleCommand(hoodAngleAndShooterPower[0]);

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import java.util.function.Supplier;
 
 public class Turret extends SubsystemBase {
     private TalonFXS motor;
@@ -140,9 +141,10 @@ public class Turret extends SubsystemBase {
     public Command changeYawOffSetCommand(double angle) {
         return runOnce(() -> changeYawOffSet(angle));
     }
-  public Command aimAtPose(Pose2d target){
-    return run(() -> goToAngle(Math.toDegrees(getYawOffset(target.getTranslation()))));
-  }
+
+    public Command aimAtPoint(Supplier<Translation2d> targetSupplier){
+        return run(() -> goToAngle(Math.toDegrees(getYawOffset(targetSupplier.get()))));
+    }
 
     public double getYawOffset(Translation2d targetLoc) {
         Pose2d turretPose = getAbsTurretPose();

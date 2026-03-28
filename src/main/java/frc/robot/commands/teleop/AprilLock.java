@@ -38,9 +38,9 @@ public class AprilLock extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y));
+        double yawOffset = turret.getYawOffset(new Translation2d(Constants.Field.BLUE_HUB_CENTER_X, Constants.Field.BLUE_HUB_CENTER_Y));
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y));
+            yawOffset = turret.getYawOffset(new Translation2d(Constants.Field.RED_HUB_CENTER_X, Constants.Field.RED_HUB_CENTER_Y));
         }
 
         // pid controlling rotation compensation

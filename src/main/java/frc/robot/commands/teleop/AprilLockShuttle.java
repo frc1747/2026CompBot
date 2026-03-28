@@ -38,9 +38,9 @@ public class AprilLockShuttle extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.BLUE_SHUTTLE_CENTER_X, turret.getAbsTurretPose().getY()));
+        double yawOffset = turret.getYawOffset(new Translation2d(Constants.TargetTranslation.BLUE_SHUTTLE_X, turret.getAbsTurretPose().getY()));
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.RED_SHUTTLE_CENTER_X, turret.getAbsTurretPose().getY()));
+            yawOffset = turret.getYawOffset(new Translation2d(Constants.TargetTranslation.RED_SHUTTLE_X, turret.getAbsTurretPose().getY()));
         }
 
         // pid controlling rotation compensation

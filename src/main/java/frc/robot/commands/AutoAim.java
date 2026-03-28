@@ -5,7 +5,9 @@
 package frc.robot.commands;
 
 
-import edu.wpi.first.math.geometry.Pose2d;
+import java.util.function.Supplier;
+
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -16,35 +18,37 @@ import frc.robot.subsystems.Shooter;
 public class AutoAim extends Command {
     private Shooter shooter;
     private Hood hood;
-    private Pose2d target;
-    private double[] hoodAngleAndShooterPower = {-1,-1};
+    private Supplier<Translation2d> targetSupplier;
+    private double[] hoodAngleAndShooterPower = {-1, -1};
 
-    public AutoAim(Shooter shooter, Hood hood, Pose2d target) {
+    public AutoAim(Shooter shooter, Hood hood, Supplier<Translation2d> targetSupplier) {
         this.shooter = shooter;
         this.hood = hood;
-        this.target = target; // we default to blue like the cordnet system.
+        this.targetSupplier = targetSupplier;
         addRequirements(shooter, hood);
     }
 
     @Override
     public void initialize() {
-        // yes I am a hack
-        double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
-        double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
-
-
+        double distance = RobotContainer.turret.getAbsTurretPose()
+            .getTranslation()
+            .getDistance(targetSupplier.get());
+        hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
         shooter.setRPM(hoodAngleAndShooterPower[1]);
     }
 
     @Override
     public void execute() {
-        double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
-        double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
+        double distance = RobotContainer.turret.getAbsTurretPose()
+            .getTranslation()
+            .getDistance(targetSupplier.get());
+        hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
 
-        hood.goToAngleCommand(hoodAngleAndShooterPower[0]);
-        if (hood.atAngle(hoodAngleAndShooterPower[0])){
+        hood.goToAngle(hoodAngleAndShooterPower[0]);
+        if (hood.atAngle(hoodAngleAndShooterPower[0])) {
             shooter.setRPM(hoodAngleAndShooterPower[1]);
         }
+
         SmartDashboard.putNumber("Shooter/distance from hub from autoAim", distance);
         SmartDashboard.putNumber("Shooter/RPM for auto aim", hoodAngleAndShooterPower[1]);
         SmartDashboard.putNumber("Shooter/hood for auto aim", hoodAngleAndShooterPower[0]);
@@ -55,7 +59,9 @@ public class AutoAim extends Command {
 
     @Override
     public boolean isFinished() {
-        // better way of doing this idk
-        return (shooter.getRPM() <= hoodAngleAndShooterPower[1] + hoodAngleAndShooterPower[1]*Constants.Shooter.TOLERANCE && shooter.getRPM() >= hoodAngleAndShooterPower[1] - hoodAngleAndShooterPower[1]*Constants.Shooter.TOLERANCE);
+        double target = hoodAngleAndShooterPower[1];
+        double tolerance = target * Constants.Shooter.TOLERANCE;
+        return shooter.getRPM() >= target - tolerance
+            && shooter.getRPM() <= target + tolerance;
     }
 }

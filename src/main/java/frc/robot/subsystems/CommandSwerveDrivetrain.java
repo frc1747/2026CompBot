@@ -288,7 +288,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putData("Field2d ", RobotContainer.field);
         addLimelightMeasurement();
         SmartDashboard.putNumber("Distance To Hub", distanceToPose(
-            new Pose2d(new Translation2d(Constants.Vision.FIELD_CENTER_X, Constants.Vision.FIELD_CENTER_Y), new Rotation2d(0.0))));
+            new Pose2d(new Translation2d(Constants.Field.CENTER_X, Constants.Field.CENTER_Y), new Rotation2d(0.0))));
     }
 
     public double distanceToPose(Pose2d targetPose) {
