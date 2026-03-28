@@ -5,8 +5,6 @@
 package frc.robot.commands;
 
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,6 +13,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.TargetingMath;
+import java.util.function.Supplier;
 
 public class AutoAim extends Command {
     private Shooter shooter;
@@ -35,7 +34,7 @@ public class AutoAim extends Command {
             .getTranslation()
             .getDistance(targetSupplier.get());
         hoodAngleAndShooterPower = TargetingMath.findSpeedAndAngleFromDistance(
-            RobotContainer.hood.getCurrentAngle(), 
+            RobotContainer.hood.getCurrentAngle(),
             distance
         );
         shooter.setRPM(hoodAngleAndShooterPower[1]);
