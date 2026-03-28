@@ -2,15 +2,24 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Map;
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -29,12 +38,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.Drivetrain;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
-import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -60,7 +65,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
-
+    
     private void configureAutoBuilder() {
         try {
             var config = RobotConfig.fromGUISettings();
@@ -89,8 +94,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }
     }
-
-
+    
+    
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
@@ -359,61 +364,56 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     // ****** ADDITIONAL METHODS TO SUPPORT VISION PROCESSING *******
     private void addLimelightMeasurement() {
-        // This will create an Optional instance of an MegaTag2 PoseEstimate from
+        // This will create an Optional instance of an MegaTag2 PoseEstimate from 
         // the LimeLight with the best (lowest ambiguity value) pose estimation.
         // It does this by walking the list of defined LimeLights, getting the
-        // abiguity value for all fiducials seen by a given LimeLight, and
+        // abiguity value for all fiducials seen by a given LimeLight, and 
         // then returns the best PoseEstimate instance.
         //
-        // It is returned as a Map Entry (key/value pair) to preserve both the
+        // It is returned as a Map Entry (key/value pair) to preserve both the 
         // name of the selected LimeLight and its PoseEstimate instance.
-        Optional<Map.Entry<String, LimelightHelpers.PoseEstimate>> bestLimeLightPose = Optional.empty();
-        Map.Entry<String, LimelightHelpers.PoseEstimate> bestEntry = null;
-
-        double bestAmbiguity = Double.MAX_VALUE;
-        for (String name : Constants.Vision.ACTIVE_POSE_LIMELIGHTS) {
-            LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);
-            if (mt2 == null) continue;
-            if (mt2.tagCount <= 0) continue;
-
-            double ambiguity = bestAmbiguity(mt2);
-            if (ambiguity < bestAmbiguity) {
-                bestAmbiguity = ambiguity;
-                bestEntry = new AbstractMap.SimpleEntry<>(name, mt2);
-            }
-        }
-
-        bestLimeLightPose = Optional.ofNullable(bestEntry);
-
+        Optional<Map.Entry<String, LimelightHelpers.PoseEstimate>> bestLimeLightPose =
+            Constants.Vision.ACTIVE_POSE_LIMELIGHTS.stream()
+                .filter(name -> LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name) != null)
+                .map(name -> Map.entry(
+                    name, 
+                    LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name)
+                ))
+                // .filter(entry -> entry.getValue() != null)
+                .filter(entry -> entry.getValue().tagCount > 0)
+                .min(Comparator.comparingDouble(entry -> 
+                        bestAmbiguity(entry.getValue())
+                )
+            );
 
         double yawDeg = getState().Pose.getRotation().getDegrees();
 
         // If we had a usable PoseEstimate from a LimeLight, the Optional instance
-        // contains a Map Entry with the best (lowest abiguity of all visible
-        // ApriTags across all available LimeLights) PoseEstimate and String name
-        // of the responsible LimeLight to inform the drivetrain of the bot's current
+        // contains a Map Entry with the best (lowest abiguity of all visible 
+        // ApriTags across all available LimeLights) PoseEstimate and String name 
+        // of the responsible LimeLight to inform the drivetrain of the bot's current 
         // position on the field.
         bestLimeLightPose.ifPresentOrElse(entry -> {
                 String limelight = entry.getKey();
                 var mt2 = entry.getValue();
 
                 LimelightHelpers.SetRobotOrientation(
-                    limelight, yawDeg, 0, 0,
+                    limelight, yawDeg, 0, 0, 
                     0, 0, 0
                 );
-                addVisionMeasurement(mt2.pose,
-                    mt2.timestampSeconds,
+                addVisionMeasurement(mt2.pose, 
+                    mt2.timestampSeconds, 
                     Constants.Vision.VISION_STDDEVS
                 );
 
                 SmartDashboard.putString("Pose LimeLight", limelight);
                 SmartDashboard.putNumber("Pose Distance", mt2.avgTagDist);
-
+                
             },
             () -> {
                 // If we didn't get any good AprilTag information, clear
                 // the values so we're not confused later.
-                SmartDashboard.putString("Pose LimeLight", "NONE");
+                SmartDashboard.putString("Pose LimeLight", "NONE");                
                 SmartDashboard.putNumber("Pose Distance", 0.0);
             }
         );

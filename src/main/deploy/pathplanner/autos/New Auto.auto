@@ -5,21 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Print"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeReverseCollect"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCollect"
+            "pathName": "Test Path"
           }
         }
       ]
