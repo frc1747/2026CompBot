@@ -1,8 +1,8 @@
 package frc.robot.commands.autosCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
-import edu.wpi.first.wpilibj.Timer;
 
 public class AutoIntakeReverseCollect extends Command {
     private Intake intake;

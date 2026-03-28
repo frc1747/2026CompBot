@@ -6,18 +6,12 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.auto.NamedCommands;
-
+import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -25,37 +19,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.commands.teleop.AprilLock;
-import frc.robot.commands.teleop.AprilLockShuttle;
-import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
-import frc.robot.commands.autosCommands.AutoIntakeCollect;
-import frc.robot.commands.autosCommands.AutoIntakeOut;
-import frc.robot.commands.autosCommands.AutoIntakeReverseCollect;
-import frc.robot.commands.autosCommands.AutoKicker;
-import frc.robot.commands.autosCommands.AutoShooter;
 import frc.robot.commands.autosCommands.AutoAutoAim;
-import frc.robot.commands.teleop.IntakeOut;
-import frc.robot.commands.teleop.IntakeSpin;
+import frc.robot.commands.teleop.AprilLock;
+import frc.robot.commands.teleop.AprilLockShuttle;
+import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.ToggleIntakeReady;
-import frc.robot.commands.teleop.TurretRotate;
-import frc.robot.commands.AutoAim;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.IntakePivot;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakePivot;
 import frc.robot.subsystems.Kicker;
-import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
@@ -171,7 +153,7 @@ public class RobotContainer {
         driver.rightTrigger()
             .whileTrue(new GrabFuel( intakePivot))
             .onFalse(new IntakeGoToDefault(intakePivot));
-        
+
         driver.rightTrigger()
             .whileTrue(intake.spin(false))
             .onFalse(intake.StopCommand());
@@ -185,7 +167,7 @@ public class RobotContainer {
 
         // operater
 
-        // intake hopper 
+        // intake hopper
 
         operator.leftBumper()
             .whileTrue(hopper.run(false)
@@ -200,11 +182,11 @@ public class RobotContainer {
             .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
-        
+
         operator.x()
             .whileTrue(hood.setPowerCommand(false))
             .onFalse(hood.stopCommand());
-         
+
         operator.y()
             .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
@@ -240,5 +222,5 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
-    
+
 }
