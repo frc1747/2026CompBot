@@ -151,8 +151,8 @@ public final class Constants {
 
     public static final class Shooter {
 
-    public static final double FUDGE_FACTOR_SHOOTER = 100; // in rpms
-    public static final int MOTOR_LEFT_PORT = 41;
+        public static final double FUDGE_FACTOR_SHOOTER = 100; // in rpms
+        public static final int MOTOR_LEFT_PORT = 41;
         public static final int MOTOR_RIGHT_PORT = 42;
         public static final int ENCODER_PORT = 1; // needs to be set
         public static final double ENCODER_OFFSET = .2; // needs to be set o7

@@ -26,6 +26,7 @@ public class AutoAim extends Command {
         this.shooter = shooter;
         this.hood = hood;
         this.fudgeFactor = fudgeFactor;
+        this.target = Constants.Shooter.BLUE_HUB_CENTER_POSE2D; // we default to blue like the coordinate system.
         addRequirements(shooter, hood);
     }
 
