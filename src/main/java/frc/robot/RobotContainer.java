@@ -6,6 +6,9 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.lang.annotation.Target;
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -127,72 +130,52 @@ public class RobotContainer {
         // .onFalse(intakePivot.moveHomeCommand().alongWith(intake.StopCommand()));
         
 
-        // intake put up
-        driver.rightTrigger()
-            .whileTrue(new GrabFuel( intakePivot))
-            .onFalse(new IntakeGoToDefault(intakePivot));
+        // much slower for the moment
+        driver.rightBumper().whileTrue(new TurretRotate(turret, 0.025));
+        driver.leftBumper().whileTrue(new TurretRotate(turret, -0.025));
 
-        driver.rightTrigger()
-            .whileTrue(intake.spin(false))
-            .onFalse(intake.StopCommand());
+        // this is on operator for now
+        operator.a().onTrue(kicker.run())
+                    .onFalse(kicker.stop());
 
-        // intake eject
-        // driver.leftTrigger()
-        //     .whileTrue(intake.spin(true))
-        //     .onFalse(intake.StopCommand());
+        operator.x().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(true))  // down
+                    .onFalse(hood.stopCommand());
+        operator.y().and(driver.leftTrigger().negate()).whileTrue(hood.setPowerCommand(false))  // up
+                    .onFalse(hood.stopCommand());
+        
+
+        // safe middle angle
+        // operator.rightBumper().whileTrue(hood.goToDesiredAngleCommand().alongWith(shooter.setSpeedToDesired()))
+        //                       .onFalse(hood.stopCommand().alongWith(shooter.stopCommand()));
+        operator.rightBumper().whileTrue(shooter.setSpeedToDesired())
+                .onFalse(shooter.stopCommand());
+
+        operator.rightTrigger().whileTrue(shooter.SetDesiredPowerCommand())
+                .onFalse(shooter.stopCommand());
+                
+        operator.leftBumper().whileTrue(new IntakeSpin(intake, Constants.Intake.POWER).alongWith(hopper.run()))
+            .onTrue(kicker.run())
+            .onFalse(kicker.stop().alongWith(hopper.stop()));
+
+        operator.povDown().whileTrue(turret.setDesiredAngle())
+            .onFalse(new TurretRotate(turret, 0.0));
+
+        // operator.leftTrigger().whileTrue(hopper.run())
+        //                       .onFalse(hopper.stop());
+
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        // operater
+        operator.b().whileTrue(new AprilLock(turret));
 
-        // intake hopper
 
-        operator.leftBumper()
-            .whileTrue(hopper.run(false)
-            .alongWith(intake.spin(false))
-            .alongWith(kicker.setRPMCommand()))
-            .onFalse(hopper.stop()
-            .alongWith(kicker.stopCommand()));
-
-        operator.rightBumper()
-            .whileTrue(hopper.run(true)
-            .alongWith(intake.spin(true))
-            .alongWith(kicker.run(true)))
-            .onFalse(hopper.stop()
-            .alongWith(kicker.stopCommand()));
-
-        operator.x()
-            .whileTrue(hood.setPowerCommand(false))
-            .onFalse(hood.stopCommand());
-
-        operator.y()
-            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
-
-        // turret moved to driver
-        driver.leftBumper()
-            .toggleOnTrue(new AprilLock(turret));
-
-        driver.leftTrigger()
-            .toggleOnTrue(new AprilLockShuttle(turret));
-
-        operator.povLeft()
-            .onTrue(turret.changeYawOffSetCommand(.01));
-
-        operator.povRight()
-            .onTrue(turret.changeYawOffSetCommand(-.01));
-
-        // this needs to be refactors to the inline standerds
-        operator.rightTrigger()
-            .onTrue(shooter.setPowerCommand(Constants.Shooter.SHOOTER_SPEED))
-            .onFalse(shooter.setPowerCommand(0));
-
-        // 2 TODO: CHECK if conflics with 1
-        operator.b()
-            .whileTrue(new AutoAim(shooter, hood))
-            .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
-
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.RED_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
+        }
+        else{
+            operator.a().whileTrue(new AutoAim(shooter, hood, Constants.Shooter.BLUE_HUB_CENTER_POSE2D).andThen(kicker.run())).onFalse(kicker.stop());
+        }
     }
-
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
