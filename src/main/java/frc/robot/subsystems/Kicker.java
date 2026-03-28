@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -27,7 +26,7 @@ public class Kicker extends SubsystemBase {
         motor = new TalonFX(Constants.Kicker.MOTOR_PORT);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
-        
+
         config.Voltage
             .withPeakForwardVoltage(12.0)
             .withPeakReverseVoltage(-12.0);
@@ -35,7 +34,7 @@ public class Kicker extends SubsystemBase {
         config.Slot0.kP = 0.5;
         config.Slot0.kI = 0.0;
         config.Slot0.kD = 0.0;
-        
+
         config.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
         config.CurrentLimits
             .withStatorCurrentLimit(60)
@@ -45,7 +44,7 @@ public class Kicker extends SubsystemBase {
             .withSupplyCurrentLimitEnable(true);
 
         config.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
-                
+
         motor.getConfigurator().apply(config);
         motor.getStatorCurrent().setUpdateFrequency(50);
         motor.getSupplyVoltage().setUpdateFrequency(50);
@@ -67,7 +66,7 @@ public class Kicker extends SubsystemBase {
     public Command stopCommand() {
         return runOnce(() -> setPower(0.0));
     }
-    
+
     public void setPower(double power) {
         dutyControl.Output = power;
         motor.setControl(dutyControl);

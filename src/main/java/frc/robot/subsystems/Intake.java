@@ -17,9 +17,9 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         this.motor = new TalonFX(Constants.Intake.MOTOR_PORT);
-        
+
         TalonFXConfiguration config = new TalonFXConfiguration();
-        
+
         config.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);

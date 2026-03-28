@@ -1,5 +1,4 @@
 package frc.robot.subsystems;
-import java.lang.invoke.ConstantCallSite;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
@@ -27,12 +26,12 @@ public class IntakePivot extends SubsystemBase {
     public IntakePivot() {
         SmartDashboard.putNumber("intake/Desired Pos", Constants.IntakePivot.OUT);
         this.motor = new TalonFX(Constants.IntakePivot.MOTOR_PORT);
-        
+
         var request = new PositionDutyCycle(0.0);
         motor.setControl(request);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
-        
+
         config.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);
@@ -45,7 +44,7 @@ public class IntakePivot extends SubsystemBase {
     // TODO: rename method and refactor
     public void intakePivot(double tick) {
         //tick = MathUtil.clamp(tick, -0.05, 0.05);
-        
+
        // double currentCounts = encoder.get();
         double currentCounts = motor.getPosition().getValueAsDouble();
         dutyCycle.Output = pid.calculate(currentCounts, tick);
@@ -91,7 +90,7 @@ public class IntakePivot extends SubsystemBase {
         return getEncoderValue() <= Constants.IntakePivot.ENCODER_DOWN_POINT_ELASTIC;
     }
 
-    
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intake/intake encoder", motor.getPosition().getValueAsDouble());
