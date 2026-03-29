@@ -15,8 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.util.TargetingMath;
 
 public class Shooter extends SubsystemBase {
     // shooting dir is froward.
@@ -89,48 +87,6 @@ public class Shooter extends SubsystemBase {
         // Upstep revolutions per second to revolutions per minute
         return (motorLeft.getVelocity().getValueAsDouble() + follower.getVelocity().getValueAsDouble()) / 2 * 60;
     }
-
-    public double getAngleNeededFromDistanceAndRPM(double x, double z ){
-        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_D*Math.pow(x,2) +- z*100;
-        double B =  Constants.Shooter.SURFACE_C + Constants.Shooter.SURFACE_E;
-        double A = Constants.Shooter.SURFACE_F;
-        double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative
-        if (aws > 0) return aws;
-        return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A;
-        // slove with the good old quady form
-    }
-
-    public double[] XfindSpeedAndAngleFromDistance(double distance){
-        // the power is multplyed by 100 to move up to the thousands
-        // better search needed
-        double currentAngle = RobotContainer.hood.getCurrentAngle();
-        double wantedRPM = TargetingMath.getRPMNeededFromDistanceAndAngle(distance, currentAngle);
-        double[] array = {-1,-1};
-        // this could be refactor
-        if (wantedRPM <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-            double[] angleAndSpeed = {currentAngle, wantedRPM*Constants.Shooter.AUTO_SHOOTER_MULT};
-            return angleAndSpeed;
-        }
-
-        // we are assuming that greater hood angle is a furtuer Shoot
-        for (currentAngle = RobotContainer.hood.getCurrentAngle() ; currentAngle <= Constants.Shooter.MAX_HOOD_ANGLE ; currentAngle ++ ){
-            if (currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE) return array;
-            if (wantedRPM <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-                double[] angleAndSpeed = {currentAngle, wantedRPM*Constants.Shooter.AUTO_SHOOTER_MULT};
-                return angleAndSpeed;
-            }
-        }
-
-        for (currentAngle = RobotContainer.hood.getCurrentAngle() ; currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE ; currentAngle -- ){
-            if (currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE) return array;
-            if (wantedRPM <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-                double[] angleAndSpeed = {currentAngle, wantedRPM*Constants.Shooter.AUTO_SHOOTER_MULT};
-                return angleAndSpeed;
-            }
-        }
-        return array;
-    }
-
 
     @Override
     public void periodic() {
