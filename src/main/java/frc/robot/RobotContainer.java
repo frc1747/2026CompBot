@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
-import frc.robot.commands.autosCommands.AutoAutoAim;
 import frc.robot.commands.teleop.AprilLock;
 import frc.robot.commands.teleop.AprilLockShuttle;
 import frc.robot.commands.teleop.GrabFuel;

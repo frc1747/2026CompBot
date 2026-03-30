@@ -46,7 +46,7 @@ public final class Constants {
         public static final double APRIL_LOCK_I = 0.003;
         public static final double APRIL_LOCK_D = 0.003;
         // maximum magnitude of PID output
-        public static final double APRIL_LOCK_PID_CLAMP = 0.5;
+        public static final double APRIL_LOCK_PID_CLAMP = 0.25;
 
         // VISION_STDDEVS allows us to control how much we trust the values coming from the Limelight(s).
         // The higher the value (distance standard deviations), the less we trust it.
@@ -156,7 +156,7 @@ public final class Constants {
         public static final double SURFACE_D = 12.4826; // needs tuning
         public static final double SURFACE_E = -10.8847; // needs tuning
         public static final double SURFACE_F = 2.9962; // needs tuning
-        public static final double MAX_AUTOSHOOT_POWER =4500;
+        public static final double MAX_AUTOSHOOT_POWER = 3900;
         public static final int AUTO_SHOOTER_MULT = 111; // this should be remove when we get better auto shoot values
         public static final double MAX_HOOD_ANGLE = 43;// degrees
         public static final double MIN_HOOD_ANGLE = 26;// degrees
@@ -166,12 +166,12 @@ public final class Constants {
         public static final double TOLERANCE = .05; // percent tolerance
         public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Vision.RED_HUB_CENTER_X, Vision.RED_HUB_CENTER_Y, new Rotation2d()); // cords hurt my brain
         public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(Vision.BLUE_HUB_CENTER_X, Vision.BLUE_HUB_CENTER_Y,new Rotation2d());
-        public static final double SHOOTER_SPEED = 0.6;
+        public static final double SHOOTER_SPEED = 0.5;
     }
 
     public static final class Intake {
         public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.6;
+        public static final double POWER = 0.4;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
     }
 
@@ -188,7 +188,7 @@ public final class Constants {
         public static final double SET_POINT_P = 0.05;  // TODO: tune
         public static final double SET_POINT_I = 0.001; // TODO: tune
         public static final double SET_POINT_D = 0.004; // TODO: tune
-        public static final double SET_POINT_PID_CLAMP = 0.5; // TODO: change
+        public static final double SET_POINT_PID_CLAMP = 0.25; // TODO: change
         public static final double SET_POINT_TOLERANCE = 0.2; // TODO: tune
         public static final double ENCODER_DOWN_POINT_ELASTIC = ENCODER_DOWN + 3; // Boolean to put on elastic to see if intake is out
     }
@@ -196,6 +196,6 @@ public final class Constants {
     public static final class Kicker {
         public static final int MOTOR_PORT = 43;
         public static final double MOTOR_RPM = 4300; // amount we got on shuffleboard when the kicker was ran at 70% power
-        public static final double MOTOR_POWER = 0.8;
+        public static final double MOTOR_POWER = 0.6;
     }
 }
