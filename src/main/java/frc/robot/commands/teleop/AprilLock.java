@@ -28,14 +28,12 @@ public class AprilLock extends Command {
     this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(turret);
-
-    // Add Lock-on status to Elastic
-    SmartDashboard.putBoolean("turret/locked on", true);
   }
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     // TODO: reformat to make more readable
     // Called every time the scheduler runs while the command is scheduled.
@@ -44,6 +42,16 @@ public class AprilLock extends Command {
         double yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y));
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             yawOffset = turret.getYawOffset(new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y));
+        }
+
+        double currentAngle = turret.getTurretAngle();
+
+        if (currentAngle >= Constants.Turret.TURRET_YAW_LIMIT_LOWER && currentAngle <= Constants.Turret.TURRET_YAW_LIMIT_UPPER) {
+          // Add Lock-on status to Elastic
+          SmartDashboard.putBoolean("turret/locked on", true);
+        } else {
+          // Update the Lock-on status
+          SmartDashboard.putBoolean("turret/locked on", false);
         }
 
         // pid controlling rotation compensation
