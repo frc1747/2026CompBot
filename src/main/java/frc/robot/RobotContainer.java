@@ -25,10 +25,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
-import frc.robot.commands.autosCommands.AutoAutoAim;
 import frc.robot.commands.teleop.AprilLock;
 import frc.robot.commands.teleop.AprilLockShuttle;
 import frc.robot.commands.teleop.GrabFuel;
+import frc.robot.commands.teleop.IntakeOut;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.ToggleIntakeReady;
 import frc.robot.generated.TunerConstants;
@@ -78,12 +78,13 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
-        NamedCommands.registerCommand("IntakeOut", new GrabFuel( intakePivot));
+        NamedCommands.registerCommand("IntakeOut", new IntakeOut(intakePivot ,6000));
+        NamedCommands.registerCommand("IntakeIn", new IntakeGoToDefault(intakePivot));
         NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
         NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
         NamedCommands.registerCommand("Kicker", kicker.run(false));
         NamedCommands.registerCommand("Hopper", hopper.run(false));
-        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter, hood));
+        NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         NamedCommands.registerCommand("StopIntake", intake.StopCommand());
         NamedCommands.registerCommand("StopKicker", kicker.stopCommand());
@@ -192,6 +193,8 @@ public class RobotContainer {
 
         driver.leftTrigger()
             .toggleOnTrue(new AprilLockShuttle(turret));
+        driver.a()
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         operator.povLeft()
             .onTrue(turret.changeYawOffSetCommand(.01));
