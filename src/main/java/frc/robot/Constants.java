@@ -118,7 +118,7 @@ public final class Constants {
         public static final double kD = 0.0;
 
         public static final double MAX_PID_OUTPUT = 0.875;
-        public static final double MANUAL_MOTOR_POWER = 0.2; 
+        public static final double MANUAL_MOTOR_POWER = 0.2;
 
     }
 
@@ -171,7 +171,7 @@ public final class Constants {
 
     public static final class Intake {
         public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.85; 
+        public static final double POWER = 0.85;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
     }
 
