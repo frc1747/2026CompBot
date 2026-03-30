@@ -150,14 +150,14 @@ public class RobotContainer {
             .whileTrue(new GrabFuel( intakePivot))
             .onFalse(new IntakeGoToDefault(intakePivot));
 
-        // driver.rightTrigger()
-        //     .whileTrue(intake.spin(false))
-        //     .onFalse(intake.StopCommand());
+        driver.rightTrigger()
+            .whileTrue(intake.spin(true))
+            .onFalse(intake.StopCommand());
 
         // intake eject
-        // driver.leftTrigger()
-        //     .whileTrue(intake.spin(true))
-        //     .onFalse(intake.StopCommand());
+        driver.leftTrigger()
+            .whileTrue(intake.spin(false))
+            .onFalse(intake.StopCommand());
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -167,19 +167,15 @@ public class RobotContainer {
 
         operator.leftBumper()
             .whileTrue(hopper.run(false)
-            .alongWith(intake.spin(true))
             .alongWith(kicker.setRPMCommand()))
             .onFalse(hopper.stop()
-            .alongWith(kicker.stopCommand()))
-            .onFalse(intake.StopCommand());
+            .alongWith(kicker.stopCommand()));
 
         operator.rightBumper()
             .whileTrue(hopper.run(true)
-            .alongWith(intake.spin(false))
             .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
-            .alongWith(kicker.stopCommand()))
-            .onFalse(intake.StopCommand());
+            .alongWith(kicker.stopCommand()));
 
         operator.x()
             .whileTrue(hood.setPowerCommand(false))
