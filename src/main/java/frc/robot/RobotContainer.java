@@ -203,11 +203,11 @@ public class RobotContainer {
             fudgeFactorTurret -= Constants.Turret.FUDGE_FACTOR_TURRET;
 
         if (operator.povUp().getAsBoolean())
-            fudgeFactorTurret += Constants.Shooter.FUDGE_FACTOR_SHOOTER;
-         if (operator.povDown().getAsBoolean())
-            fudgeFactorTurret -= Constants.Shooter.FUDGE_FACTOR_SHOOTER;
+            fudgeFactorShooter += Constants.Shooter.FUDGE_FACTOR_SHOOTER;
+        if (operator.povDown().getAsBoolean())
+            fudgeFactorShooter -= Constants.Shooter.FUDGE_FACTOR_SHOOTER;
 
-        // this needs to be refactors to the inline standerds
+        // this needs to be refactors to the inline standards
         operator.rightTrigger()
             .onTrue(shooter.setPowerCommand(Constants.Shooter.SHOOTER_SPEED))
             .onFalse(shooter.setPowerCommand(0));
