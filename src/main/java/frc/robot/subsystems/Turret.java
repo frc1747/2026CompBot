@@ -128,7 +128,7 @@ public class Turret extends SubsystemBase {
         // location of turret relative to field
         Translation2d absoluteTurretLoc = robotLoc.plus(relativeTurretLoc);
         // rotation of turret relative to field
-        Rotation2d relativeTurretRotation = new Rotation2d(getTurretAngle() * Math.PI / 180.0); // how?
+        Rotation2d relativeTurretRotation = new Rotation2d((getTurretAngle() * Math.PI / 180.0) + Math.PI); // how?
         // System.out.println("relativeTurretAngle: " + relativeTurretRotation);
         Rotation2d absoluteTurretRotation = robotRotation.plus(relativeTurretRotation);
         Pose2d absoluteTurretPose = new Pose2d(absoluteTurretLoc, absoluteTurretRotation);
