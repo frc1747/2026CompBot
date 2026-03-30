@@ -151,13 +151,13 @@ public class RobotContainer {
             .onFalse(new IntakeGoToDefault(intakePivot));
 
         driver.rightTrigger()
-            .whileTrue(intake.spin(false))
+            .whileTrue(intake.spin(true))
             .onFalse(intake.StopCommand());
 
         // intake eject
-        // driver.leftTrigger()
-        //     .whileTrue(intake.spin(true))
-        //     .onFalse(intake.StopCommand());
+        driver.leftTrigger()
+            .whileTrue(intake.spin(false))
+            .onFalse(intake.StopCommand());
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -167,14 +167,12 @@ public class RobotContainer {
 
         operator.leftBumper()
             .whileTrue(hopper.run(false)
-            .alongWith(intake.spin(false))
             .alongWith(kicker.setRPMCommand()))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
         operator.rightBumper()
             .whileTrue(hopper.run(true)
-            .alongWith(intake.spin(true))
             .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
