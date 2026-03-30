@@ -197,31 +197,6 @@ public final class Constants {
     public static final class Kicker {
         public static final int MOTOR_PORT = 43;
         public static final double MOTOR_RPM = 4300; // amount we got on shuffleboard when the kicker was ran at 70% power
-        public static final double MOTOR_POWER = 0.35; // was .8
+        public static final double MOTOR_POWER = 0.35;
     }
-    
-  public static final class TargetPosesConstants {
-
-    public static final double SHOOTER_SLIDER_VALUE = 2;
-    public static final double SHOOTER_BASE_VALUE = .5;
-
-    public static final double TURRET_SLIDER_VALUE = 2;
-    public static final double TURRET_BASE_VALUE = .001;
-
-    public static final double BLUE_DEADZONE_MIN = 2;
-    public static final double BLUE_DEADZONE_MAX = 3;
-
-    public static final double RED_DEADZONE_MIN = 2;
-    public static final double RED_DEADZONE_MAX = 3;
-
-    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d BLUE_LEFT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d()); // need tuning
-    public static final Pose2d BLUE_RIGHT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-
-    public static final Pose2d RED_LEFT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d RED_RIGHT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-  }
 }
-
-
