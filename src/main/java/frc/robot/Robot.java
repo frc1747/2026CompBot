@@ -4,18 +4,53 @@
 
 package frc.robot;
 
+
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import monologue.Monologue;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private final RobotContainer m_robotContainer;
 
+    private final Timer userCodeTimer = new Timer();
+    private final Timer dtTimer = new Timer();
+
     public Robot() {
+        Timer initTimer = new Timer();
+        initTimer.start();
+
+        DataLogManager.start();
+        DriverStation.startDataLog(DataLogManager.getLog());
+        DriverStation.silenceJoystickConnectionWarning(!DriverStation.isFMSAttached());
+
         m_robotContainer = new RobotContainer();
+
+        Monologue.setupMonologue(m_robotContainer, "Robot", false, false);
+
+        gitInit();
+        initTimer.stop();
+        m_robotContainer.log("Timing/Robot init ms", initTimer.get() * 1000);
+        dtTimer.start();
+    }
+
+    @Override
+    public void robotPeriodic() {
+        m_robotContainer.log("Timing/Loop dt ms", dtTimer.get() * 1000);
+        dtTimer.restart();
+        userCodeTimer.restart();
+
+        CommandScheduler.getInstance().run();
+        Monologue.updateAll();
+        m_robotContainer.log("Timing/User code ms", userCodeTimer.get() * 1000);
+    }
+
+    public void gitInit() {
         String warning = BuildConstants.DIRTY == 1 ? "WARNING: The code was built with uncommitted changes!\n" : "";
         String info = String.format("""
         ===============================
@@ -33,14 +68,6 @@ public class Robot extends TimedRobot {
         warning
         );
         System.out.print(info);
-
-    // Add Scheduler to Elastic
-    SmartDashboard.putData(CommandScheduler.getInstance());
-  }
-
-    @Override
-    public void robotPeriodic() {
-        CommandScheduler.getInstance().run();
     }
 
     @Override
@@ -57,7 +84,7 @@ public class Robot extends TimedRobot {
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
         if (m_autonomousCommand != null) {
-        CommandScheduler.getInstance().schedule(m_autonomousCommand);
+            CommandScheduler.getInstance().schedule(m_autonomousCommand);
         }
     }
 
@@ -70,7 +97,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         if (m_autonomousCommand != null) {
-        CommandScheduler.getInstance().cancel(m_autonomousCommand);
+            CommandScheduler.getInstance().cancel(m_autonomousCommand);
         }
     }
 

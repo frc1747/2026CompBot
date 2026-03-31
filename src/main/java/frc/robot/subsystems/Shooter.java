@@ -20,8 +20,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import monologue.Logged;
 
-public class Shooter extends SubsystemBase {
+public class Shooter extends SubsystemBase implements Logged{
     // shooting dir is froward.
     private TalonFX motorLeft;
     private TalonFX follower;
@@ -35,6 +36,7 @@ public class Shooter extends SubsystemBase {
     public double PID_P = Constants.Shooter.PID_P ;
     public double PID_I = Constants.Shooter.PID_I;
     public double PID_D = Constants.Shooter.PID_D;
+    private double shooterOffset = 0.0;
 
 
     public Shooter() {
@@ -93,6 +95,14 @@ public class Shooter extends SubsystemBase {
         return run(() -> setRPM(desiredRPM));
     }
 
+    public Command offsetDecrement() {
+        return run(() -> shooterOffset -= Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
+    }
+
+    public Command offsetIncrement() {
+        return run(() -> shooterOffset += Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
+    }
+
     public void setPower(double power) {
         dutyCycleShooter.Output = power;
         motorLeft.setControl(dutyCycleShooter);
@@ -101,7 +111,7 @@ public class Shooter extends SubsystemBase {
     // in RPM
     public void setRPM(double rpm) {
         //velocityShooter.Velocity * 60 = //pid.calculate(getRPM(), rpm);
-        motorLeft.setControl(velocityShooter.withVelocity(rpm/60.0));
+        motorLeft.setControl(velocityShooter.withVelocity((rpm + shooterOffset) / 60.0));
     }
 
     public double getRPM() {
@@ -110,26 +120,26 @@ public class Shooter extends SubsystemBase {
 
     public double getPowerNeededFromDistanceAndAngle(double x, double y){
         // Z = A + BX + CY + DX^2 + FY^2 + EXY is the quady E Z is power, X is distance, Y is hood angle
-        return (Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_D*Math.pow(x,2) + Constants.Shooter.SURFACE_F*Math.pow(y,2) + Constants.Shooter.SURFACE_E*x*y)/100;
+        return (Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_D*Math.pow(x,2) + Constants.Shooter.SURFACE_F*Math.pow(y,2) + Constants.Shooter.SURFACE_E*x*y);
     }
 
     public double getdistanceNeededFromAngleAndPower(double y, double z ){
-        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_F*Math.pow(y,2) +- z*100;
-        double B =  Constants.Shooter.SURFACE_B + Constants.Shooter.SURFACE_E;
+        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_F*Math.pow(y,2) - z;
+        double B =  Constants.Shooter.SURFACE_B + Constants.Shooter.SURFACE_E*y;
         double A = Constants.Shooter.SURFACE_D;
-        double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative
+        double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/(2*A); // we need to see if it's postive or negative
         if (aws > 0) return aws;
-        return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A;
+        return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/(2*A);
         // slove with the good old quady form
     }
 
     public double getAngleNeededFromDistanceAndPower(double x, double z ){
-        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_D*Math.pow(x,2) +- z*100;
-        double B =  Constants.Shooter.SURFACE_C + Constants.Shooter.SURFACE_E;
+        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_D*Math.pow(x,2) - z;
+        double B =  Constants.Shooter.SURFACE_C + Constants.Shooter.SURFACE_E*x;
         double A = Constants.Shooter.SURFACE_F;
-        double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative
+        double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/(2*A); // we need to see if it's postive or negative
         if (aws > 0) return aws;
-        return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A;
+        return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/(2*A);
         // slove with the good old quady form
     }
 
@@ -167,20 +177,20 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Shooter/Average RPM", getRPM());
+        log("Shooter/Average RPM", getRPM());
         desiredRPM = SmartDashboard.getNumber("Shooter/Desired RPM", 0.0);
         //SmartDashboard.putNumber("Shooter/Desired RPM error", Math.abs((desiredRPM - getRPM()) / getRPM()));
         if (Math.abs((desiredRPM - getRPM()) / getRPM()) <= 0.01) {
-            SmartDashboard.putBoolean("Shooter/Desired RPM Reached", true);
+            log("Shooter/Desired RPM Reached", true);
         } else{
-            SmartDashboard.putBoolean("Shooter/Desired RPM Reached", false);
+            log("Shooter/Desired RPM Reached", false);
         }
         desiredPower = SmartDashboard.getNumber("Shooter/Desired Power", 0.0) ;
-        SmartDashboard.putNumber("number I am putting on smartdashbard", desiredRPM);
+        log("number I am putting on smartdashbard", desiredRPM);
 
         //setRPM(desiredRPM);
-        SmartDashboard.putNumber("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity);
-        SmartDashboard.getNumber("Shooter/Desired Power?", desiredPower) ;
+        log("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity);
+        log("Shooter/Desired Power?", desiredPower) ;
 
         // auto shoot
 
@@ -189,7 +199,7 @@ public class Shooter extends SubsystemBase {
         PID_P = SmartDashboard.getNumber("Shooter/Shooter pid P", PID_P);
         PID_I = SmartDashboard.getNumber("Shooter/Shooter pid I", PID_I);
         PID_D = SmartDashboard.getNumber("Shooter/Shooter pid D", PID_D);
-        SmartDashboard.putNumber("Shooter/Shooter true pid P",  configShooter.Slot0.kP);
+        log("Shooter/Shooter true pid P",  configShooter.Slot0.kP);
 
         if(configShooter.Slot0.kP != PID_P)  {
             configShooter.Slot0.kP = PID_P;

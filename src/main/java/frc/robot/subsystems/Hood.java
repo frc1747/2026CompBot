@@ -18,8 +18,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import monologue.Logged;
 
-public class Hood extends SubsystemBase {
+public class Hood extends SubsystemBase implements Logged {
     private TalonFXS motor;
     private Encoder encoder;
     private double desiredAngle;
@@ -44,7 +45,7 @@ public class Hood extends SubsystemBase {
         motor.getConfigurator().apply(config);
 
         if (RobotBase.isSimulation()) {
-        encoderSim = new EncoderSim(encoder);
+            encoderSim = new EncoderSim(encoder);
         }
     }
 
@@ -132,17 +133,17 @@ public class Hood extends SubsystemBase {
         // Allow an input from Elastic
         desiredAngle = SmartDashboard.getNumber("hood/Desired Angle", Constants.Hood.MIN_ANGLE);
 
-        SmartDashboard.putNumber("hood/encoder ticks", degreesToCounts(getCurrentAngle()));
-        SmartDashboard.putNumber("hood/hood angle", getCurrentAngle());
-        SmartDashboard.putNumber("hood/PID", pid.calculate(getCurrentAngle(), desiredAngle));
-        SmartDashboard.putNumber("hood/DutyCycle", dutyCycle.Output);
-        SmartDashboard.putBoolean("hood/hood down", isDown());
+        log("hood/encoder ticks", degreesToCounts(getCurrentAngle()));
+        log("hood/hood angle", getCurrentAngle());
+        log("hood/PID", pid.calculate(getCurrentAngle(), desiredAngle));
+        log("hood/DutyCycle", dutyCycle.Output);
+        log("hood/hood down", isDown());
         //SmartDashboard.getNumber("hood/Hood Desired Angle")
 
         if (Math.abs((desiredAngle - getCurrentAngle()) / getCurrentAngle()) <= Constants.Hood.ANGLE_TOLERANCE) {
-            SmartDashboard.putBoolean("hood/hood angle Reached", true);
+            log("hood/hood angle Reached", true);
         } else {
-            SmartDashboard.putBoolean("hood/hood angle Reached", false);
+            log("hood/hood angle Reached", false);
         }
     }
 
