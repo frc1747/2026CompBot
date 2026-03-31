@@ -20,23 +20,34 @@ public class AprilLock extends Command {
     private final Turret turret;
     private final PIDController pid;
 
-    // TODO: fix starting pose of robot
-    public AprilLock(Turret turret) {
-        this.turret = turret;
-        this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
-        // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(turret);
-    }
+  // TODO: fix starting pose of robot
+  public AprilLock(Turret turret) {
+    this.turret = turret;
+    this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(turret);
+  }
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     // TODO: reformat to make more readable
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         double yawOffset = turret.getYawOffset(TargetPoses.getTargetPose().getTranslation());
+
+        double currentAngle = turret.getTurretAngle();
+
+        if (currentAngle >= Constants.Turret.TURRET_YAW_LIMIT_LOWER && currentAngle <= Constants.Turret.TURRET_YAW_LIMIT_UPPER) {
+          // Add Lock-on status to Elastic
+          SmartDashboard.putBoolean("turret/locked on", true);
+        } else {
+          // Update the Lock-on status
+          SmartDashboard.putBoolean("turret/locked on", false);
+        }
 
         // pid controlling rotation compensation
         double pidOutput = pid.calculate(yawOffset);
@@ -54,11 +65,14 @@ public class AprilLock extends Command {
         turret.basicSpin(clampPid);
     }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-        turret.basicSpin(0.0);
-    }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    turret.basicSpin(0.0);
+
+    // Update the Lock-on status
+    SmartDashboard.putBoolean("turret/locked on", false);
+  }
 
     // Returns true when the command should end.
     @Override
