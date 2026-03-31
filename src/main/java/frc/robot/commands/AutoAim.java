@@ -10,19 +10,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.TargetPoses;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 
 public class AutoAim extends Command {
     private Shooter shooter;
     private Hood hood;
-    private Pose2d target;
+    private Pose2d target = TargetPoses.getTargetPose();
     private double[] hoodAngleAndShooterPower = {-1,-1};
 
-    public AutoAim(Shooter shooter, Hood hood, Pose2d target) {
+    public AutoAim(Shooter shooter, Hood hood) {
         this.shooter = shooter;
         this.hood = hood;
-        this.target = target; // we default to blue like the cordnet system.
+         // we default to blue like the cordnet system.
         addRequirements(shooter, hood);
     }
 

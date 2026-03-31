@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -29,6 +30,7 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
 import frc.robot.commands.autosCommands.AutoAutoAim;
+import frc.robot.commands.teleop.AprilLock;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.ToggleIntakeReady;
@@ -78,8 +80,8 @@ public class RobotContainer {
     public static final Field2d field = new Field2d();
 
     public static TargetPoses target = new TargetPoses();
-    public final JoystickButton tmJoystickFaceButtonRight = new JoystickButton(operator , 5);
-    public final JoystickButton tmJoystickFaceButtonLeft = new JoystickButton(operator , 4);
+    public final JoystickButton tmJoystickFaceButtonRight = new JoystickButton(operator , 4);
+    public final JoystickButton tmJoystickFaceButtonLeft = new JoystickButton(operator , 3);
     public final JoystickButton tmJoystickTrigger = new JoystickButton(operator , 1);
     public final POVButton tmJoystickPovUp = new POVButton(operator, 0);
     public final POVButton tmJoystickPovDown = new POVButton(operator, 180);
@@ -202,21 +204,16 @@ public class RobotContainer {
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
-
-        if (tmJoystickFaceButtonRight.getAsBoolean())
-            TargetPoses.setScoring();
-
         tmJoystickFaceButtonRight
-            .toggleOnTrue(turret.aimAtPose(TargetPoses.getTargetPose()));
-
-        if (tmJoystickFaceButtonLeft.getAsBoolean())
-            TargetPoses.setShuttling();
+            .toggleOnTrue(new AprilLock(turret)
+            .alongWith(Commands.run( () -> TargetPoses.setScoring())));
 
         tmJoystickFaceButtonLeft
-            .toggleOnTrue(turret.aimAtPose(TargetPoses.getTargetPose()));
+            .toggleOnTrue(new AprilLock(turret)
+            .alongWith(Commands.run( () -> TargetPoses.setShuttling())));
 
         tmJoystickTrigger
-            .whileTrue(new AutoAim(shooter, hood ,TargetPoses.getTargetPose()))
+            .whileTrue(new AutoAim(shooter, hood))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 
@@ -257,10 +254,10 @@ public class RobotContainer {
         // TargetPoses.fudgeShooterFactor(drivetrain.getState().Pose ,operator.getY() * shooterFudgeFactor);
 
         // TargetPoses.fudgeTurretFactor(operator.getTwist()* turretFudgeFactor);
-        
+
         // shooterFudgeFactor = Constants.TargetPosesConstants.SHOOTER_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.SHOOTER_BASE_VALUE;
         // turretFudgeFactor = Constants.TargetPosesConstants.TURRET_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.TURRET_BASE_VALUE;
-        
+
         field.getObject("target").setPoses(TargetPoses.currentTarget);
 
         System.out.println(TargetPoses.getTargetPose().getX());

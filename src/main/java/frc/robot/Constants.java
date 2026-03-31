@@ -69,11 +69,11 @@ public final class Constants {
 
         public static final double BLUE_HUB_CENTER_X = 4.611624;
         public static final double BLUE_HUB_CENTER_Y = FIELD_CENTER_Y;
-        public static final double BLUE_SHUTTLE_CENTER_X = 3;
+        public static final double BLUE_SHUTTLE_CENTER_X = 1;
 
         public static final double RED_HUB_CENTER_X = 16.5 - BLUE_HUB_CENTER_X;
         public static final double RED_HUB_CENTER_Y = FIELD_CENTER_Y;
-        public static final double RED_SHUTTLE_CENTER_X = 16.5 - BLUE_HUB_CENTER_X;
+        public static final double RED_SHUTTLE_CENTER_X = 16.5 - BLUE_SHUTTLE_CENTER_X;
 
         public static final double RED_RIGHT_CORNER_X = 17.5482504;
         public static final double RED_RIGHT_CORNER_Y = 8.0519016;
@@ -209,18 +209,18 @@ public final class Constants {
     public static final double TURRET_SLIDER_VALUE = 2;
     public static final double TURRET_BASE_VALUE = .001;
 
-    public static final double BLUE_DEADZONE_MIN = 2;
-    public static final double BLUE_DEADZONE_MAX = 3;
+    public static final double BLUE_DEADZONE_MIN = 3;
+    public static final double BLUE_DEADZONE_MAX = 5;
 
-    public static final double RED_DEADZONE_MIN = 2;
-    public static final double RED_DEADZONE_MAX = 3;
+    public static final double RED_DEADZONE_MIN = 3;
+    public static final double RED_DEADZONE_MAX = 5;
 
     public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y, new Rotation2d());
     public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d BLUE_LEFT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d()); // need tuning
-    public static final Pose2d BLUE_RIGHT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d BLUE_LEFT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.BLUE_SHUTTLE_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y + 3, new Rotation2d()); // need tuning
+    public static final Pose2d BLUE_RIGHT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.BLUE_SHUTTLE_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y -3 , new Rotation2d());
 
-    public static final Pose2d RED_LEFT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
-    public static final Pose2d RED_RIGHT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d RED_LEFT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_SHUTTLE_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y+ 3, new Rotation2d());
+    public static final Pose2d RED_RIGHT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_SHUTTLE_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y -3, new Rotation2d());
   }
 }

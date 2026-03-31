@@ -18,14 +18,15 @@ public class TargetPoses{
     }
 
     public static void setScoring() {
-        System.out.println(Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D);
-        currentTarget = Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D;
+        RobotContainer.field.getObject("target").setPoses(TargetPoses.getTargetPose());
+        currentTarget = Constants.TargetPosesConstants.BLUE_HUB_CENTER_POSE2D;
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             currentTarget = Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D;
         }
     }
 
     public static void setShuttling() {
+        RobotContainer.field.getObject("target").setPoses(TargetPoses.getTargetPose());
         currentTarget = blueShuttling();
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             currentTarget = redshuttling();
@@ -34,24 +35,26 @@ public class TargetPoses{
 
     private static Pose2d blueShuttling() {
         Pose2d turretPose = RobotContainer.turret.getAbsTurretPose();
-        if (turretPose.getX() > Constants.TargetPosesConstants.BLUE_DEADZONE_MIN && turretPose.getX() < Constants.TargetPosesConstants.BLUE_DEADZONE_MAX ){
-            if (turretPose.getX() - Constants.TargetPosesConstants.BLUE_DEADZONE_MIN > turretPose.getX() - Constants.TargetPosesConstants.BLUE_DEADZONE_MAX ) {
-                turretPose = Constants.TargetPosesConstants.BLUE_LEFT_SHUTTLE_POSE2D;
+        Pose2d targetPose = new Pose2d( Constants.Vision.BLUE_SHUTTLE_CENTER_X, turretPose.getY(), new Rotation2d());
+        if (turretPose.getY() > Constants.TargetPosesConstants.BLUE_DEADZONE_MIN && turretPose.getY() < Constants.TargetPosesConstants.BLUE_DEADZONE_MAX ){
+            if (turretPose.getY() - Constants.TargetPosesConstants.BLUE_DEADZONE_MIN > Math.abs(turretPose.getY() - Constants.TargetPosesConstants.BLUE_DEADZONE_MAX) ) {
+                targetPose = Constants.TargetPosesConstants.BLUE_LEFT_SHUTTLE_POSE2D;
             }
-            turretPose = Constants.TargetPosesConstants.BLUE_RIGHT_SHUTTLE_POSE2D;
+            targetPose = Constants.TargetPosesConstants.BLUE_RIGHT_SHUTTLE_POSE2D;
         }
-        return turretPose;
+        return targetPose;
     }
 
     private static Pose2d redshuttling() {
         Pose2d turretPose = RobotContainer.turret.getAbsTurretPose();
-        if (turretPose.getX() > Constants.TargetPosesConstants.RED_DEADZONE_MIN && turretPose.getX() < Constants.TargetPosesConstants.RED_DEADZONE_MAX ){
-            if (turretPose.getX() - Constants.TargetPosesConstants.RED_DEADZONE_MIN > turretPose.getX() - Constants.TargetPosesConstants.RED_DEADZONE_MAX ) {
-                turretPose = Constants.TargetPosesConstants.RED_LEFT_SHUTTLE_POSE2D;
+        Pose2d targetPose = new Pose2d( Constants.Vision.RED_SHUTTLE_CENTER_X, turretPose.getY(), new Rotation2d());
+        if (turretPose.getY() > Constants.TargetPosesConstants.RED_DEADZONE_MIN && turretPose.getY() < Constants.TargetPosesConstants.RED_DEADZONE_MAX ){
+            if (turretPose.getY() - Constants.TargetPosesConstants.RED_DEADZONE_MIN > Math.abs(turretPose.getY() - Constants.TargetPosesConstants.RED_DEADZONE_MAX) ) {
+                targetPose = Constants.TargetPosesConstants.RED_LEFT_SHUTTLE_POSE2D;
             }
-            turretPose = Constants.TargetPosesConstants.RED_RIGHT_SHUTTLE_POSE2D;
+            targetPose = Constants.TargetPosesConstants.RED_RIGHT_SHUTTLE_POSE2D;
         }
-        return turretPose;
+        return targetPose;
     }
 
     public static void ShootOnTheMove() {
