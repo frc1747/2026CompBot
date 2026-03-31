@@ -126,7 +126,7 @@ public final class Constants {
 
     public static final class Turret {
 
-    public static final double FUDGE_FACTOR_TURRET = .01; // in radians
+    public static final double FUDGE_FACTOR_TURRET = .05; // in radians
     public static final int MOTOR_PORT = 59;
         public static final int ENCODER_PORT_A = 0;
         public static final int ENCODER_PORT_B = 1;

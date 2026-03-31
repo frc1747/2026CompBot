@@ -76,7 +76,7 @@ public class RobotContainer {
 
     //fudge factor
     public double fudgeFactorTurret = 0;
-    public double fudgeFactorShooter;
+    public double fudgeFactorShooter = 0;
 
     public static final Field2d field = new Field2d();
 
@@ -191,7 +191,7 @@ public class RobotContainer {
 
         // turret moved to driver
         driver.leftBumper()
-            .toggleOnTrue(new AprilLock(turret, fudgeFactorTurret));
+            .toggleOnTrue(new AprilLock(turret, () -> fudgeFactorTurret));
 
         driver.leftTrigger()
             .toggleOnTrue(new AprilLockShuttle(turret));

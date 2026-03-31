@@ -7,6 +7,8 @@ package frc.robot.commands.teleop;
 
 
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -21,10 +23,10 @@ public class AprilLock extends Command {
     /** Creates a new FaceObject. */
     private final Turret turret;
     private final PIDController pid;
-    private final double fudgeFactor;
+    private final DoubleSupplier fudgeFactor;
 
     // TODO: fix starting pose of robot
-    public AprilLock(Turret turret, double fudgeFactor) {
+    public AprilLock(Turret turret, DoubleSupplier fudgeFactor) {
         this.turret = turret;
         this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
         this.fudgeFactor = fudgeFactor;
@@ -46,7 +48,7 @@ public class AprilLock extends Command {
         }
 
         // pid controlling rotation compensation
-        double pidOutput = pid.calculate(yawOffset);
+        double pidOutput = pid.calculate(yawOffset + this.fudgeFactor.getAsDouble());
         double clampPid = pidOutput;
         if (clampPid > Constants.Vision.APRIL_LOCK_PID_CLAMP) {
             clampPid = Constants.Vision.APRIL_LOCK_PID_CLAMP;
