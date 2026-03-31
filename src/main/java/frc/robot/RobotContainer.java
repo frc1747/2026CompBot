@@ -85,24 +85,23 @@ public class RobotContainer {
         NamedCommands.registerCommand("HopperStopTest", new InstantCommand(() -> System.out.println("Hopper Stop Command Has Run")));
         NamedCommands.registerCommand("KickerStopTest", new InstantCommand(() -> System.out.println("Kicker Stop Command Has Run")));
 
-
         NamedCommands.registerCommand("IntakeReverseTest", new InstantCommand(() -> System.out.println("Intake Reverse Collect Command Has Run")));
         NamedCommands.registerCommand("IntakeSpinTest" , new InstantCommand(() -> System.out.println("Intake Collect Command Has Run")));
         NamedCommands.registerCommand("IntakeOutTest", new InstantCommand(() -> System.out.println("Intake Out Command Has Run")));
         NamedCommands.registerCommand("IntakeInTest", new InstantCommand(() -> System.out.println("Intake In Command Has Run")));
         NamedCommands.registerCommand("IntakeStopTest", new InstantCommand(() -> System.out.println("Intake Stop Has Been Run")));
 
-
-
-
-
-        NamedCommands.registerCommand("IntakeOut", new GrabFuel(intakePivot));
-        NamedCommands.registerCommand("IntakeIn", new IntakeGoToDefault(intakePivot));
+        NamedCommands.registerCommand("IntakeOut", intakePivot.moveOutCommand());
+        NamedCommands.registerCommand("IntakeIn", intakePivot.moveHomeCommand());
         NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
-        NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
+        //NamedCommands.registerCommand("IntakeCollect", intake.spin(false).withTimeout(0.5));        NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true).withTimeout(0.5));
         NamedCommands.registerCommand("Kicker", kicker.run(false));
+        //NamedCommands.registerCommand("Kicker", kicker.run(false).withTimeout(5.0));
         NamedCommands.registerCommand("Hopper", hopper.run(false));
+        //NamedCommands.registerCommand("Hopper", hopper.run(false).withTimeout(5.0));
         NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
+        //NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood).withTimeout(5.0));
+
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         NamedCommands.registerCommand("StopIntake", intake.StopCommand());
         NamedCommands.registerCommand("StopKicker", kicker.stopCommand());

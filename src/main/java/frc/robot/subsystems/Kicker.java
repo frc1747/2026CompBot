@@ -62,6 +62,7 @@ public class Kicker extends SubsystemBase {
     }
 
     public Command stopCommand() {
+        System.out.println("Kicker Stop Called");
         return runOnce(() -> setPower(0.0));
     }
 

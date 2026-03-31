@@ -41,6 +41,8 @@ public class Intake extends SubsystemBase {
     }
 
     public Command StopCommand() {
+        System.out.println("Intake Stop has been calledyu");
+
         return runOnce( () -> setIntakePower(0));
     }
     public Command spin(boolean reverse) {
