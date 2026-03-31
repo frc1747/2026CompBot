@@ -93,8 +93,11 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("IntakeOut", intakePivot.moveOutCommand());
         NamedCommands.registerCommand("IntakeIn", intakePivot.moveHomeCommand());
-        NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
-        //NamedCommands.registerCommand("IntakeCollect", intake.spin(false).withTimeout(0.5));        NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true).withTimeout(0.5));
+        //NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
+        NamedCommands.registerCommand("IntakeCollect", intake.spin(false).withTimeout(4.0));
+        NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true).withTimeout(0.5));
+        //NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
+
         NamedCommands.registerCommand("Kicker", kicker.run(false));
         //NamedCommands.registerCommand("Kicker", kicker.run(false).withTimeout(5.0));
         NamedCommands.registerCommand("Hopper", hopper.run(false));

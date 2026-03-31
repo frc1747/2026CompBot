@@ -37,7 +37,7 @@ public class Intake extends SubsystemBase {
 
     public Command spin() {
         System.out.println("Intake is Spinning");
-        return runOnce( () -> intakeSpin(Constants.Intake.POWER));
+        return run( () -> intakeSpin(Constants.Intake.POWER));
     }
 
     public Command StopCommand() {
