@@ -36,6 +36,7 @@ public class Shooter extends SubsystemBase implements Logged{
     public double PID_P = Constants.Shooter.PID_P ;
     public double PID_I = Constants.Shooter.PID_I;
     public double PID_D = Constants.Shooter.PID_D;
+    private double shooterOffset = 0.0;
 
 
     public Shooter() {
@@ -94,6 +95,14 @@ public class Shooter extends SubsystemBase implements Logged{
         return run(() -> setRPM(desiredRPM));
     }
 
+    public Command offsetDecrement() {
+        return run(() -> shooterOffset -= Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
+    }
+
+    public Command offsetIncrement() {
+        return run(() -> shooterOffset += Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
+    }
+
     public void setPower(double power) {
         dutyCycleShooter.Output = power;
         motorLeft.setControl(dutyCycleShooter);
@@ -102,7 +111,7 @@ public class Shooter extends SubsystemBase implements Logged{
     // in RPM
     public void setRPM(double rpm) {
         //velocityShooter.Velocity * 60 = //pid.calculate(getRPM(), rpm);
-        motorLeft.setControl(velocityShooter.withVelocity(rpm/60.0));
+        motorLeft.setControl(velocityShooter.withVelocity((rpm + shooterOffset) / 60.0));
     }
 
     public double getRPM() {
@@ -111,26 +120,26 @@ public class Shooter extends SubsystemBase implements Logged{
 
     public double getPowerNeededFromDistanceAndAngle(double x, double y){
         // Z = A + BX + CY + DX^2 + FY^2 + EXY is the quady E Z is power, X is distance, Y is hood angle
-        return (Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_D*Math.pow(x,2) + Constants.Shooter.SURFACE_F*Math.pow(y,2) + Constants.Shooter.SURFACE_E*x*y)/100;
+        return (Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_D*Math.pow(x,2) + Constants.Shooter.SURFACE_F*Math.pow(y,2) + Constants.Shooter.SURFACE_E*x*y);
     }
 
     public double getdistanceNeededFromAngleAndPower(double y, double z ){
-        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_F*Math.pow(y,2) +- z*100;
-        double B =  Constants.Shooter.SURFACE_B + Constants.Shooter.SURFACE_E;
+        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_F*Math.pow(y,2) - z;
+        double B =  Constants.Shooter.SURFACE_B + Constants.Shooter.SURFACE_E*y;
         double A = Constants.Shooter.SURFACE_D;
-        double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative
+        double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/(2*A); // we need to see if it's postive or negative
         if (aws > 0) return aws;
-        return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A;
+        return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/(2*A);
         // slove with the good old quady form
     }
 
     public double getAngleNeededFromDistanceAndPower(double x, double z ){
-        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_D*Math.pow(x,2) +- z*100;
-        double B =  Constants.Shooter.SURFACE_C + Constants.Shooter.SURFACE_E;
+        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_D*Math.pow(x,2) - z;
+        double B =  Constants.Shooter.SURFACE_C + Constants.Shooter.SURFACE_E*x;
         double A = Constants.Shooter.SURFACE_F;
-        double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative
+        double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/(2*A); // we need to see if it's postive or negative
         if (aws > 0) return aws;
-        return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A;
+        return (- B - Math.sqrt( Math.pow(B, 2) - 4*A*C))/(2*A);
         // slove with the good old quady form
     }
 
