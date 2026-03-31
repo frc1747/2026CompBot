@@ -17,12 +17,13 @@ import frc.robot.subsystems.Shooter;
 public class AutoAim extends Command {
     private Shooter shooter;
     private Hood hood;
-    private Pose2d target = TargetPoses.getTargetPose();
+    private Pose2d target;
     private double[] hoodAngleAndShooterPower = {-1,-1};
 
     public AutoAim(Shooter shooter, Hood hood) {
         this.shooter = shooter;
         this.hood = hood;
+        this.target = TargetPoses.getTargetPose();
          // we default to blue like the cordnet system.
         addRequirements(shooter, hood);
     }
