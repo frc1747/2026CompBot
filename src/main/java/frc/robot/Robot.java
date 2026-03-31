@@ -4,93 +4,109 @@
 
 package frc.robot;
 
+
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import monologue.Monologue;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
 
-  public Robot() {
-    m_robotContainer = new RobotContainer();
-    String warning = BuildConstants.DIRTY == 1 ? "WARNING: The code was built with uncommitted changes!\n" : "";
-    String info = String.format("""
-      ===============================
-      Git information:
-      SHA: %s
-      Branch: %s
-      Commit Date: %s
-      Build Date: %s
-      %s==============================
-      """,
-      BuildConstants.GIT_SHA,
-      BuildConstants.GIT_BRANCH,
-      BuildConstants.GIT_DATE,
-      BuildConstants.BUILD_DATE,
-      warning
-    );
-    System.out.print(info);
+    private final Timer userCodeTimer = new Timer();
+    private final Timer dtTimer = new Timer();
 
-    // Add Scheduler to Elastic
-    SmartDashboard.putData(CommandScheduler.getInstance());
-  }
+    public Robot() {
+        Timer initTimer = new Timer();
+        initTimer.start();
 
-  @Override
-  public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
-  }
+        DataLogManager.start();
+        DriverStation.startDataLog(DataLogManager.getLog());
+        DriverStation.silenceJoystickConnectionWarning(!DriverStation.isFMSAttached());
 
-  @Override
-  public void disabledInit() {}
+        m_robotContainer = new RobotContainer();
 
-  @Override
-  public void disabledPeriodic() {}
+        Monologue.setupMonologue(m_robotContainer, "Robot", false, false);
 
-  @Override
-  public void disabledExit() {}
-
-  @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    if (m_autonomousCommand != null) {
-      CommandScheduler.getInstance().schedule(m_autonomousCommand);
+        gitInit();
+        initTimer.stop();
+        m_robotContainer.log("Timing/Robot init ms", initTimer.get() * 1000);
+        dtTimer.start();
     }
-  }
 
-  @Override
-  public void autonomousPeriodic() {}
+    @Override
+    public void robotPeriodic() {
+        m_robotContainer.log("Timing/Loop dt ms", dtTimer.get() * 1000);
+        dtTimer.restart();
+        userCodeTimer.restart();
 
-  @Override
-  public void autonomousExit() {}
-
-  @Override
-  public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      CommandScheduler.getInstance().cancel(m_autonomousCommand);
+        CommandScheduler.getInstance().run();
+        Monologue.updateAll();
+        m_robotContainer.log("Timing/User code ms", userCodeTimer.get() * 1000);
     }
-  }
 
-  @Override
-  public void teleopPeriodic() {}
+    public void gitInit() {
+        String warning = BuildConstants.DIRTY == 1 ? "WARNING: The code was built with uncommitted changes!\n" : "";
+        String info = String.format("""
+        ===============================
+        Git information:
+        SHA: %s
+        Branch: %s
+        Commit Date: %s
+        Build Date: %s
+        %s==============================
+        """,
+        BuildConstants.GIT_SHA,
+        BuildConstants.GIT_BRANCH,
+        BuildConstants.GIT_DATE,
+        BuildConstants.BUILD_DATE,
+        warning
+        );
+        System.out.print(info);
+    }
 
-  @Override
-  public void teleopExit() {}
+    @Override
+    public void autonomousPeriodic() {}
 
-  @Override
-  public void testInit() {
-    CommandScheduler.getInstance().cancelAll();
-  }
+    @Override
+    public void autonomousExit() {}
 
-  @Override
-  public void testPeriodic() {}
+    @Override
+    public void disabledExit() {}
 
-  @Override
-  public void testExit() {}
+    @Override
+    public void autonomousInit() {
+        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-  @Override
-  public void simulationPeriodic() {}
+        if (m_autonomousCommand != null) {
+            CommandScheduler.getInstance().schedule(m_autonomousCommand);
+        }
+    }
+
+    @Override
+    public void teleopPeriodic() {}
+
+    @Override
+    public void teleopExit() {}
+
+    @Override
+    public void teleopInit() {
+        if (m_autonomousCommand != null) {
+            CommandScheduler.getInstance().cancel(m_autonomousCommand);
+        }
+    }
+
+    @Override
+    public void testPeriodic() {}
+
+    @Override
+    public void testExit() {}
+
+    @Override
+    public void simulationPeriodic() {}
 }

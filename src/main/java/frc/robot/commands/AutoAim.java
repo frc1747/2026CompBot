@@ -6,13 +6,11 @@ package frc.robot.commands;
 
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.TargetPoses;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 
@@ -27,7 +25,8 @@ public class AutoAim extends Command {
     public AutoAim(Shooter shooter, Hood hood) {
         this.shooter = shooter;
         this.hood = hood;
-        this.target = Constants.Shooter.BLUE_HUB_CENTER_POSE2D; // we default to blue like the cordnet system.
+        this.target = TargetPoses.getTargetPose();
+         // we default to blue like the cordnet system.
         addRequirements(shooter, hood);
     }
 
@@ -37,9 +36,6 @@ public class AutoAim extends Command {
         timer.start();
         System.out.println("Shooter Initalized");
 
-        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            this.target = Constants.Shooter.RED_HUB_CENTER_POSE2D;
-        }
         // yes I am a hack
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);

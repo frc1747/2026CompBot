@@ -8,13 +8,13 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import monologue.Logged;
 
 
-public class Hopper extends SubsystemBase {
+public class Hopper extends SubsystemBase implements Logged{
     private TalonFX motor;
     private DutyCycleOut dutyControl = new DutyCycleOut(0.0);
 
@@ -72,9 +72,9 @@ public class Hopper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Hopper/isJammed", isJammed());
-        SmartDashboard.putBoolean("hopper/is motor reversed", isReversed());
-        SmartDashboard.putNumber("hopper/velocity", motor.getVelocity().getValueAsDouble());
+        log("Hopper/isJammed", isJammed());
+        log("hopper/is motor reversed", isReversed());
+        log("hopper/velocity", motor.getVelocity().getValueAsDouble());
     }
 
 }
