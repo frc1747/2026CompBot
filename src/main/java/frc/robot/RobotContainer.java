@@ -52,7 +52,7 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
-
+    //Commiting good workign code
     // Control
     private final CommandXboxController driver = new CommandXboxController(Constants.Controller.DRIVER_PORT);
     private final XboxController driver_hid = driver.getHID();
@@ -76,7 +76,11 @@ public class RobotContainer {
 
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
-
+        NamedCommands.registerCommand("TestCommand", new InstantCommand(() -> System.out.println("Test Command Has Run")));
+        NamedCommands.registerCommand("ShooterTest" , new InstantCommand(() -> System.out.println("Shooter has Started Running")));
+        NamedCommands.registerCommand("HopperTest" , new InstantCommand(() -> System.out.println("Hopper has Started Running")));
+        NamedCommands.registerCommand("KickerTest" , new InstantCommand(() -> System.out.println("Shooter has Started Running")));
+        NamedCommands.registerCommand("IntakeTest" , new InstantCommand(() -> System.out.println("Intake has Started Rotating")));
         NamedCommands.registerCommand("IntakeOut", new GrabFuel(intakePivot));
         NamedCommands.registerCommand("IntakeIn", new IntakeGoToDefault(intakePivot));
         NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
