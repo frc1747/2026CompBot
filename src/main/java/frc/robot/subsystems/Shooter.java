@@ -124,7 +124,7 @@ public class Shooter extends SubsystemBase {
 
     public double getdistanceNeededFromAngleAndPower(double y, double z ){
         double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_F*Math.pow(y,2) +- z;
-        double B =  Constants.Shooter.SURFACE_B + Constants.Shooter.SURFACE_E;
+        double B =  Constants.Shooter.SURFACE_B + Constants.Shooter.SURFACE_E*y;
         double A = Constants.Shooter.SURFACE_D;
         double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative
         if (aws > 0) return aws;
@@ -134,7 +134,7 @@ public class Shooter extends SubsystemBase {
 
     public double getAngleNeededFromDistanceAndPower(double x, double z ){
         double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_D*Math.pow(x,2) +- z;
-        double B =  Constants.Shooter.SURFACE_C + Constants.Shooter.SURFACE_E;
+        double B =  Constants.Shooter.SURFACE_C + Constants.Shooter.SURFACE_E*x;
         double A = Constants.Shooter.SURFACE_F;
         double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative
         if (aws > 0) return aws;
