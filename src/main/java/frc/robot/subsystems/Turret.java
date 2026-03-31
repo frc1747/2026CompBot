@@ -16,14 +16,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.TargetPoses;
+import monologue.Logged;
 
-public class Turret extends SubsystemBase {
+public class Turret extends SubsystemBase implements Logged{
     private TalonFXS motor;
     private Encoder encoder;
     // left from perspective of someone facing the turret sie of bot
@@ -249,12 +249,12 @@ public class Turret extends SubsystemBase {
         motor.setControl(dutyCycle);
 
         // SmartDashboard
-        SmartDashboard.putNumber("Turret/encoder value", encoder.get());
-        SmartDashboard.putNumber("Turret/encoder angle", getTurretAngle());
-        SmartDashboard.putNumber("Turret/turret degrees", getAbsTurretPose().getRotation().getDegrees());
-        SmartDashboard.putBoolean("Left Limit Switch", getLeftLimitSwitchPressed());
-        SmartDashboard.putBoolean("Right Limit Switch", getRightLimitSwitchPressed());
-        SmartDashboard.putNumber("Turret/speed:", dutyCycle.Output);
+        log("Turret/encoder value", encoder.get());
+        log("Turret/encoder angle", getTurretAngle());
+        log("Turret/turret degrees", getAbsTurretPose().getRotation().getDegrees());
+        log("Turret/Left Limit Switch", getLeftLimitSwitchPressed());
+        log("Turret/Right Limit Switch", getRightLimitSwitchPressed());
+        log("Turret/speed", dutyCycle.Output);
         //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
     }
 }
