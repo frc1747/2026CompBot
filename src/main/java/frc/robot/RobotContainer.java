@@ -6,19 +6,13 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -35,8 +29,6 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
 import frc.robot.commands.autosCommands.AutoAutoAim;
-import frc.robot.commands.teleop.AprilLock;
-import frc.robot.commands.teleop.AprilLockShuttle;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.ToggleIntakeReady;
@@ -82,10 +74,10 @@ public class RobotContainer {
     public static final Shooter shooter = new Shooter();
     public static final Hopper hopper = new Hopper();
     public static final Turret turret = new Turret();
-    
+
     public static final Field2d field = new Field2d();
 
-    public final TargetPoses target = new TargetPoses();
+    public static TargetPoses target = new TargetPoses();
     public final JoystickButton tmJoystickFaceButtonRight = new JoystickButton(operator , 5);
     public final JoystickButton tmJoystickFaceButtonLeft = new JoystickButton(operator , 4);
     public final JoystickButton tmJoystickTrigger = new JoystickButton(operator , 1);
@@ -101,8 +93,8 @@ public class RobotContainer {
     public double turretFudgeFactor;
 
     public RobotContainer() {
-        NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
 
+        NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
         NamedCommands.registerCommand("IntakeOut", new GrabFuel( intakePivot));
         NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
         NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
@@ -117,9 +109,9 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
-        
-        
-        
+
+
+
 
         // Warmup PathPlanner to avoid Java pauses
         CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
@@ -185,68 +177,64 @@ public class RobotContainer {
             .onFalse(new IntakeGoToDefault(intakePivot));
 
         driver.rightTrigger()
-            .whileTrue(intake.spin(false))
+            .whileTrue(intake.spin(true))
             .onFalse(intake.StopCommand());
 
         // intake eject
-        // driver.leftTrigger()
-        //     .whileTrue(intake.spin(true))
-        //     .onFalse(intake.StopCommand());
+        driver.leftTrigger()
+            .whileTrue(intake.spin(false))
+            .onFalse(intake.StopCommand());
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
         // operater
 
-        // intake hopper 
+        // intake hopper
         tmJoystickPovUp
             .whileTrue(hopper.run(false)
-            .alongWith(intake.spin(false))
             .alongWith(kicker.setRPMCommand()))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
         tmJoystickPovDown
             .whileTrue(hopper.run(true)
-            .alongWith(intake.spin(true))
             .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
-        
-        
 
-        if (tmJoystickFaceButtonRight.getAsBoolean()) 
-            target.setScoring();
+        if (tmJoystickFaceButtonRight.getAsBoolean())
+            TargetPoses.setScoring();
 
         tmJoystickFaceButtonRight
-            .toggleOnTrue(turret.aimAtPose(target.getTargetPose()));
-        
-        if (tmJoystickFaceButtonLeft.getAsBoolean()) 
-            target.setShuttling();
+            .toggleOnTrue(turret.aimAtPose(TargetPoses.getTargetPose()));
+
+        if (tmJoystickFaceButtonLeft.getAsBoolean())
+            TargetPoses.setShuttling();
 
         tmJoystickFaceButtonLeft
-            .toggleOnTrue(turret.aimAtPose(target.getTargetPose())); 
+            .toggleOnTrue(turret.aimAtPose(TargetPoses.getTargetPose()));
 
         tmJoystickTrigger
-            .whileTrue(new AutoAim(shooter, hood ,target.getTargetPose()))
+            .whileTrue(new AutoAim(shooter, hood ,TargetPoses.getTargetPose()))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 
-
-        
-
-        
         // Manual Turret movement code
         tmJoystickRightHandBottomLeft
-            .whileTrue(new TurretRotate(turret, -0.025));
+            .whileTrue(turret.spin(true))
+            .onFalse(turret.stopCommand());
         tmJoystickRightHandBottomMiddle
-            .whileTrue(new TurretRotate(turret, 0.025));
+            .whileTrue(turret.spin(false))
+            .onFalse(turret.stopCommand());
 
         // Manual Hood movement code
         tmJoystickRightHandTopLeft
-            .whileTrue(hood.setPowerCommand(false));
+            .whileTrue(hood.setPowerCommand(false))
+            .onFalse(hood.stopCommand());
         tmJoystickRightHandTopMiddle
-            .whileTrue(hood.setPowerCommand(true));
+            .whileTrue(hood.setPowerCommand(true))
+            .onFalse(hood.stopCommand());
 
         // Shooter speed manual change
         tmJoystickRightHandTopRight
@@ -254,8 +242,8 @@ public class RobotContainer {
         tmJoystickRightHandBottomRight
             .onTrue(shooter.offsetDecrement());
 
-        
-        
+
+
 
         // this needs to be refactors to the inline standerds
 
@@ -266,15 +254,17 @@ public class RobotContainer {
         //fudge it
 
 
-        // target.fudgeShooterFactor(drivetrain.getState().Pose ,operator.getY() * shooterFudgeFactor);
+        // TargetPoses.fudgeShooterFactor(drivetrain.getState().Pose ,operator.getY() * shooterFudgeFactor);
 
-        // target.fudgeTurretFactor(operator.getTwist()* turretFudgeFactor);
-       // shooterFudgeFactor = Constants.TargetPosesConstants.SHOOTER_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.SHOOTER_BASE_VALUE;
-        //turretFudgeFactor = Constants.TargetPosesConstants.TURRET_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.TURRET_BASE_VALUE;
-        field.getObject("target").setPoses(target.CurrentTarget);
-
-        SmartDashboard.putBoolean("thustmaster" ,driver.a().getAsBoolean());
+        // TargetPoses.fudgeTurretFactor(operator.getTwist()* turretFudgeFactor);
         
+        // shooterFudgeFactor = Constants.TargetPosesConstants.SHOOTER_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.SHOOTER_BASE_VALUE;
+        // turretFudgeFactor = Constants.TargetPosesConstants.TURRET_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.TURRET_BASE_VALUE;
+        
+        field.getObject("target").setPoses(TargetPoses.currentTarget);
+
+        System.out.println(TargetPoses.getTargetPose().getX());
+
 
     }
 
