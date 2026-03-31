@@ -356,6 +356,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return super.samplePoseAt(Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
+    public Translation2d getVelocity() {
+        double xVel = getState().Speeds.vxMetersPerSecond;
+        double yVel = getState().Speeds.vyMetersPerSecond;
+        return new Translation2d(xVel, yVel);
+    }
 
     // ****** ADDITIONAL METHODS TO SUPPORT VISION PROCESSING *******
     private void addLimelightMeasurement() {

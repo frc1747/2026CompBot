@@ -65,6 +65,47 @@ public class Turret extends SubsystemBase {
         yawOffsetFudge = 0;
     }
 
+    // could be more accurate using empirically collected data and interpolation
+    // kinetics math here may have errors
+    public Double getFuelTravelTime(double hoodAngle, double dist) {
+        double initHeight = Constants.Turret.DIST_TO_BOT_CENTER;
+        double finalHeight = Constants.Vision.HUB_HEIGHT;
+        double hubClearHeight = Constants.Vision.HUB_CLEAR_HEIGHT;
+        try {
+            double maxHeight = initHeight - Math.pow(Math.tan(hoodAngle), 2)/(4 * (finalHeight - initHeight - Math.tan(hoodAngle) * dist));
+            if (maxHeight <= hubClearHeight) {
+                // fuel would not make it to hub, return null
+                return null;
+            } else if (maxHeight <= initHeight) {
+                // scenario should be impossible, return null
+                return null;
+            }
+            // time from launch to reaching max height in seconds
+            double timeToMax = Math.sqrt(2 * (maxHeight - initHeight) / 9.8); // 9.8 is in m/s^2, is gravitational constant g
+            // time from reaching max height to reaching hub
+            double timeFromMax = Math.sqrt(2 * (maxHeight - finalHeight) / 9.8); // 9.8 is in m/s^2, is gravitational constant g
+            return timeToMax + timeFromMax;
+        } catch (ArithmeticException e) {
+            // display error without stopping code
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    // returns turret tangential velocity of turret relative to bot center
+    // rotated to field space
+    public Translation2d getTangentialVelocity() {
+        // rotational speed in radians per second
+        double robotOmega = RobotContainer.drivetrain.getState().Speeds.omegaRadiansPerSecond;
+        double robotRotationRadians = RobotContainer.drivetrain.getState().Pose.getRotation().getRadians();
+        // 90 degrees from bot forward vector
+        double tangentialDirRadians = robotRotationRadians - Math.PI / 2;
+        double speed = robotOmega * Constants.Turret.DIST_TO_BOT_CENTER;
+        // may need to switch x and y
+        Translation2d tangentialVelocity = new Translation2d(Math.cos(tangentialDirRadians), Math.sin(tangentialDirRadians)).times(speed);
+        return tangentialVelocity;
+  }
+
     // left from perspective of a person facing turret side of robot
     public boolean getLeftLimitSwitchPressed() {
         // not (!) operator used because limit switch is normally open

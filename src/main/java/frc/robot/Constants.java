@@ -78,6 +78,8 @@ public final class Constants {
         public static final double RED_RIGHT_CORNER_X = 17.5482504;
         public static final double RED_RIGHT_CORNER_Y = 8.0519016;
 
+        public static final double HUB_HEIGHT = 1.45; // placeholder (meters) TODO: verify
+        public static final double HUB_CLEAR_HEIGHT = 1.85; // placeholder (meters) TODO: verify
     }
 
     public static final class Controller {
