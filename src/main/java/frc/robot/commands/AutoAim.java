@@ -14,18 +14,19 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
+import java.util.function.DoubleSupplier;
 
 public class AutoAim extends Command {
     private Shooter shooter;
     private Hood hood;
     private Pose2d target;
     private double[] hoodAngleAndShooterPower = {-1,-1};
-    private double fudgeFactor;
+    private DoubleSupplier fudgeFactorSupplier;
 
-    public AutoAim(Shooter shooter, Hood hood, double fudgeFactor) {
+    public AutoAim(Shooter shooter, Hood hood, DoubleSupplier fudgeFactorSupplier) {
         this.shooter = shooter;
         this.hood = hood;
-        this.fudgeFactor = fudgeFactor;
+        this.fudgeFactorSupplier = fudgeFactorSupplier;
         this.target = Constants.Shooter.BLUE_HUB_CENTER_POSE2D; // we default to blue like the coordinate system.
         addRequirements(shooter, hood);
     }
@@ -50,7 +51,7 @@ public class AutoAim extends Command {
 
         hood.goToAngleCommand(hoodAngleAndShooterPower[0]);
         if (hood.atAngle(hoodAngleAndShooterPower[0])){
-            shooter.setRPM(hoodAngleAndShooterPower[1]*fudgeFactor);
+            shooter.setRPM(hoodAngleAndShooterPower[1] + fudgeFactorSupplier.getAsDouble());
         }
         SmartDashboard.putNumber("Shooter/distance from hub from autoAim", distance);
         SmartDashboard.putNumber("Shooter/RPM for auto aim", hoodAngleAndShooterPower[1]);

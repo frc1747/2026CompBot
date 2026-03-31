@@ -164,9 +164,9 @@ public final class Constants {
         public static final double SURFACE_F = 2.9962; // needs tuning
         public static final double MAX_AUTOSHOOT_POWER =4500;
         public static final int AUTO_SHOOTER_MULT = 107; // this should be remove when we get better auto shoot values
-        public static final double MAX_HOOD_ANGLE = 43;// degrees
-        public static final double MIN_HOOD_ANGLE = 26;// degrees
-        public static final double PID_P = .75;// they are half for the two motors
+        public static final double MAX_HOOD_ANGLE = 43; // degrees
+        public static final double MIN_HOOD_ANGLE = 26; // degrees
+        public static final double PID_P = .75; // they are half for the two motors
         public static final double PID_I = 0.3;
         public static final double PID_D = 0.015;
         public static final double TOLERANCE = .05; // percent tolerance
@@ -177,7 +177,7 @@ public final class Constants {
 
     public static final class Intake {
         public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.85;
+        public static final double POWER = 0.80;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
     }
 
@@ -189,7 +189,7 @@ public final class Constants {
         public static final double kI = 0.0;  // TODO: VERIFY
         public static final double kD = 0.0;  // TODO: VERIFY
         public static final double ENCODER_UP = 0;     // TODO: Verify
-        public static final double ENCODER_DOWN = -42.5;  // TODO: Verify
+        public static final double ENCODER_DOWN = -40.0;  // TODO: Verify
         public static final double ENCODER_READY = -42.5; // TODO: Verify
         public static final double SET_POINT_P = 0.05;  // TODO: tune
         public static final double SET_POINT_I = 0.001; // TODO: tune

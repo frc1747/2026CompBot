@@ -40,6 +40,7 @@ import frc.robot.subsystems.IntakePivot;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
+import java.util.function.DoubleSupplier;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -75,7 +76,7 @@ public class RobotContainer {
 
     //fudge factor
     public double fudgeFactorTurret = 0;
-    public double fudgeFactorShooter = 0;
+    public double fudgeFactorShooter;
 
     public static final Field2d field = new Field2d();
 
@@ -212,7 +213,7 @@ public class RobotContainer {
 
         // 2 TODO: CHECK if conflics with 1
         operator.b()
-            .whileTrue(new AutoAim(shooter, hood, fudgeFactorShooter))
+            .whileTrue(new AutoAim(shooter, hood, () -> fudgeFactorShooter))
             .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
 
     }
