@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -71,6 +72,7 @@ public class RobotContainer {
     public static final Shooter shooter = new Shooter();
     public static final Hopper hopper = new Hopper();
     public static final Turret turret = new Turret();
+    public static final AutoAim autoAim = new AutoAim(shooter, hood);
 
     public static final Field2d field = new Field2d();
 
@@ -102,14 +104,14 @@ public class RobotContainer {
         //NamedCommands.registerCommand("Kicker", kicker.run(false).withTimeout(5.0));
         NamedCommands.registerCommand("Hopper", hopper.run(false));
         //NamedCommands.registerCommand("Hopper", hopper.run(false).withTimeout(5.0));
-        NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
-        //NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood).withTimeout(5.0));
+        //NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
+        NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood).withTimeout(5.0));
 
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         NamedCommands.registerCommand("StopIntake", intake.StopCommand());
         NamedCommands.registerCommand("StopKicker", kicker.stopCommand());
         NamedCommands.registerCommand("StopHopper", hopper.stop());
-        NamedCommands.registerCommand("StopShooter", shooter.stopCommand());
+        NamedCommands.registerCommand("StopShooter", Commands.run(() -> shooter.stopCommand()));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 

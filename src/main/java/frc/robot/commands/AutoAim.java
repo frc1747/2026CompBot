@@ -8,6 +8,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -20,6 +21,8 @@ public class AutoAim extends Command {
     private Hood hood;
     private Pose2d target;
     private double[] hoodAngleAndShooterPower = {-1,-1};
+    private Timer timer = new Timer();
+
 
     public AutoAim(Shooter shooter, Hood hood) {
         this.shooter = shooter;
@@ -30,6 +33,8 @@ public class AutoAim extends Command {
 
     @Override
     public void initialize() {
+        timer.reset();
+        timer.start();
         System.out.println("Shooter Initalized");
 
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
@@ -59,11 +64,13 @@ public class AutoAim extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        shooter.setPower(0.0);
+    }
 
     @Override
     public boolean isFinished() {
         // better way of doing this idk
-        return (shooter.getRPM() <= hoodAngleAndShooterPower[1] + hoodAngleAndShooterPower[1]*Constants.Shooter.TOLERANCE && shooter.getRPM() >= hoodAngleAndShooterPower[1] - hoodAngleAndShooterPower[1]*Constants.Shooter.TOLERANCE);
+        return timer.hasElapsed(6.0);
     }
 }

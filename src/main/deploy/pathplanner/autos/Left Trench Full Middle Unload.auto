@@ -40,7 +40,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "IntakeCollect"
+                        "name": "Hopper"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Kicker"
                       }
                     }
                   ]
@@ -52,25 +58,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Hopper"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Kicker"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopHopper"
+            "name": "StopShooter"
           }
         },
         {
@@ -82,7 +70,7 @@
         {
           "type": "named",
           "data": {
-            "name": "StopIntake"
+            "name": "StopHopper"
           }
         },
         {
@@ -98,12 +86,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "IntakeCollect"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Left Trench Full MIddle Unload C"
@@ -113,12 +95,6 @@
           "type": "named",
           "data": {
             "name": "IntakeIn"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopIntake"
           }
         },
         {
@@ -157,25 +133,19 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "IntakeCollect"
+                        "name": "Hopper"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Kicker"
                       }
                     }
                   ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Hopper"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Kicker"
           }
         },
         {
@@ -199,7 +169,7 @@
         {
           "type": "named",
           "data": {
-            "name": "StopIntake"
+            "name": "StopShooter"
           }
         }
       ]

@@ -7,43 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Command Path A"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of Command Path A"
+            "pathName": "Tuesday Testing Path"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeOut"
+            "name": "Shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeCollect"
+            "name": "ShooterTest"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 5.0
+            "waitTime": 6.7
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StopIntake"
+            "name": "StopShooter"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeIn"
+            "name": "ShooterStopTest"
           }
         }
       ]
