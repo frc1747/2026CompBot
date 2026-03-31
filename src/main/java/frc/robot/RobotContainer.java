@@ -186,7 +186,10 @@ public class RobotContainer implements Logged {
         // intake eject
         driver.leftTrigger()
             .whileTrue(intake.spin(false))
-            .onFalse(intake.StopCommand());
+            .whileTrue(hopper.run(true))
+            .onFalse(intake.StopCommand())
+            .onFalse(hopper.stop());
+
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -241,15 +244,6 @@ public class RobotContainer implements Logged {
             .onTrue(shooter.offsetDecrement());
 
 
-<<<<<<< HEAD
-        driver.leftTrigger()
-            .whileTrue(intake.spin(false))
-            .whileTrue(hopper.run(false))
-            .onFalse(intake.StopCommand())
-            .onFalse(hopper.stop());
-
-=======
->>>>>>> main
 
 
         // this needs to be refactors to the inline standerds
