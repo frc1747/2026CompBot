@@ -53,6 +53,7 @@ public class Kicker extends SubsystemBase {
     }
 
     public Command run(boolean reverse) {
+        System.out.println("Running Kicker");
         return runOnce(() -> setPower((reverse ? -1 : 1) * Constants.Intake.POWER));
     }
 

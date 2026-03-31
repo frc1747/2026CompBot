@@ -76,11 +76,26 @@ public class RobotContainer {
 
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
+        //Commands here are purely for testing when other commands run
         NamedCommands.registerCommand("TestCommand", new InstantCommand(() -> System.out.println("Test Command Has Run")));
-        NamedCommands.registerCommand("ShooterTest" , new InstantCommand(() -> System.out.println("Shooter has Started Running")));
-        NamedCommands.registerCommand("HopperTest" , new InstantCommand(() -> System.out.println("Hopper has Started Running")));
-        NamedCommands.registerCommand("KickerTest" , new InstantCommand(() -> System.out.println("Shooter has Started Running")));
-        NamedCommands.registerCommand("IntakeTest" , new InstantCommand(() -> System.out.println("Intake has Started Rotating")));
+        NamedCommands.registerCommand("ShooterTest" , new InstantCommand(() -> System.out.println("Shooter Command Has Run")));
+        NamedCommands.registerCommand("HopperTest" , new InstantCommand(() -> System.out.println("Hopper Command Has Run")));
+        NamedCommands.registerCommand("KickerTest" , new InstantCommand(() -> System.out.println("Kicker Command Has Run")));
+        NamedCommands.registerCommand("ShooterStopTest", new InstantCommand(() -> System.out.println("Shooter Stop Command Has Run")));
+        NamedCommands.registerCommand("HopperStopTest", new InstantCommand(() -> System.out.println("Hopper Stop Command Has Run")));
+        NamedCommands.registerCommand("KickerStopTest", new InstantCommand(() -> System.out.println("Kicker Stop Command Has Run")));
+
+
+        NamedCommands.registerCommand("IntakeReverseTest", new InstantCommand(() -> System.out.println("Intake Reverse Collect Command Has Run")));
+        NamedCommands.registerCommand("IntakeSpinTest" , new InstantCommand(() -> System.out.println("Intake Collect Command Has Run")));
+        NamedCommands.registerCommand("IntakeOutTest", new InstantCommand(() -> System.out.println("Intake Out Command Has Run")));
+        NamedCommands.registerCommand("IntakeInTest", new InstantCommand(() -> System.out.println("Intake In Command Has Run")));
+        NamedCommands.registerCommand("IntakeStopTest", new InstantCommand(() -> System.out.println("Intake Stop Has Been Run")));
+
+
+
+
+
         NamedCommands.registerCommand("IntakeOut", new GrabFuel(intakePivot));
         NamedCommands.registerCommand("IntakeIn", new IntakeGoToDefault(intakePivot));
         NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
