@@ -20,8 +20,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import monologue.Logged;
 
-public class Shooter extends SubsystemBase {
+public class Shooter extends SubsystemBase implements Logged{
     // shooting dir is froward.
     private TalonFX motorLeft;
     private TalonFX follower;
@@ -167,20 +168,20 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Shooter/Average RPM", getRPM());
+        log("Shooter/Average RPM", getRPM());
         desiredRPM = SmartDashboard.getNumber("Shooter/Desired RPM", 0.0);
         //SmartDashboard.putNumber("Shooter/Desired RPM error", Math.abs((desiredRPM - getRPM()) / getRPM()));
         if (Math.abs((desiredRPM - getRPM()) / getRPM()) <= 0.01) {
-            SmartDashboard.putBoolean("Shooter/Desired RPM Reached", true);
+            log("Shooter/Desired RPM Reached", true);
         } else{
-            SmartDashboard.putBoolean("Shooter/Desired RPM Reached", false);
+            log("Shooter/Desired RPM Reached", false);
         }
         desiredPower = SmartDashboard.getNumber("Shooter/Desired Power", 0.0) ;
-        SmartDashboard.putNumber("number I am putting on smartdashbard", desiredRPM);
+        log("number I am putting on smartdashbard", desiredRPM);
 
         //setRPM(desiredRPM);
-        SmartDashboard.putNumber("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity);
-        SmartDashboard.getNumber("Shooter/Desired Power?", desiredPower) ;
+        log("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity);
+        log("Shooter/Desired Power?", desiredPower) ;
 
         // auto shoot
 
@@ -189,7 +190,7 @@ public class Shooter extends SubsystemBase {
         PID_P = SmartDashboard.getNumber("Shooter/Shooter pid P", PID_P);
         PID_I = SmartDashboard.getNumber("Shooter/Shooter pid I", PID_I);
         PID_D = SmartDashboard.getNumber("Shooter/Shooter pid D", PID_D);
-        SmartDashboard.putNumber("Shooter/Shooter true pid P",  configShooter.Slot0.kP);
+        log("Shooter/Shooter true pid P",  configShooter.Slot0.kP);
 
         if(configShooter.Slot0.kP != PID_P)  {
             configShooter.Slot0.kP = PID_P;
