@@ -36,7 +36,7 @@ public class Shooter extends SubsystemBase {
     public double PID_I = Constants.Shooter.PID_I;
     public double PID_D = Constants.Shooter.PID_D;
     private double shooterOffset = 0.0;
-  
+
 
     public Shooter() {
         motorLeft = new TalonFX(Constants.Shooter.MOTOR_LEFT_PORT);
@@ -119,11 +119,11 @@ public class Shooter extends SubsystemBase {
 
     public double getPowerNeededFromDistanceAndAngle(double x, double y){
         // Z = A + BX + CY + DX^2 + FY^2 + EXY is the quady E Z is power, X is distance, Y is hood angle
-        return (Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_D*Math.pow(x,2) + Constants.Shooter.SURFACE_F*Math.pow(y,2) + Constants.Shooter.SURFACE_E*x*y)/100;
+        return (Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_D*Math.pow(x,2) + Constants.Shooter.SURFACE_F*Math.pow(y,2) + Constants.Shooter.SURFACE_E*x*y);
     }
 
     public double getdistanceNeededFromAngleAndPower(double y, double z ){
-        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_F*Math.pow(y,2) +- z*100;
+        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_C*y + Constants.Shooter.SURFACE_F*Math.pow(y,2) +- z;
         double B =  Constants.Shooter.SURFACE_B + Constants.Shooter.SURFACE_E;
         double A = Constants.Shooter.SURFACE_D;
         double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative
@@ -133,7 +133,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getAngleNeededFromDistanceAndPower(double x, double z ){
-        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_D*Math.pow(x,2) +- z*100;
+        double C = Constants.Shooter.SURFACE_A + Constants.Shooter.SURFACE_B*x + Constants.Shooter.SURFACE_D*Math.pow(x,2) +- z;
         double B =  Constants.Shooter.SURFACE_C + Constants.Shooter.SURFACE_E;
         double A = Constants.Shooter.SURFACE_F;
         double aws = (- B + Math.sqrt( Math.pow(B, 2) - 4*A*C))/2*A; // we need to see if it's postive or negative

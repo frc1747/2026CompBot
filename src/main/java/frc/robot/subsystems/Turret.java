@@ -102,6 +102,10 @@ public class Turret extends SubsystemBase {
         targetPower = power;
     }
 
+    public Command spin(boolean reverse) {
+        return runOnce(() -> basicSpin((reverse ? -1 : 1) * Constants.Turret.TURRET_POWER));
+    }
+
     // TODO: also rename and refactor to getRelativeTurretAngle
     public double getTurretAngle() {
         // gear ratio 15 to 110, 110/15 ~= 7.333
@@ -154,20 +158,35 @@ public class Turret extends SubsystemBase {
         return wrappedYaw + yawOffsetFudge;
     }
 
-
     // TODO: Tune PID
     public void goToAngle(double targetAngle) {
         double currentAngle = getTurretAngle();
         double output = pid.calculate(currentAngle, targetAngle);
 
         // Safety
-        output = MathUtil.clamp(output, Constants.Turret.GO_TO_ANGLE_LOWER_SAFETY, Constants.Turret.GO_TO_ANGLE_HIGHER_SAFETY);
-        dutyCycle.Output = output;
+       // output = MathUtil.clamp(output, Constants.Turret.GO_TO_ANGLE_LOWER_SAFETY, Constants.Turret.GO_TO_ANGLE_HIGHER_SAFETY);
 
-        if ((Constants.Turret.LOWER_LIMIT <= targetAngle) && (targetAngle <= Constants.Turret.UPPER_LIMIT)){
-            dutyCycle.Output = 0;
+        double clampPid = output;
+        if (clampPid > Constants.Vision.APRIL_LOCK_PID_CLAMP) {
+            clampPid = Constants.Vision.APRIL_LOCK_PID_CLAMP;
+        } else if (clampPid < -Constants.Vision.APRIL_LOCK_PID_CLAMP) {
+            clampPid = -Constants.Vision.APRIL_LOCK_PID_CLAMP;
         }
-        motor.setControl(dutyCycle);
+
+        dutyCycle.Output = clampPid;
+
+        // if ((Constants.Turret.LOWER_LIMIT <= targetAngle) && (targetAngle <= Constants.Turret.UPPER_LIMIT)){
+        //     dutyCycle.Output = 0;
+        // }
+        basicSpin(clampPid);
+    }
+
+    public Command aimAtPose(Pose2d target){
+        return run( () -> goToAngle(getYawOffset(target.getTranslation())));
+    }
+
+    public Command stopCommand(){
+        return runOnce( () -> basicSpin(0));
     }
 
     @Override
