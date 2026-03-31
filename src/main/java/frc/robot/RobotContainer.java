@@ -214,7 +214,11 @@ public class RobotContainer implements Logged {
             .alongWith(Commands.run( () -> TargetPoses.setShuttling())));
 
         tmJoystickTrigger
-            .whileTrue(new AutoAim(shooter, hood))
+            .onTrue(Commands.run( () -> TargetPoses.reinitTargetLocPrime()));
+
+        tmJoystickTrigger
+            .whileTrue(new AutoAim(shooter, hood)
+            .alongWith(Commands.run( () -> TargetPoses.shootOnTheMove())))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 

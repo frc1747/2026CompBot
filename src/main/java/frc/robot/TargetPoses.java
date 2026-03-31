@@ -28,8 +28,9 @@ public class TargetPoses {
         updateTurretVelAndLoc();
     }
 
-    // initShootWhileMove
-    // targetLocPrime = currentTarget.getTranslation();
+    public static void reinitTargetLocPrime() {
+        targetLocPrime = currentTarget.getTranslation();
+    }
 
     private static Pair<Translation2d, Double> getNextTargetApprox(Translation2d previousApproximation) {
         // distance from  turret to previous approximation
@@ -101,7 +102,7 @@ public class TargetPoses {
     }
 
     public static Pose2d getTargetPose() {
-        return currentTarget;
+        return new Pose2d(targetLocPrime, new Rotation2d());
     }
 
     public static void setScoring() {
@@ -110,7 +111,7 @@ public class TargetPoses {
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             currentTarget = Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D;
         }
-        targetLocPrime = currentTarget.getTranslation();
+        reinitTargetLocPrime();
     }
 
     public static void setShuttling() {
@@ -119,7 +120,7 @@ public class TargetPoses {
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             currentTarget = redshuttling();
         }
-        targetLocPrime = currentTarget.getTranslation();
+        reinitTargetLocPrime();
     }
 
     private static Pose2d blueShuttling() {
