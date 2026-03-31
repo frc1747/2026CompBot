@@ -27,7 +27,6 @@ import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
 import frc.robot.commands.autosCommands.AutoAutoAim;
 import frc.robot.commands.teleop.AprilLock;
-import frc.robot.commands.teleop.AprilLockShuttle;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.ToggleIntakeReady;
@@ -191,7 +190,11 @@ public class RobotContainer {
             .toggleOnTrue(new AprilLock(turret));
 
         driver.leftTrigger()
-            .toggleOnTrue(new AprilLockShuttle(turret));
+            .whileTrue(intake.spin(false))
+            .whileTrue(hopper.run(false))
+            .onFalse(intake.StopCommand())
+            .onFalse(hopper.stop());
+
 
         operator.povLeft()
             .onTrue(turret.changeYawOffSetCommand(.01));
