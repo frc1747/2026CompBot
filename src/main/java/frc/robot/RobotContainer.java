@@ -186,7 +186,10 @@ public class RobotContainer implements Logged {
         // intake eject
         driver.leftTrigger()
             .whileTrue(intake.spin(false))
-            .onFalse(intake.StopCommand());
+            .whileTrue(hopper.run(true))
+            .onFalse(intake.StopCommand())
+            .onFalse(hopper.stop());
+
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
