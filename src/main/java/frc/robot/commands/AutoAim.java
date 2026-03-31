@@ -6,12 +6,11 @@ package frc.robot.commands;
 
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.TargetPoses;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 import java.util.function.DoubleSupplier;
@@ -27,15 +26,13 @@ public class AutoAim extends Command {
         this.shooter = shooter;
         this.hood = hood;
         this.fudgeFactorSupplier = fudgeFactorSupplier;
-        this.target = Constants.Shooter.BLUE_HUB_CENTER_POSE2D; // we default to blue like the coordinate system.
+        this.target = TargetPoses.getTargetPose();
+         // we default to blue like the coordinate system.
         addRequirements(shooter, hood);
     }
 
     @Override
     public void initialize() {
-        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            this.target = Constants.Shooter.RED_HUB_CENTER_POSE2D;
-        }
         // yes I am a hack
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);

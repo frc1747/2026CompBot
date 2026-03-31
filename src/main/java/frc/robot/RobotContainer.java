@@ -12,14 +12,18 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAim;
@@ -27,7 +31,6 @@ import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
 import frc.robot.commands.autosCommands.AutoAutoAim;
 import frc.robot.commands.teleop.AprilLock;
-import frc.robot.commands.teleop.AprilLockShuttle;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.ToggleIntakeReady;
@@ -41,8 +44,9 @@ import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import java.util.function.DoubleSupplier;
+import monologue.Logged;
 
-public class RobotContainer {
+public class RobotContainer implements Logged {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
@@ -58,7 +62,8 @@ public class RobotContainer {
     // Control
     private final CommandXboxController driver = new CommandXboxController(Constants.Controller.DRIVER_PORT);
     private final XboxController driver_hid = driver.getHID();
-    private final CommandXboxController operator = new CommandXboxController(Constants.Controller.OPERATOR_PORT);
+    private final Joystick operator = new Joystick(Constants.Controller.OPERATOR_PORT);
+
 
     public static final Kicker kicker = new Kicker();
     public static final Hood hood = new Hood();
@@ -80,9 +85,24 @@ public class RobotContainer {
 
     public static final Field2d field = new Field2d();
 
-    public RobotContainer() {
-        NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
+    public static TargetPoses target = new TargetPoses();
+    public final JoystickButton tmJoystickFaceButtonRight = new JoystickButton(operator , 4);
+    public final JoystickButton tmJoystickFaceButtonLeft = new JoystickButton(operator , 3);
+    public final JoystickButton tmJoystickTrigger = new JoystickButton(operator , 1);
+    public final POVButton tmJoystickPovUp = new POVButton(operator, 0);
+    public final POVButton tmJoystickPovDown = new POVButton(operator, 180);
+    public final JoystickButton tmJoystickRightHandBottomLeft = new JoystickButton(operator , 9);
+    public final JoystickButton tmJoystickRightHandBottomMiddle = new JoystickButton(operator , 10);
+    public final JoystickButton tmJoystickRightHandBottomRight = new JoystickButton(operator , 11);
+    public final JoystickButton tmJoystickRightHandTopLeft = new JoystickButton(operator , 8);
+    public final JoystickButton tmJoystickRightHandTopMiddle = new JoystickButton(operator , 7);
+    public final JoystickButton tmJoystickRightHandTopRight = new JoystickButton(operator , 6);
+    public double shooterFudgeFactor;
+    public double turretFudgeFactor;
 
+    public RobotContainer() {
+
+        NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
         NamedCommands.registerCommand("IntakeOut", new GrabFuel( intakePivot));
         NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
         NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
@@ -97,10 +117,19 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
-        configureBindings();
+
+
+
 
         // Warmup PathPlanner to avoid Java pauses
         CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
+
+        // booo I don't like this
+        // thrustmaster controls
+
+        this.shooterFudgeFactor = 0;
+        this.turretFudgeFactor = 0;
+        configureBindings();
     }
 
     private void configureBindings() {
@@ -169,34 +198,53 @@ public class RobotContainer {
         // operater
 
         // intake hopper
-
-        operator.leftBumper()
+        tmJoystickPovUp
             .whileTrue(hopper.run(false)
             .alongWith(kicker.setRPMCommand()))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
-        operator.rightBumper()
+        tmJoystickPovDown
             .whileTrue(hopper.run(true)
             .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
-        operator.x()
+        tmJoystickFaceButtonRight
+            .toggleOnTrue(new AprilLock(turret)
+            .alongWith(Commands.run( () -> TargetPoses.setScoring())));
+
+        tmJoystickFaceButtonLeft
+            .toggleOnTrue(new AprilLock(turret)
+            .alongWith(Commands.run( () -> TargetPoses.setShuttling())));
+
+        tmJoystickTrigger
+            .whileTrue(new AutoAim(shooter, hood))
+            .onFalse(shooter.stopCommand()
+            .alongWith(hood.stopCommand()));
+
+        // Manual Turret movement code
+        tmJoystickRightHandBottomLeft
+            .whileTrue(turret.spin(true))
+            .onFalse(turret.stopCommand());
+        tmJoystickRightHandBottomMiddle
+            .whileTrue(turret.spin(false))
+            .onFalse(turret.stopCommand());
+
+        // Manual Hood movement code
+        tmJoystickRightHandTopLeft
             .whileTrue(hood.setPowerCommand(false))
             .onFalse(hood.stopCommand());
+        tmJoystickRightHandTopMiddle
+            .whileTrue(hood.setPowerCommand(true))
+            .onFalse(hood.stopCommand(, () -> fudgeFactorTurret));
 
-        operator.y()
-            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
+        // Shooter speed manual change
+        tmJoystickRightHandTopRight
+            .onTrue(shooter.offsetIncrement());
+        tmJoystickRightHandBottomRight
+            .onTrue(shooter.offsetDecrement());
 
-        // turret moved to driver
-        driver.leftBumper()
-            .toggleOnTrue(new AprilLock(turret, () -> fudgeFactorTurret));
-
-        driver.leftTrigger()
-            .toggleOnTrue(new AprilLockShuttle(turret));
-
-        if (operator.povLeft().getAsBoolean())
             fudgeFactorTurret += Constants.Turret.FUDGE_FACTOR_TURRET;
         if (operator.povRight().getAsBoolean())
             fudgeFactorTurret -= Constants.Turret.FUDGE_FACTOR_TURRET;
@@ -205,6 +253,9 @@ public class RobotContainer {
             fudgeFactorShooter += Constants.Shooter.FUDGE_FACTOR_SHOOTER;
         if (operator.povDown().getAsBoolean())
             fudgeFactorShooter -= Constants.Shooter.FUDGE_FACTOR_SHOOTER;
+
+
+
 
         // this needs to be refactors to the inline standards
         operator.rightTrigger()

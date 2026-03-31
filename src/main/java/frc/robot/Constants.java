@@ -69,11 +69,11 @@ public final class Constants {
 
         public static final double BLUE_HUB_CENTER_X = 4.611624;
         public static final double BLUE_HUB_CENTER_Y = FIELD_CENTER_Y;
-        public static final double BLUE_SHUTTLE_CENTER_X = 3;
+        public static final double BLUE_SHUTTLE_CENTER_X = 1;
 
         public static final double RED_HUB_CENTER_X = 16.5 - BLUE_HUB_CENTER_X;
         public static final double RED_HUB_CENTER_Y = FIELD_CENTER_Y;
-        public static final double RED_SHUTTLE_CENTER_X = 16.5 - BLUE_HUB_CENTER_X;
+        public static final double RED_SHUTTLE_CENTER_X = 16.5 - BLUE_SHUTTLE_CENTER_X;
 
         public static final double RED_RIGHT_CORNER_X = 17.5482504;
         public static final double RED_RIGHT_CORNER_Y = 8.0519016;
@@ -137,9 +137,9 @@ public final class Constants {
         // value to divide encoder value by in order to get 360 degress per turret rotation
         public static final double TURRET_RATIO = 41.719;
         public static final int encoderLimit = 5771 / 2; // temporary encoder value limit
-        public static final double PID_P = 0.0;
-        public static final double PID_I = 0;
-        public static final double PID_D = 0;
+        public static final double PID_P = 1.0;
+        public static final double PID_I = 0.003;
+        public static final double PID_D = 0.003;
         public static final double GO_TO_ANGLE_LOWER_SAFETY = -3.0;
         public static final double GO_TO_ANGLE_HIGHER_SAFETY = 3.0;
         public static final double UPPER_LIMIT = 90;
@@ -147,11 +147,13 @@ public final class Constants {
         public static final double DIST_TO_BOT_CENTER = 0.1529842; // meters
         public static final double TURRET_YAW_LIMIT_UPPER = 95; // deg
         public static final double TURRET_YAW_LIMIT_LOWER = -150;
+        public static final double TURRET_POWER = .025;
     }
 
     public static final class Shooter {
 
         public static final double FUDGE_FACTOR_SHOOTER = 100; // in rpms
+        public static final double AUTOSHOOT_OFFSET_INCREMENT = 100;
         public static final int MOTOR_LEFT_PORT = 41;
         public static final int MOTOR_RIGHT_PORT = 42;
         public static final int ENCODER_PORT = 1; // needs to be set
@@ -163,7 +165,7 @@ public final class Constants {
         public static final double SURFACE_E = -10.8847; // needs tuning
         public static final double SURFACE_F = 2.9962; // needs tuning
         public static final double MAX_AUTOSHOOT_POWER =4500;
-        public static final int AUTO_SHOOTER_MULT = 107; // this should be remove when we get better auto shoot values
+        public static final double AUTO_SHOOTER_MULT = .65; // this should be remove when we get better auto shoot values
         public static final double MAX_HOOD_ANGLE = 43; // degrees
         public static final double MIN_HOOD_ANGLE = 26; // degrees
         public static final double PID_P = .75; // they are half for the two motors
@@ -202,6 +204,29 @@ public final class Constants {
     public static final class Kicker {
         public static final int MOTOR_PORT = 43;
         public static final double MOTOR_RPM = 4300; // amount we got on shuffleboard when the kicker was ran at 70% power
-        public static final double MOTOR_POWER = 0.35; // was .8
+        public static final double MOTOR_POWER = 0.35;
     }
+
+  public static final class TargetPosesConstants {
+
+    public static final double SHOOTER_SLIDER_VALUE = 2;
+    public static final double SHOOTER_BASE_VALUE = .5;
+
+    public static final double TURRET_SLIDER_VALUE = 2;
+    public static final double TURRET_BASE_VALUE = .001;
+
+    public static final double BLUE_DEADZONE_MIN = 3;
+    public static final double BLUE_DEADZONE_MAX = 5;
+
+    public static final double RED_DEADZONE_MIN = 3;
+    public static final double RED_DEADZONE_MAX = 5;
+
+    public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(Constants.Vision.BLUE_HUB_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y, new Rotation2d());
+    public static final Pose2d BLUE_LEFT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.BLUE_SHUTTLE_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y + 3, new Rotation2d()); // need tuning
+    public static final Pose2d BLUE_RIGHT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.BLUE_SHUTTLE_CENTER_X, Constants.Vision.BLUE_HUB_CENTER_Y -3 , new Rotation2d());
+
+    public static final Pose2d RED_LEFT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_SHUTTLE_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y+ 3, new Rotation2d());
+    public static final Pose2d RED_RIGHT_SHUTTLE_POSE2D = new Pose2d(Constants.Vision.RED_SHUTTLE_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y -3, new Rotation2d());
+  }
 }
