@@ -56,6 +56,7 @@ public class AprilLock extends Command {
             clampPid = -Constants.Vision.APRIL_LOCK_PID_CLAMP;
         }
 
+        SmartDashboard.putNumber("Yaw offset + fudge", yawOffset + this.fudgeFactor.getAsDouble());
         SmartDashboard.putNumber("pidOutput", pidOutput);
         SmartDashboard.putNumber("clampPid", clampPid);
         SmartDashboard.putNumber("yawOffset", yawOffset);
