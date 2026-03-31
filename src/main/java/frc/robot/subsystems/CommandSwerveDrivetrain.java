@@ -30,6 +30,8 @@ import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
+import monologue.Logged;
+
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Map;
@@ -40,7 +42,7 @@ import java.util.function.Supplier;
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
  * Subsystem so it can easily be used in command-based projects.
  */
-public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem, Logged {
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -287,6 +289,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         RobotContainer.field.setRobotPose(getState().Pose);
         SmartDashboard.putData("Field2d ", RobotContainer.field);
         addLimelightMeasurement();
+        log("Pose", getState().Pose);
         SmartDashboard.putNumber("Distance To Hub", distanceToPose(
             new Pose2d(new Translation2d(Constants.Vision.FIELD_CENTER_X, Constants.Vision.FIELD_CENTER_Y), new Rotation2d(0.0))));
     }
