@@ -68,28 +68,9 @@ public class Turret extends SubsystemBase implements Logged{
     // could be more accurate using empirically collected data and interpolation
     // kinetics math here may have errors
     public Double getFuelTravelTime(double hoodAngle, double dist) {
-        double initHeight = Constants.Turret.DIST_TO_BOT_CENTER;
-        double finalHeight = Constants.Vision.HUB_HEIGHT;
-        double hubClearHeight = Constants.Vision.HUB_CLEAR_HEIGHT;
-        try {
-            double maxHeight = initHeight - Math.pow(Math.tan(hoodAngle), 2)/(4 * (finalHeight - initHeight - Math.tan(hoodAngle) * dist));
-            if (maxHeight <= hubClearHeight) {
-                // fuel would not make it to hub, return null
-                return null;
-            } else if (maxHeight <= initHeight) {
-                // scenario should be impossible, return null
-                return null;
-            }
-            // time from launch to reaching max height in seconds
-            double timeToMax = Math.sqrt(2 * (maxHeight - initHeight) / 9.8); // 9.8 is in m/s^2, is gravitational constant g
-            // time from reaching max height to reaching hub
-            double timeFromMax = Math.sqrt(2 * (maxHeight - finalHeight) / 9.8); // 9.8 is in m/s^2, is gravitational constant g
-            return timeToMax + timeFromMax;
-        } catch (ArithmeticException e) {
-            // display error without stopping code
-            System.out.println(e);
-            return null;
-        }
+        // very very approximate, obtained from a single, out of date measurement
+        // 1.2 / 3.27 is the linear approximation factor for tavel time based on distance
+        return dist * 1.2 / 3.27;
     }
 
     // returns turret tangential velocity of turret relative to bot center
