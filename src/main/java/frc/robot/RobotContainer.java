@@ -251,10 +251,10 @@ public class RobotContainer implements Logged {
             .toggleOnTrue(new AprilLockShuttle(turret));
 
         tmJoystickPOVLeft
-            .onTrue(turret.changeYawOffSetCommand(.05));
+            .whileTrue(turret.changeYawOffSetCommand(.05));
 
         tmJoystickPOVRight
-            .onTrue(turret.changeYawOffSetCommand(-.05));
+            .whileTrue(turret.changeYawOffSetCommand(-.05));
 
         // this needs to be refactors to the inline standerds
         tmJoystickFaceButtonDown
