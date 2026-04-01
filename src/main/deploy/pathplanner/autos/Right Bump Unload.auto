@@ -40,19 +40,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "IntakeCollect"
+                        "name": "Hopper"
                       }
                     }
                   ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Hopper"
           }
         },
         {
@@ -82,7 +76,7 @@
         {
           "type": "named",
           "data": {
-            "name": "StopIntake"
+            "name": "StopShooter"
           }
         }
       ]
