@@ -13,18 +13,21 @@ import frc.robot.RobotContainer;
 import frc.robot.TargetPoses;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
+import java.util.function.DoubleSupplier;
 
 public class AutoAim extends Command {
     private Shooter shooter;
     private Hood hood;
     private Pose2d target;
     private double[] hoodAngleAndShooterPower = {-1,-1};
+    private DoubleSupplier fudgeFactorSupplier;
 
-    public AutoAim(Shooter shooter, Hood hood) {
+    public AutoAim(Shooter shooter, Hood hood, DoubleSupplier fudgeFactorSupplier) {
         this.shooter = shooter;
         this.hood = hood;
+        this.fudgeFactorSupplier = fudgeFactorSupplier;
         this.target = TargetPoses.getTargetPose();
-         // we default to blue like the cordnet system.
+         // we default to blue like the coordinate system.
         addRequirements(shooter, hood);
     }
 
@@ -45,7 +48,7 @@ public class AutoAim extends Command {
 
         hood.goToAngleCommand(hoodAngleAndShooterPower[0]);
         if (hood.atAngle(hoodAngleAndShooterPower[0])){
-            shooter.setRPM(hoodAngleAndShooterPower[1]);
+            shooter.setRPM(hoodAngleAndShooterPower[1] + fudgeFactorSupplier.getAsDouble());
         }
         SmartDashboard.putNumber("Shooter/distance from hub from autoAim", distance);
         SmartDashboard.putNumber("Shooter/RPM for auto aim", hoodAngleAndShooterPower[1]);
@@ -53,7 +56,9 @@ public class AutoAim extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        shooter.setRPM(0);
+    }
 
     @Override
     public boolean isFinished() {

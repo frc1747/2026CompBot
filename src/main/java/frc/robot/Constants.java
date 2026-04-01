@@ -120,10 +120,14 @@ public final class Constants {
         public static final double MAX_PID_OUTPUT = 0.875;
         public static final double MANUAL_MOTOR_POWER = 0.2;
 
-    }
+  }
+
+
 
     public static final class Turret {
-        public static final int MOTOR_PORT = 59;
+
+    public static final double FUDGE_FACTOR_TURRET = .05; // in radians
+    public static final int MOTOR_PORT = 59;
         public static final int ENCODER_PORT_A = 0;
         public static final int ENCODER_PORT_B = 1;
         // left from the perspective of someone facing towards the turret side of bot
@@ -147,6 +151,8 @@ public final class Constants {
     }
 
     public static final class Shooter {
+
+        public static final double FUDGE_FACTOR_SHOOTER = 100; // in rpms
         public static final double AUTOSHOOT_OFFSET_INCREMENT = 100;
         public static final int MOTOR_LEFT_PORT = 41;
         public static final int MOTOR_RIGHT_PORT = 42;
@@ -160,9 +166,9 @@ public final class Constants {
         public static final double SURFACE_F = 2.9962; // needs tuning
         public static final double MAX_AUTOSHOOT_POWER =4500;
         public static final double AUTO_SHOOTER_MULT = .65; // this should be remove when we get better auto shoot values
-        public static final double MAX_HOOD_ANGLE = 43;// degrees
-        public static final double MIN_HOOD_ANGLE = 26;// degrees
-        public static final double PID_P = .75;// they are half for the two motors
+        public static final double MAX_HOOD_ANGLE = 43; // degrees
+        public static final double MIN_HOOD_ANGLE = 26; // degrees
+        public static final double PID_P = .75; // they are half for the two motors
         public static final double PID_I = 0.3;
         public static final double PID_D = 0.015;
         public static final double TOLERANCE = .05; // percent tolerance
@@ -173,7 +179,7 @@ public final class Constants {
 
     public static final class Intake {
         public static final int MOTOR_PORT = 46;
-        public static final double POWER = 0.85;
+        public static final double POWER = 0.80;
         public static final int INTAKE_PIVOT_TICK = 6000; //TODO: VERIFY
     }
 
@@ -185,7 +191,7 @@ public final class Constants {
         public static final double kI = 0.0;  // TODO: VERIFY
         public static final double kD = 0.0;  // TODO: VERIFY
         public static final double ENCODER_UP = 0;     // TODO: Verify
-        public static final double ENCODER_DOWN = -42.5;  // TODO: Verify
+        public static final double ENCODER_DOWN = -40.0;  // TODO: Verify
         public static final double ENCODER_READY = -42.5; // TODO: Verify
         public static final double SET_POINT_P = 0.05;  // TODO: tune
         public static final double SET_POINT_I = 0.001; // TODO: tune

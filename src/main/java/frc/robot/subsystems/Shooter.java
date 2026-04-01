@@ -13,7 +13,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -151,7 +150,7 @@ public class Shooter extends SubsystemBase implements Logged{
         double[] array = {-1,-1};
         // this could be refactor
         if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-            double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};
+            double[] angleAndSpeed = {currentAngle, wantedPower * Constants.Shooter.AUTO_SHOOTER_MULT};
             return angleAndSpeed;
         }
 
@@ -159,7 +158,7 @@ public class Shooter extends SubsystemBase implements Logged{
         for (currentAngle = RobotContainer.hood.getCurrentAngle() ; currentAngle <= Constants.Shooter.MAX_HOOD_ANGLE ; currentAngle ++ ){
             if (currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE) return array;
             if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-                double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};
+                double[] angleAndSpeed = {currentAngle, wantedPower * Constants.Shooter.AUTO_SHOOTER_MULT};
                 return angleAndSpeed;
             }
         }
@@ -167,7 +166,7 @@ public class Shooter extends SubsystemBase implements Logged{
         for (currentAngle = RobotContainer.hood.getCurrentAngle() ; currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE ; currentAngle -- ){
             if (currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE) return array;
             if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-                double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};
+                double[] angleAndSpeed = {currentAngle, wantedPower * Constants.Shooter.AUTO_SHOOTER_MULT};
                 return angleAndSpeed;
             }
         }

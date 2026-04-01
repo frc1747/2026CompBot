@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.TargetPoses;
 import frc.robot.subsystems.Turret;
+import java.util.function.DoubleSupplier;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AprilLock extends Command {
@@ -46,7 +47,7 @@ public class AprilLock extends Command {
         } else if (clampPid < -Constants.Vision.APRIL_LOCK_PID_CLAMP) {
             clampPid = -Constants.Vision.APRIL_LOCK_PID_CLAMP;
         }
-
+        
         SmartDashboard.putNumber("pidOutput", pidOutput);
         SmartDashboard.putNumber("clampPid", clampPid);
         SmartDashboard.putNumber("yawOffset", yawOffset);
