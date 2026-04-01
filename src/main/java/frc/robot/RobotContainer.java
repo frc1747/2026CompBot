@@ -31,6 +31,7 @@ import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
 import frc.robot.commands.autosCommands.AutoAutoAim;
 import frc.robot.commands.teleop.AprilLock;
+import frc.robot.commands.teleop.AprilLockShuttle;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.ToggleIntakeReady;
@@ -43,7 +44,6 @@ import frc.robot.subsystems.IntakePivot;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
-import java.util.function.DoubleSupplier;
 import monologue.Logged;
 
 public class RobotContainer implements Logged {
@@ -88,9 +88,12 @@ public class RobotContainer implements Logged {
     public static TargetPoses target = new TargetPoses();
     public final JoystickButton tmJoystickFaceButtonRight = new JoystickButton(operator , 4);
     public final JoystickButton tmJoystickFaceButtonLeft = new JoystickButton(operator , 3);
+    public final JoystickButton tmJoystickFaceButtonDown = new JoystickButton(operator, 2);
     public final JoystickButton tmJoystickTrigger = new JoystickButton(operator , 1);
     public final POVButton tmJoystickPovUp = new POVButton(operator, 0);
     public final POVButton tmJoystickPovDown = new POVButton(operator, 180);
+    public final POVButton tmJoystickPOVLeft = new POVButton(operator, 270);
+    public final POVButton tmJoystickPOVRight = new POVButton(operator, 90);
     public final JoystickButton tmJoystickRightHandBottomLeft = new JoystickButton(operator , 9);
     public final JoystickButton tmJoystickRightHandBottomMiddle = new JoystickButton(operator , 10);
     public final JoystickButton tmJoystickRightHandBottomRight = new JoystickButton(operator , 11);
@@ -98,7 +101,7 @@ public class RobotContainer implements Logged {
     public final JoystickButton tmJoystickRightHandTopMiddle = new JoystickButton(operator , 7);
     public final JoystickButton tmJoystickRightHandTopRight = new JoystickButton(operator , 6);
     public double shooterFudgeFactor;
-    public double turretFudgeFactor;
+
 
     public RobotContainer() {
 
@@ -128,7 +131,6 @@ public class RobotContainer implements Logged {
         // thrustmaster controls
 
         this.shooterFudgeFactor = 0;
-        this.turretFudgeFactor = 0;
         configureBindings();
     }
 
@@ -212,14 +214,14 @@ public class RobotContainer implements Logged {
 
         tmJoystickFaceButtonRight
             .toggleOnTrue(new AprilLock(turret)
-            .alongWith(Commands.run( () -> TargetPoses.setScoring())));
+            .alongWith(Commands.run(() -> TargetPoses.setScoring())));
 
         tmJoystickFaceButtonLeft
             .toggleOnTrue(new AprilLock(turret)
-            .alongWith(Commands.run( () -> TargetPoses.setShuttling())));
+            .alongWith(Commands.run(() -> TargetPoses.setShuttling())));
 
         tmJoystickTrigger
-            .whileTrue(new AutoAim(shooter, hood))
+            .whileTrue(new AutoAim(shooter, hood, () -> fudgeFactorShooter))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 
@@ -237,7 +239,7 @@ public class RobotContainer implements Logged {
             .onFalse(hood.stopCommand());
         tmJoystickRightHandTopMiddle
             .whileTrue(hood.setPowerCommand(true))
-            .onFalse(hood.stopCommand(, () -> fudgeFactorTurret));
+            .onFalse(hood.stopCommand());
 
         // Shooter speed manual change
         tmJoystickRightHandTopRight
@@ -245,28 +247,19 @@ public class RobotContainer implements Logged {
         tmJoystickRightHandBottomRight
             .onTrue(shooter.offsetDecrement());
 
-            fudgeFactorTurret += Constants.Turret.FUDGE_FACTOR_TURRET;
-        if (operator.povRight().getAsBoolean())
-            fudgeFactorTurret -= Constants.Turret.FUDGE_FACTOR_TURRET;
+        driver.leftTrigger()
+            .toggleOnTrue(new AprilLockShuttle(turret));
 
-        if (operator.povUp().getAsBoolean())
-            fudgeFactorShooter += Constants.Shooter.FUDGE_FACTOR_SHOOTER;
-        if (operator.povDown().getAsBoolean())
-            fudgeFactorShooter -= Constants.Shooter.FUDGE_FACTOR_SHOOTER;
+        tmJoystickPOVLeft
+            .onTrue(turret.changeYawOffSetCommand(.05));
 
+        tmJoystickPOVRight
+            .onTrue(turret.changeYawOffSetCommand(-.05));
 
-
-
-        // this needs to be refactors to the inline standards
-        operator.rightTrigger()
+        // this needs to be refactors to the inline standerds
+        tmJoystickFaceButtonDown
             .onTrue(shooter.setPowerCommand(Constants.Shooter.SHOOTER_SPEED))
             .onFalse(shooter.setPowerCommand(0));
-
-        // 2 TODO: CHECK if conflics with 1
-        operator.b()
-            .whileTrue(new AutoAim(shooter, hood, () -> fudgeFactorShooter))
-            .onFalse(shooter.stopCommand().alongWith(hood.stopCommand()));
-
     }
 
     public Command getAutonomousCommand() {

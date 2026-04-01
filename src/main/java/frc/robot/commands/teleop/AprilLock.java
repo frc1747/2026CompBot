@@ -7,27 +7,24 @@ package frc.robot.commands.teleop;
 
 
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.TargetPoses;
 import frc.robot.subsystems.Turret;
+import java.util.function.DoubleSupplier;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AprilLock extends Command {
     /** Creates a new FaceObject. */
     private final Turret turret;
     private final PIDController pid;
-    private final DoubleSupplier fudgeFactor;
 
     // TODO: fix starting pose of robot
-    public AprilLock(Turret turret, DoubleSupplier fudgeFactor) {
+    public AprilLock(Turret turret) {
         this.turret = turret;
         this.pid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
-        this.fudgeFactor = fudgeFactor;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(turret);
     }
@@ -43,15 +40,14 @@ public class AprilLock extends Command {
         double yawOffset = turret.getYawOffset(TargetPoses.getTargetPose().getTranslation());
 
         // pid controlling rotation compensation
-        double pidOutput = pid.calculate(yawOffset + this.fudgeFactor.getAsDouble());
+        double pidOutput = pid.calculate(yawOffset);
         double clampPid = pidOutput;
         if (clampPid > Constants.Vision.APRIL_LOCK_PID_CLAMP) {
             clampPid = Constants.Vision.APRIL_LOCK_PID_CLAMP;
         } else if (clampPid < -Constants.Vision.APRIL_LOCK_PID_CLAMP) {
             clampPid = -Constants.Vision.APRIL_LOCK_PID_CLAMP;
         }
-
-        SmartDashboard.putNumber("Yaw offset + fudge", yawOffset + this.fudgeFactor.getAsDouble());
+        
         SmartDashboard.putNumber("pidOutput", pidOutput);
         SmartDashboard.putNumber("clampPid", clampPid);
         SmartDashboard.putNumber("yawOffset", yawOffset);
