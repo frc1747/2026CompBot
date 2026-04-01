@@ -92,6 +92,7 @@ public class RobotContainer implements Logged {
     public final JoystickButton tmJoystickRightHandTopLeft = new JoystickButton(operator , 8);
     public final JoystickButton tmJoystickRightHandTopMiddle = new JoystickButton(operator , 7);
     public final JoystickButton tmJoystickRightHandTopRight = new JoystickButton(operator , 6);
+    public final JoystickButton tmJoystickLeftHandBottomLeft = new JoystickButton(operator, 16);
     public double shooterFudgeFactor;
     public double turretFudgeFactor;
 
@@ -240,6 +241,9 @@ public class RobotContainer implements Logged {
         tmJoystickRightHandBottomRight
             .onTrue(shooter.offsetDecrement());
 
+        tmJoystickLeftHandBottomLeft
+            .whileTrue(shooter.setSpeedToDesired())
+            .onFalse(shooter.stopCommand());
 
 
 
