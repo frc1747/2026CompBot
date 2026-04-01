@@ -245,6 +245,7 @@ public class RobotContainer implements Logged {
             .whileTrue(shooter.setSpeedToDesired())
             .onFalse(shooter.stopCommand());
 
+        
 
 
         // this needs to be refactors to the inline standerds
