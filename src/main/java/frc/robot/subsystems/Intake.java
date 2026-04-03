@@ -36,10 +36,13 @@ public class Intake extends SubsystemBase {
     }
 
     public Command spin() {
-        return runOnce( () -> intakeSpin(Constants.Intake.POWER));
+        System.out.println("Intake is Spinning");
+        return run( () -> intakeSpin(Constants.Intake.POWER));
     }
 
     public Command StopCommand() {
+        System.out.println("Intake Stop has been calledyu");
+
         return runOnce( () -> setIntakePower(0));
     }
     public Command spin(boolean reverse) {

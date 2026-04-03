@@ -29,7 +29,9 @@ public class IntakeGoToDefault extends Command {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+        System.out.println("Intake Go To Default has been initalized");
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override

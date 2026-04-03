@@ -53,6 +53,7 @@ public class Kicker extends SubsystemBase implements Logged{
     }
 
     public Command run(boolean reverse) {
+        System.out.println("Running Kicker");
         return runOnce(() -> setPower((reverse ? -1 : 1) * Constants.Intake.POWER));
     }
 
@@ -61,6 +62,7 @@ public class Kicker extends SubsystemBase implements Logged{
     }
 
     public Command stopCommand() {
+        System.out.println("Kicker Stop Called");
         return runOnce(() -> setPower(0.0));
     }
 

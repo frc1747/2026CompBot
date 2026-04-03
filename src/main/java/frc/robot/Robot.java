@@ -14,9 +14,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import monologue.Monologue;
 
 public class Robot extends TimedRobot {
-    private Command m_autonomousCommand;
+  private Command m_autonomousCommand;
 
-    private final RobotContainer m_robotContainer;
+  private final RobotContainer m_robotContainer;
 
     private final Timer userCodeTimer = new Timer();
     private final Timer dtTimer = new Timer();
@@ -71,10 +71,10 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void disabledInit() {}
+    public void autonomousPeriodic() {}
 
     @Override
-    public void disabledPeriodic() {}
+    public void autonomousExit() {}
 
     @Override
     public void disabledExit() {}
@@ -89,27 +89,16 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void autonomousPeriodic() {}
-
-    @Override
-    public void autonomousExit() {}
-
-    @Override
-    public void teleopInit() {
-        if (m_autonomousCommand != null) {
-            CommandScheduler.getInstance().cancel(m_autonomousCommand);
-        }
-    }
-
-    @Override
     public void teleopPeriodic() {}
 
     @Override
     public void teleopExit() {}
 
     @Override
-    public void testInit() {
-        CommandScheduler.getInstance().cancelAll();
+    public void teleopInit() {
+        if (m_autonomousCommand != null) {
+            CommandScheduler.getInstance().cancel(m_autonomousCommand);
+        }
     }
 
     @Override

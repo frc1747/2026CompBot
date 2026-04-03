@@ -44,6 +44,8 @@ public class Hopper extends SubsystemBase implements Logged{
     }
 
     public Command run(boolean reverse) {
+        System.out.println("Running Hopper");
+
         return runOnce(() -> setPower((reverse ? -1 : 1) * Constants.Hopper.MOTOR_POWER));
     }
 
