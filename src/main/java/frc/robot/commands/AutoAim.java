@@ -16,8 +16,6 @@ public class AutoAim extends Command {
     private Shooter shooter;
     private Hood hood;
     private double[] hoodAngleAndShooterPower = {-1,-1};
-    private Timer timer = new Timer();
-
 
     public AutoAim(Shooter shooter, Hood hood) {
         this.shooter = shooter;
@@ -28,8 +26,6 @@ public class AutoAim extends Command {
 
     @Override
     public void initialize() {
-        timer.reset();
-        timer.start();
         System.out.println("Shooter Initalized");
 
         // yes I am a hack
@@ -62,6 +58,6 @@ public class AutoAim extends Command {
     @Override
     public boolean isFinished() {
         // better way of doing this idk
-        return timer.hasElapsed(6.0);
+        return false;
     }
 }
