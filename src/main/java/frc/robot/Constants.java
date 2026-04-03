@@ -185,8 +185,8 @@ public final class Constants {
         public static final double kI = 0.0;  // TODO: VERIFY
         public static final double kD = 0.0;  // TODO: VERIFY
         public static final double ENCODER_UP = 0;     // TODO: Verify
-        public static final double ENCODER_DOWN = -42.5;  // TODO: Verify
-        public static final double ENCODER_READY = -42.5; // TODO: Verify
+        public static final double ENCODER_DOWN = -37.7;  // TODO: Verify
+        public static final double ENCODER_READY = -37.0;//TODO: Verify
         public static final double SET_POINT_P = 0.05;  // TODO: tune
         public static final double SET_POINT_I = 0.001; // TODO: tune
         public static final double SET_POINT_D = 0.004; // TODO: tune
