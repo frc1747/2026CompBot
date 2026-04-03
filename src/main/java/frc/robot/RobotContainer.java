@@ -125,7 +125,7 @@ public class RobotContainer implements Logged {
         NamedCommands.registerCommand("Hopper", hopper.run(false));
         //NamedCommands.registerCommand("Hopper", hopper.run(false).withTimeout(5.0));
         //NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
-        NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood).withTimeout(5.0));
+        NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
 
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         NamedCommands.registerCommand("StopIntake", intake.StopCommand());
