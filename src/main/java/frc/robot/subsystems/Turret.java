@@ -47,6 +47,13 @@ public class Turret extends SubsystemBase implements Logged{
         config.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);
+        
+        config.CurrentLimits
+            .withStatorCurrentLimit(30)
+            .withStatorCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(20)
+            .withSupplyCurrentLowerLimit(20)
+            .withSupplyCurrentLimitEnable(true);
 
         config.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
 

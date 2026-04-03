@@ -49,6 +49,12 @@ public class Shooter extends SubsystemBase implements Logged{
         configShooter.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);
+        configShooter.CurrentLimits
+            .withStatorCurrentLimit(30)
+            .withStatorCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(20)
+            .withSupplyCurrentLowerLimit(20)
+            .withSupplyCurrentLimitEnable(true);
 
         configShooter.Slot0.kP = Constants.Shooter.PID_P;
         configShooter.Slot0.kI = Constants.Shooter.PID_I;

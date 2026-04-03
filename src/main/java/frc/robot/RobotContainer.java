@@ -29,10 +29,12 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
+import frc.robot.commands.autosCommands.AutoAutoAim;
 import frc.robot.commands.teleop.AprilLock;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.ToggleIntakeReady;
+import frc.robot.commands.teleop.driverShutdown;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Hood;
@@ -93,6 +95,7 @@ public class RobotContainer implements Logged {
     public final JoystickButton tmJoystickRightHandTopMiddle = new JoystickButton(operator , 7);
     public final JoystickButton tmJoystickRightHandTopRight = new JoystickButton(operator , 6);
     public final JoystickButton tmJoystickLeftHandBottomLeft = new JoystickButton(operator, 16);
+    public final JoystickButton tmJoystickBottomTop = new JoystickButton(operator, 2);
     public double shooterFudgeFactor;
     public double turretFudgeFactor;
 
@@ -125,7 +128,7 @@ public class RobotContainer implements Logged {
         NamedCommands.registerCommand("Hopper", hopper.run(false));
         //NamedCommands.registerCommand("Hopper", hopper.run(false).withTimeout(5.0));
         //NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
-        NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
+        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter, hood));
 
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         NamedCommands.registerCommand("StopIntake", intake.StopCommand());
@@ -267,6 +270,9 @@ public class RobotContainer implements Logged {
             .whileTrue(shooter.setSpeedToDesired())
             .onFalse(shooter.stopCommand());
 
+        tmJoystickBottomTop
+            .whileTrue(new driverShutdown(drivetrain));
+        
 
 
 

@@ -35,6 +35,13 @@ public class IntakePivot extends SubsystemBase implements Logged{
 
         motor.getConfigurator().apply(config);
 
+        config.CurrentLimits
+            .withStatorCurrentLimit(30)
+            .withStatorCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(15)
+            .withSupplyCurrentLowerLimit(20)
+            .withSupplyCurrentLimitEnable(true);
+
         defaultPosition = Constants.IntakePivot.ENCODER_UP;
     }
 

@@ -20,9 +20,15 @@ public class Intake extends SubsystemBase {
         config.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);
+        
+        config.CurrentLimits
+            .withStatorCurrentLimit(60)
+            .withStatorCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(40)
+            .withSupplyCurrentLowerLimit(40)
+            .withSupplyCurrentLimitEnable(true);
 
         config.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
-
         motor.getConfigurator().apply(config);
 
     }
