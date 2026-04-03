@@ -25,7 +25,7 @@ public class Hopper extends SubsystemBase implements Logged{
         config.CurrentLimits
             .withStatorCurrentLimit(60)
             .withStatorCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(20)
+            .withSupplyCurrentLimit(40)
             .withSupplyCurrentLowerLimit(40)
             .withSupplyCurrentLimitEnable(true);
 

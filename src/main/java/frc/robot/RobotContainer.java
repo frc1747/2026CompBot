@@ -34,7 +34,6 @@ import frc.robot.commands.teleop.AprilLock;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.ToggleIntakeReady;
-import frc.robot.commands.teleop.driverShutdown;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Hood;
@@ -270,8 +269,8 @@ public class RobotContainer implements Logged {
             .whileTrue(shooter.setSpeedToDesired())
             .onFalse(shooter.stopCommand());
 
-        tmJoystickBottomTop
-            .whileTrue(new driverShutdown(drivetrain));
+        // tmJoystickBottomTop
+        //     .whileTrue(new driverShutdown(drivetrain));
         
 
 
