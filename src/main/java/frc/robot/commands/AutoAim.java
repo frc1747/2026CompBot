@@ -26,7 +26,7 @@ public class AutoAim extends Command {
 
     @Override
     public void initialize() {
-        System.out.println("Shooter Initalized");
+       // System.out.println("Shooter Initalized");
 
         // yes I am a hack
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(TargetPoses.getTargetPose().getTranslation());
