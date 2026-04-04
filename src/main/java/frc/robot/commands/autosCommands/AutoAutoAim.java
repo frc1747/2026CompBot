@@ -62,11 +62,13 @@ public class AutoAutoAim extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        shooter.setRPM(0.0);
+    }
 
     @Override
     public boolean isFinished() {
         // better way of doing this idk
-        return timer.hasElapsed(20.0);
+        return timer.hasElapsed(5.0);
     }
 }
