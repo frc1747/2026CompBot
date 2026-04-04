@@ -100,11 +100,11 @@ public class IntakePivot extends SubsystemBase implements Logged{
     log("intake/intake encoder", motor.getPosition().getValueAsDouble());
     log("intake/Is intake out:", isDown());
 
-    log("IntakePivot/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
-    log("IntakePivot/Stator Current", motor.getStatorCurrent().getValueAsDouble());
-    log("IntakePivot/Velocity", motor.getVelocity().getValueAsDouble());
-    log("IntakePivot/Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
-    log("IntakePivot/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
-    log("IntakePivot/Temperature", motor.getDeviceTemp().getValueAsDouble());
+    log("Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+    log("Stator Current", motor.getStatorCurrent().getValueAsDouble());
+    log("Velocity", motor.getVelocity().getValueAsDouble());
+    log("Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
+    log("Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
+    log("Temperature", motor.getDeviceTemp().getValueAsDouble());
   }
 }

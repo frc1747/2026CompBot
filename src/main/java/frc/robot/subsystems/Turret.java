@@ -215,18 +215,18 @@ public class Turret extends SubsystemBase implements Logged{
         motor.setControl(dutyCycle);
 
         // SmartDashboard
-        log("Turret/encoder value", encoder.get());
-        log("Turret/encoder angle", getTurretAngle());
-        log("Turret/turret degrees", getAbsTurretPose().getRotation().getDegrees());
-        log("Turret/Left Limit Switch", getLeftLimitSwitchPressed());
-        log("Turret/Right Limit Switch", getRightLimitSwitchPressed());
-        log("Turret/speed", dutyCycle.Output);
+        log("encoder value", encoder.get());
+        log("encoder angle", getTurretAngle());
+        log("turret degrees", getAbsTurretPose().getRotation().getDegrees());
+        log("Left Limit Switch", getLeftLimitSwitchPressed());
+        log("Right Limit Switch", getRightLimitSwitchPressed());
+        log("speed", dutyCycle.Output);
 
-        log("Turret/Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
-        log("Turret/Stator Current", motor.getStatorCurrent().getValueAsDouble());
-        log("Turret/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
-        log("Turret/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
-        log("Turret/Temperature", motor.getDeviceTemp().getValueAsDouble());
+        log("Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
+        log("Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        log("Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        log("Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
+        log("Temperature", motor.getDeviceTemp().getValueAsDouble());
         //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
     }
 }

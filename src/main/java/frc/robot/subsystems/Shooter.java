@@ -219,23 +219,23 @@ public class Shooter extends SubsystemBase implements Logged{
             configShooter.Slot0.kD = PID_D;
         }
 
-        log("Shooter/Left Supply Current", motorLeft.getSupplyCurrent().getValueAsDouble());
-        log("Shooter/Right Supply Current", follower.getSupplyCurrent().getValueAsDouble());
-        log("Shooter/Left Stator Current", motorLeft.getStatorCurrent().getValueAsDouble());
-        log("Shooter/Right Stator Current", follower.getStatorCurrent().getValueAsDouble());
-        log("Shooter/Left Velocity", motorLeft.getVelocity().getValueAsDouble());
-        log("Shooter/Right Velocity", follower.getVelocity().getValueAsDouble());
-        log("Shooter/Left Applied Voltage", motorLeft.getMotorVoltage().getValueAsDouble());
-        log("Shooter/Right Applied Voltage", follower.getMotorVoltage().getValueAsDouble());
-        log("Shooter/Left Supply Voltage", motorLeft.getSupplyVoltage().getValueAsDouble());
-        log("Shooter/Right Supply Voltage", follower.getSupplyVoltage().getValueAsDouble());
-        log("Shooter/Left Temperature", motorLeft.getDeviceTemp().getValueAsDouble());
-        log("Shooter/Right Temperature", follower.getDeviceTemp().getValueAsDouble());
-        log("Shooter/Left output status", motorLeft.getMotorOutputStatus().toString());
-        log("Shooter/Right output status", follower.getMotorOutputStatus().toString());
-        log("Shooter/Left bridge status", motorLeft.getBridgeOutput().toString());
-        log("Shooter/Right bridge status", follower.getBridgeOutput().toString());
-        log("Shooter/Right faults", follower.getFaultField().getValue());
-        log("Shooter/Left faults", motorLeft.getFaultField().getValue());
+        log("Left Supply Current", motorLeft.getSupplyCurrent().getValueAsDouble());
+        log("Right Supply Current", follower.getSupplyCurrent().getValueAsDouble());
+        log("Left Stator Current", motorLeft.getStatorCurrent().getValueAsDouble());
+        log("Right Stator Current", follower.getStatorCurrent().getValueAsDouble());
+        log("Left Velocity", motorLeft.getVelocity().getValueAsDouble());
+        log("Right Velocity", follower.getVelocity().getValueAsDouble());
+        log("Left Applied Voltage", motorLeft.getMotorVoltage().getValueAsDouble());
+        log("Right Applied Voltage", follower.getMotorVoltage().getValueAsDouble());
+        log("Left Supply Voltage", motorLeft.getSupplyVoltage().getValueAsDouble());
+        log("Right Supply Voltage", follower.getSupplyVoltage().getValueAsDouble());
+        log("Left Temperature", motorLeft.getDeviceTemp().getValueAsDouble());
+        log("Right Temperature", follower.getDeviceTemp().getValueAsDouble());
+        log("Left output status", motorLeft.getMotorOutputStatus().toString());
+        log("Right output status", follower.getMotorOutputStatus().toString());
+        log("Left bridge status", motorLeft.getBridgeOutput().toString());
+        log("Right bridge status", follower.getBridgeOutput().toString());
+        log("Right faults", follower.getFaultField().getValue());
+        log("Left faults", motorLeft.getFaultField().getValue());
     }
 }

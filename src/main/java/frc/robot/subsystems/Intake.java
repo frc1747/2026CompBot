@@ -57,11 +57,11 @@ public class Intake extends SubsystemBase implements Logged {
 
     @Override
     public void periodic() {
-        log("Intake/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
-        log("Intake/Stator Current", motor.getStatorCurrent().getValueAsDouble());
-        log("Intake/Velocity", motor.getVelocity().getValueAsDouble());
-        log("Intake/Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
-        log("Intake/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
-        log("Intake/Temperature", motor.getDeviceTemp().getValueAsDouble());
+        log("Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        log("Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        log("Velocity", motor.getVelocity().getValueAsDouble());
+        log("Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
+        log("Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
+        log("Temperature", motor.getDeviceTemp().getValueAsDouble());
     }
 }

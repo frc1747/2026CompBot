@@ -84,13 +84,13 @@ public class Kicker extends SubsystemBase implements Logged{
 
     @Override
     public void periodic() {
-        log("Kicker/RPM", getRPM());
+        log("kicker/kicker rpm", getRPM());
 
-        log("Kicker/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
-        log("Kicker/Stator Current", motor.getStatorCurrent().getValueAsDouble());
-        log("Kicker/Velocity", motor.getVelocity().getValueAsDouble());
-        log("Kicker/Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
-        log("Kicker/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
-        log("Kicker/Temperature", motor.getDeviceTemp().getValueAsDouble());
+        log("Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        log("Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        log("Velocity", motor.getVelocity().getValueAsDouble());
+        log("Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
+        log("Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
+        log("Temperature", motor.getDeviceTemp().getValueAsDouble());
     }
 }
