@@ -215,12 +215,12 @@ public class Turret extends SubsystemBase implements Logged{
         motor.setControl(dutyCycle);
 
         // SmartDashboard
-        log("encoder value", encoder.get());
-        log("encoder angle", getTurretAngle());
-        log("turret degrees", getAbsTurretPose().getRotation().getDegrees());
-        log("Left Limit Switch", getLeftLimitSwitchPressed());
-        log("Right Limit Switch", getRightLimitSwitchPressed());
-        log("speed", dutyCycle.Output);
+        log("Turret/encoder value", encoder.get());
+        log("Turret/encoder angle", getTurretAngle());
+        log("Turret/turret degrees", getAbsTurretPose().getRotation().getDegrees());
+        log("Turret/Left Limit Switch", getLeftLimitSwitchPressed());
+        log("Turret/Right Limit Switch", getRightLimitSwitchPressed());
+        log("Turret/speed", dutyCycle.Output);
 
         log("Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
         log("Stator Current", motor.getStatorCurrent().getValueAsDouble());
