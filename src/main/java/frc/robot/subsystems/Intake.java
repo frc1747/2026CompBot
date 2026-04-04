@@ -7,8 +7,9 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import monologue.Logged;
 
-public class Intake extends SubsystemBase {
+public class Intake extends SubsystemBase implements Logged {
     private TalonFX motor;
     private DutyCycleOut dutyCycle = new DutyCycleOut(0.0);
 
@@ -46,5 +47,15 @@ public class Intake extends SubsystemBase {
     }
     public Command spin(boolean reverse) {
         return runOnce(() -> setIntakePower((reverse ? -1 : 1) * Constants.Intake.POWER));
+    }
+
+    @Override
+    public void periodic() {
+        log("Intake/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        log("Intake/Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        log("Intake/Velocity", motor.getVelocity().getValueAsDouble());
+        log("Intake/Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
+        log("Intake/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
+        log("Intake/Temperature", motor.getDeviceTemp().getValueAsDouble());
     }
 }

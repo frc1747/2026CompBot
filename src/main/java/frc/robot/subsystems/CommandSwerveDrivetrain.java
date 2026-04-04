@@ -291,6 +291,34 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         log("Pose", getState().Pose);
         SmartDashboard.putNumber("Distance To Hub", distanceToPose(
             new Pose2d(new Translation2d(Constants.Vision.FIELD_CENTER_X, Constants.Vision.FIELD_CENTER_Y), new Rotation2d(0.0))));
+
+        log("Drivetrain/Mod0/Supply Current", this.getModule(0).getDriveMotor().getSupplyCurrent().getValueAsDouble());
+        log("Drivetrain/Mod0/Stator Current", this.getModule(0).getDriveMotor().getStatorCurrent().getValueAsDouble());
+        log("Drivetrain/Mod0/Velocity", this.getModule(0).getDriveMotor().getVelocity().getValueAsDouble());
+        log("Drivetrain/Mod0/Applied Voltage", this.getModule(0).getDriveMotor().getMotorVoltage().getValueAsDouble());
+        log("Drivetrain/Mod0/Supply Voltage", this.getModule(0).getDriveMotor().getSupplyVoltage().getValueAsDouble());
+        log("Drivetrain/Mod0/Temperature", this.getModule(0).getDriveMotor().getDeviceTemp().getValueAsDouble());
+
+        log("Drivetrain/Mod1/Supply Current", this.getModule(1).getDriveMotor().getSupplyCurrent().getValueAsDouble());
+        log("Drivetrain/Mod1/Stator Current", this.getModule(1).getDriveMotor().getStatorCurrent().getValueAsDouble());
+        log("Drivetrain/Mod1/Velocity", this.getModule(1).getDriveMotor().getVelocity().getValueAsDouble());
+        log("Drivetrain/Mod1/Applied Voltage", this.getModule(1).getDriveMotor().getMotorVoltage().getValueAsDouble());
+        log("Drivetrain/Mod1/Supply Voltage", this.getModule(1).getDriveMotor().getSupplyVoltage().getValueAsDouble());
+        log("Drivetrain/Mod1/Temperature", this.getModule(1).getDriveMotor().getDeviceTemp().getValueAsDouble());
+
+        log("Drivetrain/Mod2/Supply Current", this.getModule(2).getDriveMotor().getSupplyCurrent().getValueAsDouble());
+        log("Drivetrain/Mod2/Stator Current", this.getModule(2).getDriveMotor().getStatorCurrent().getValueAsDouble());
+        log("Drivetrain/Mod2/Velocity", this.getModule(2).getDriveMotor().getVelocity().getValueAsDouble());
+        log("Drivetrain/Mod2/Applied Voltage", this.getModule(2).getDriveMotor().getMotorVoltage().getValueAsDouble());
+        log("Drivetrain/Mod2/Supply Voltage", this.getModule(2).getDriveMotor().getSupplyVoltage().getValueAsDouble());
+        log("Drivetrain/Mod2/Temperature", this.getModule(2).getDriveMotor().getDeviceTemp().getValueAsDouble());
+
+        log("Drivetrain/Mod3/Supply Current", this.getModule(3).getDriveMotor().getSupplyCurrent().getValueAsDouble());
+        log("Drivetrain/Mod3/Stator Current", this.getModule(3).getDriveMotor().getStatorCurrent().getValueAsDouble());
+        log("Drivetrain/Mod3/Velocity", this.getModule(3).getDriveMotor().getVelocity().getValueAsDouble());
+        log("Drivetrain/Mod3/Applied Voltage", this.getModule(3).getDriveMotor().getMotorVoltage().getValueAsDouble());
+        log("Drivetrain/Mod3/Supply Voltage", this.getModule(3).getDriveMotor().getSupplyVoltage().getValueAsDouble());
+        log("Drivetrain/Mod3/Temperature", this.getModule(3).getDriveMotor().getDeviceTemp().getValueAsDouble());
     }
 
     public double distanceToPose(Pose2d targetPose) {

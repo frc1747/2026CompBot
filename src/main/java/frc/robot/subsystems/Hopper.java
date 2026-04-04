@@ -72,8 +72,15 @@ public class Hopper extends SubsystemBase implements Logged{
     @Override
     public void periodic() {
         log("Hopper/isJammed", isJammed());
-        log("hopper/is motor reversed", isReversed());
-        log("hopper/velocity", motor.getVelocity().getValueAsDouble());
+        log("Hopper/is motor reversed", isReversed());
+        log("Hopper/velocity", motor.getVelocity().getValueAsDouble());
+
+        log("Hopper/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        log("Hopper/Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        log("Hopper/Velocity", motor.getVelocity().getValueAsDouble());
+        log("Hopper/Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
+        log("Hopper/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
+        log("Hopper/Temperature", motor.getDeviceTemp().getValueAsDouble());
     }
 
 }

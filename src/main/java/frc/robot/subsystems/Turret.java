@@ -214,6 +214,12 @@ public class Turret extends SubsystemBase implements Logged{
         log("Turret/Left Limit Switch", getLeftLimitSwitchPressed());
         log("Turret/Right Limit Switch", getRightLimitSwitchPressed());
         log("Turret/speed", dutyCycle.Output);
+
+        log("Turret/Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
+        log("Turret/Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        log("Turret/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        log("Turret/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
+        log("Turret/Temperature", motor.getDeviceTemp().getValueAsDouble());
         //System.out.println("Turret Degrees: " + getAbsTurretPose().getRotation().getDegrees());
     }
 }

@@ -145,6 +145,13 @@ public class Hood extends SubsystemBase implements Logged {
         } else {
             log("hood/hood angle Reached", false);
         }
+
+        log("Hood/Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        log("Hood/Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        log("Hood/Velocity", motor.getVelocity().getValueAsDouble());
+        log("Hood/Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
+        log("Hood/Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
+        log("Hood/Temperature", motor.getDeviceTemp().getValueAsDouble());
     }
 
     @Override
