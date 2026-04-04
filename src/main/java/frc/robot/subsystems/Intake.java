@@ -21,9 +21,15 @@ public class Intake extends SubsystemBase implements Logged {
         config.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);
+        
+        config.CurrentLimits
+            .withStatorCurrentLimit(80)
+            .withStatorCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(60)
+            .withSupplyCurrentLowerLimit(60)
+            .withSupplyCurrentLimitEnable(true);
 
         config.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
-
         motor.getConfigurator().apply(config);
 
     }
