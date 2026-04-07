@@ -215,7 +215,7 @@ public class RobotContainer implements Logged {
 
         // Hood go down at trench code
         driver.x()
-            .onTrue(hood.goToDesiredAngleCommand());
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
