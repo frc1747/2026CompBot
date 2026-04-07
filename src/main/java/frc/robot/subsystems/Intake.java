@@ -21,8 +21,14 @@ public class Intake extends SubsystemBase {
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);
 
-        config.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
+        config.CurrentLimits
+            .withStatorCurrentLimit(80)
+            .withStatorCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(60)
+            .withSupplyCurrentLowerLimit(60)
+            .withSupplyCurrentLimitEnable(true);
 
+        config.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
         motor.getConfigurator().apply(config);
 
     }
@@ -36,10 +42,12 @@ public class Intake extends SubsystemBase {
     }
 
     public Command spin() {
-        return runOnce( () -> intakeSpin(Constants.Intake.POWER));
+
+        return run( () -> intakeSpin(Constants.Intake.POWER));
     }
 
     public Command StopCommand() {
+
         return runOnce( () -> setIntakePower(0));
     }
     public Command spin(boolean reverse) {

@@ -7,7 +7,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.TargetPoses;
 import frc.robot.subsystems.Hood;
@@ -27,6 +26,8 @@ public class AutoAim extends Command {
 
     @Override
     public void initialize() {
+       // System.out.println("Shooter Initalized");
+
         // yes I am a hack
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(TargetPoses.getTargetPose().getTranslation());
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
@@ -50,11 +51,13 @@ public class AutoAim extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        shooter.setPower(0.0);
+    }
 
     @Override
     public boolean isFinished() {
         // better way of doing this idk
-        return (shooter.getRPM() <= hoodAngleAndShooterPower[1] + hoodAngleAndShooterPower[1]*Constants.Shooter.TOLERANCE && shooter.getRPM() >= hoodAngleAndShooterPower[1] - hoodAngleAndShooterPower[1]*Constants.Shooter.TOLERANCE);
+        return false;
     }
 }

@@ -49,6 +49,12 @@ public class Shooter extends SubsystemBase implements Logged{
         configShooter.Voltage
             .withPeakForwardVoltage(12)
             .withPeakReverseVoltage(-12);
+        configShooter.CurrentLimits
+            .withStatorCurrentLimit(80)
+            .withStatorCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(60)
+            .withSupplyCurrentLowerLimit(40)
+            .withSupplyCurrentLimitEnable(true);
 
         configShooter.Slot0.kP = Constants.Shooter.PID_P;
         configShooter.Slot0.kI = Constants.Shooter.PID_I;
@@ -148,7 +154,7 @@ public class Shooter extends SubsystemBase implements Logged{
         // better search needed
         double currentAngle = RobotContainer.hood.getCurrentAngle();
         double wantedPower = getPowerNeededFromDistanceAndAngle(Distance, currentAngle);
-        double[] array = {-1,-1};
+        double[] array = {-1,Constants.Shooter.MAX_AUTOSHOOT_POWER};
         // this could be refactor
         if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
             double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};

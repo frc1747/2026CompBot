@@ -46,6 +46,9 @@ public class AutoAutoAim extends Command {
 
     @Override
     public void execute() {
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+            this.target = Constants.Shooter.RED_HUB_CENTER_POSE2D;
+        }
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
 
