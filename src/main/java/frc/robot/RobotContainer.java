@@ -63,6 +63,9 @@ public class RobotContainer implements Logged {
     private final XboxController driver_hid = driver.getHID();
     private final Joystick operator = new Joystick(Constants.Controller.OPERATOR_PORT);
 
+    // This value can either be one or .5 (the constant value) and is for driving regularly and for slowed driving (while shooting)
+    private double activeControllerCap = 1;
+
 
     public static final Kicker kicker = new Kicker();
     public static final Hood hood = new Hood();
@@ -242,6 +245,10 @@ public class RobotContainer implements Logged {
             .whileTrue(new AutoAim(shooter, hood))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
+
+        tmJoystickTrigger
+            .whileTrue(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_SHOOTING))
+            .onFalse(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_REGULAR));
 
         // Manual Turret movement code
         tmJoystickRightHandBottomLeft

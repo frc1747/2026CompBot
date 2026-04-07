@@ -83,6 +83,8 @@ public final class Constants {
     public static final class Controller {
         public static final int DRIVER_PORT = 0;
         public static final int OPERATOR_PORT = 1;
+        public static final double CONTROLLER_CAP_SHOOTING = 0.5;
+        public static final double CONTROLLER_CAP_REGULAR = 1;
     }
 
     public static final class Drivetrain {
