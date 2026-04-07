@@ -128,12 +128,12 @@ public class RobotContainer implements Logged {
      
         //NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
 
-        NamedCommands.registerCommand("Kicker", new AutoKickerRun(kicker));
+        NamedCommands.registerCommand("Kicker", new AutoKickerRun(kicker).withTimeout(2));
         //NamedCommands.registerCommand("Kicker", kicker.run(false).withTimeout(5.0));
-        NamedCommands.registerCommand("Hopper", new AutoHopperRun(hopper));
+        NamedCommands.registerCommand("Hopper", new AutoHopperRun(hopper).withTimeout(2));
         //NamedCommands.registerCommand("Hopper", hopper.run(false).withTimeout(5.0));
         //NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
-        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter, hood));
+        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter, hood).withTimeout(2));
 
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         NamedCommands.registerCommand("StopIntake", intake.StopCommand());
