@@ -79,6 +79,7 @@ public class RobotContainer implements Logged {
     public static final Turret turret = new Turret();
 
     public static final Field2d field = new Field2d();
+    public static final Field2d  directionIndicator = new Field2d();
 
     public static TargetPoses target = new TargetPoses();
     public final JoystickButton tmJoystickFaceButtonRight = new JoystickButton(operator , 4);

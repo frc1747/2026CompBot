@@ -78,6 +78,7 @@ public final class Constants {
         public static final double RED_RIGHT_CORNER_X = 17.5482504;
         public static final double RED_RIGHT_CORNER_Y = 8.0519016;
 
+        // HUB_HEIGHT is the height of the lower entrance, HUB_CLEAR is the upper, wider entrance before the funnel
         public static final double HUB_HEIGHT = 1.45; // placeholder (meters) TODO: verify
         public static final double HUB_CLEAR_HEIGHT = 1.85; // placeholder (meters) TODO: verify
     }
@@ -146,6 +147,7 @@ public final class Constants {
         public static final double TURRET_YAW_LIMIT_UPPER = 95; // deg
         public static final double TURRET_YAW_LIMIT_LOWER = -150;
         public static final double TURRET_POWER = .025;
+        public static final double HEIGHT = 0.3; // Placeholder TODO: Verify
     }
 
     public static final class Shooter {

@@ -23,7 +23,7 @@ import frc.robot.RobotContainer;
 import frc.robot.TargetPoses;
 import monologue.Logged;
 
-public class Turret extends SubsystemBase implements Logged{
+public class Turret extends SubsystemBase implements Logged {
     private TalonFXS motor;
     private Encoder encoder;
     // left from perspective of someone facing the turret sie of bot
@@ -67,10 +67,14 @@ public class Turret extends SubsystemBase implements Logged{
 
     // could be more accurate using empirically collected data and interpolation
     // kinetics math here may have errors
+    // time in seconds
+    // hood angle may not accurately represent fuel exit 
+    //                                     V - this needs to be in radians from the horizontal
     public Double getFuelTravelTime(double hoodAngle, double dist) {
-        // very very approximate, obtained from a single, out of date measurement
-        // 1.2 / 3.27 is the linear approximation factor for tavel time based on distance
-        return dist * 1.2 / 3.27 / 2;
+        double h_f = Constants.Vision.HUB_HEIGHT;
+        double h_i = Constants.Turret.HEIGHT;
+        double t = Math.sqrt((h_i + dist * Math.tan(hoodAngle) - h_f) / 9.81);
+        return t;
     }
 
     // returns turret tangential velocity of turret relative to bot center
