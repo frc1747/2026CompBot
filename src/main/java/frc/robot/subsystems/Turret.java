@@ -70,7 +70,7 @@ public class Turret extends SubsystemBase implements Logged{
     public Double getFuelTravelTime(double hoodAngle, double dist) {
         // very very approximate, obtained from a single, out of date measurement
         // 1.2 / 3.27 is the linear approximation factor for tavel time based on distance
-        return dist * 1.2 / 3.27;
+        return dist * 1.2 / 3.27 / 2;
     }
 
     // returns turret tangential velocity of turret relative to bot center

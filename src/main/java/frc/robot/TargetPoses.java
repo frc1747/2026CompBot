@@ -74,6 +74,8 @@ public class TargetPoses {
             // return most recent valid approx if calculated approximation is null
             if (approxB == null) return approxA;
         }
+        // RobotContainer.field.getObject("approxB").setPoses(new Pose2d(approxB, new Rotation2d()));
+        // System.out.println("Getting target approx");
         // return the final approximation
         return approxB;
     }
@@ -99,6 +101,7 @@ public class TargetPoses {
         updateTurretVelAndLoc();
         // approximation of point to aim turret at
         targetLocPrime = getTargetApprox(targetLocPrime);
+        RobotContainer.field.getObject("target").setPoses(new Pose2d(targetLocPrime, new Rotation2d()));
     }
 
     public static Pose2d getTargetPose() {
