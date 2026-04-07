@@ -106,21 +106,21 @@ public class TargetPoses {
     }
 
     public static void setScoring() {
-        RobotContainer.field.getObject("target").setPoses(TargetPoses.getTargetPose());
         currentTarget = Constants.TargetPosesConstants.BLUE_HUB_CENTER_POSE2D;
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             currentTarget = Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D;
         }
         reinitTargetLocPrime();
+        RobotContainer.field.getObject("target").setPoses(TargetPoses.getTargetPose());
     }
 
     public static void setShuttling() {
-        RobotContainer.field.getObject("target").setPoses(TargetPoses.getTargetPose());
         currentTarget = blueShuttling();
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             currentTarget = redshuttling();
         }
         reinitTargetLocPrime();
+        RobotContainer.field.getObject("target").setPoses(TargetPoses.getTargetPose());
     }
 
     private static Pose2d blueShuttling() {
