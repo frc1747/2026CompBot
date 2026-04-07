@@ -69,31 +69,6 @@
           "data": {
             "pathName": "Auton Command Testing B"
           }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeCollect"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Kicker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot"
-                }
-              }
-            ]
-          }
         }
       ]
     }

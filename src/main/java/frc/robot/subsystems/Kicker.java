@@ -36,7 +36,7 @@ public class Kicker extends SubsystemBase implements Logged{
         config.CurrentLimits
             .withStatorCurrentLimit(60)
             .withStatorCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(40)
+            .withSupplyCurrentLimit(50)
             .withSupplyCurrentLowerLimit(40)
             .withSupplyCurrentLimitEnable(true);
 
@@ -61,6 +61,7 @@ public class Kicker extends SubsystemBase implements Logged{
     }
 
     public Command stopCommand() {
+        System.out.println("Kicker Stop Called");
         return runOnce(() -> setPower(0.0));
     }
 

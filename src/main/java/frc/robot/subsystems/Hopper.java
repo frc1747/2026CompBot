@@ -23,9 +23,9 @@ public class Hopper extends SubsystemBase implements Logged{
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
         config.CurrentLimits
-            .withStatorCurrentLimit(60)
+            .withStatorCurrentLimit(100)
             .withStatorCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(40)
+            .withSupplyCurrentLimit(90)
             .withSupplyCurrentLowerLimit(40)
             .withSupplyCurrentLimitEnable(true);
 
@@ -44,6 +44,7 @@ public class Hopper extends SubsystemBase implements Logged{
     }
 
     public Command run(boolean reverse) {
+
         return runOnce(() -> setPower((reverse ? -1 : 1) * Constants.Hopper.MOTOR_POWER));
     }
 
