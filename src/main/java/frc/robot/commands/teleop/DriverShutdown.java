@@ -5,7 +5,6 @@
 package frc.robot.commands.teleop;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.Drivetrain;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
