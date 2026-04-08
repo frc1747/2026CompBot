@@ -149,15 +149,15 @@ public class Shooter extends SubsystemBase implements Logged{
         // slove with the good old quady form
     }
 
-    public double[] findSpeedAndAngleFromDistance(double Distance){
+    public double[] findSpeedAndAngleFromDistance(double Distance, double autoShooterMult){
         // the power is multplyed by 100 to move up to the thousands
         // better search needed
         double currentAngle = RobotContainer.hood.getCurrentAngle();
         double wantedPower = getPowerNeededFromDistanceAndAngle(Distance, currentAngle);
-        double[] array = {-1,Constants.Shooter.MAX_AUTOSHOOT_POWER};
+        double[] array = {-1, Constants.Shooter.MAX_AUTOSHOOT_POWER};
         // this could be refactor
         if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-            double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};
+            double[] angleAndSpeed = {currentAngle, wantedPower * autoShooterMult};
             return angleAndSpeed;
         }
 
@@ -165,7 +165,7 @@ public class Shooter extends SubsystemBase implements Logged{
         for (currentAngle = RobotContainer.hood.getCurrentAngle() ; currentAngle <= Constants.Shooter.MAX_HOOD_ANGLE ; currentAngle ++ ){
             if (currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE) return array;
             if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-                double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};
+                double[] angleAndSpeed = {currentAngle, wantedPower * autoShooterMult};
                 return angleAndSpeed;
             }
         }
@@ -173,7 +173,7 @@ public class Shooter extends SubsystemBase implements Logged{
         for (currentAngle = RobotContainer.hood.getCurrentAngle() ; currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE ; currentAngle -- ){
             if (currentAngle >= Constants.Shooter.MAX_HOOD_ANGLE) return array;
             if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
-                double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};
+                double[] angleAndSpeed = {currentAngle, wantedPower * autoShooterMult};
                 return angleAndSpeed;
             }
         }

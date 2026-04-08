@@ -159,7 +159,8 @@ public final class Constants {
         public static final double SURFACE_E = -10.8847; // needs tuning
         public static final double SURFACE_F = 2.9962; // needs tuning
         public static final double MAX_AUTOSHOOT_POWER =4500;
-        public static final double AUTO_SHOOTER_MULT = 1.04; // this should be remove when we get better auto shoot values
+        public static final double AUTO_SHOOTER_MULT_HUB = 1.04; // this should be remove when we get better auto shoot values
+        public static final double AUTO_SHOOTER_MULT_SHUTTLE = 1.14;
         public static final double MAX_HOOD_ANGLE = 43;// degrees
         public static final double MIN_HOOD_ANGLE = 26;// degrees
         public static final double PID_P = .75;// they are half for the two motors

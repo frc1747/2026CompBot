@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.TargetPoses;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 
@@ -38,7 +39,7 @@ public class AutoAutoAim extends Command {
         }
         // yes I am a hack
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
-        double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
+        double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance, Constants.Shooter.AUTO_SHOOTER_MULT_HUB);
 
 
         shooter.setRPM(hoodAngleAndShooterPower[1]);
@@ -50,7 +51,7 @@ public class AutoAutoAim extends Command {
             this.target = Constants.Shooter.RED_HUB_CENTER_POSE2D;
         }
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
-        double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
+        double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance, Constants.Shooter.AUTO_SHOOTER_MULT_HUB);
 
         hood.goToAngleCommand(hoodAngleAndShooterPower[0]);
         if (hood.atAngle(hoodAngleAndShooterPower[0])){
