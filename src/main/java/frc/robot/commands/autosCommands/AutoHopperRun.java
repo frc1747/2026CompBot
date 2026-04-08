@@ -29,7 +29,8 @@ public class AutoHopperRun extends Command{
     }
     @Override
     public void end(boolean interrupted){
-        hopper.stop();
+        hopper.setPower(0.0);
+        System.out.println("The Hopper Has Been Stopped");
     }
 
     @Override

@@ -31,7 +31,8 @@ public class AutoIntakeSpin extends Command{
     }
     @Override
     public void end(boolean interrupted){
-        intake.StopCommand();
+        intake.setIntakePower(0.0);
+        System.out.println("Intake Spin has Been Stopped");
     }
 
     @Override

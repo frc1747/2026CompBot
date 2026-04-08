@@ -1,5 +1,6 @@
 package frc.robot.commands.autosCommands;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.IntakePivot;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -19,7 +20,12 @@ public class AutoIntakeLower extends Command{
         //Resets and Starts a timer
         timer.reset();
         timer.start();
-        intakePivot.moveOutCommand();
+          if (intakePivot.getDown()) {
+            intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_UP);
+        } else {
+            intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_READY);
+        }
+        intakePivot.toggleDown();
     }
 
     @Override 
@@ -30,6 +36,7 @@ public class AutoIntakeLower extends Command{
     public void end(boolean interrupted){
         //IntakePivot does not have a stop Command method. Would like to see if e vould add one
         intakePivot.setPower(0.0);
+        System.out.println("IntakeLower Has Been Ended");
     }
 
     @Override

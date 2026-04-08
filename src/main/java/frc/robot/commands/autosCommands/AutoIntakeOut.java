@@ -27,6 +27,7 @@ public class AutoIntakeOut extends Command {
     @Override
     public void end(boolean interrupted) {
         intakePivot.intakePivot(0);
+        System.out.println("IntakeOut Has Been Ended");
     }
     @Override
     public boolean isFinished() {

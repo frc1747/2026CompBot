@@ -123,17 +123,17 @@ public class RobotContainer implements Logged {
         NamedCommands.registerCommand("IntakeOut", new AutoIntakeLower(intakePivot));
         NamedCommands.registerCommand("IntakeIn", new AutoIntakeStash(intakePivot));
         //NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
-        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeSpin(intake , false));
-        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeSpin(intake , true));
+        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeSpin(intake , false).withTimeout(5));
+        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeSpin(intake , true).withTimeout(5));
      
         //NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
 
-        NamedCommands.registerCommand("Kicker", new AutoKickerRun(kicker).withTimeout(2));
+        NamedCommands.registerCommand("Kicker", new AutoKickerRun(kicker).withTimeout(5));
         //NamedCommands.registerCommand("Kicker", kicker.run(false).withTimeout(5.0));
-        NamedCommands.registerCommand("Hopper", new AutoHopperRun(hopper).withTimeout(2));
+        NamedCommands.registerCommand("Hopper", new AutoHopperRun(hopper).withTimeout(5));
         //NamedCommands.registerCommand("Hopper", hopper.run(false).withTimeout(5.0));
         //NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
-        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter, hood).withTimeout(2));
+        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter, hood).withTimeout(5));
 
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         NamedCommands.registerCommand("StopIntake", intake.StopCommand());
@@ -257,7 +257,7 @@ public class RobotContainer implements Logged {
             .whileTrue(turret.spin(false))
             .onFalse(turret.stopCommand());
 
-        // Manual Hood movement code
+        // Manual Hood movement 3
         tmJoystickRightHandTopLeft
             .whileTrue(hood.setPowerCommand(false))
             .onFalse(hood.stopCommand());

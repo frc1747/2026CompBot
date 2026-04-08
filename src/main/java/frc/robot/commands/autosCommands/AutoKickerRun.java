@@ -30,6 +30,7 @@ public class AutoKickerRun extends Command{
     @Override
     public void end(boolean interrupted){
         kicker.stopCommand();
+        System.out.println("Kicker Has Been Stopped");
     }
 
     @Override

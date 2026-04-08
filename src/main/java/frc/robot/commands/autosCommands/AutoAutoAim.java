@@ -64,6 +64,7 @@ public class AutoAutoAim extends Command {
     @Override
     public void end(boolean interrupted) {
         shooter.setRPM(0.0);
+        System.out.println("Shooter Has Been Stopped");
     }
 
     @Override
