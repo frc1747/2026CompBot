@@ -127,6 +127,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
+project.compileJava.dependsOn(spotlessCheck)
 spotless {
     java {
         target fileTree('.') {
