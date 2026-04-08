@@ -19,7 +19,7 @@ public class TargetPoses{
 
     public static double getTargetAutoShootMult() {
         if (currentTarget == Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D || currentTarget == Constants.TargetPosesConstants.BLUE_HUB_CENTER_POSE2D) {
-            return Constants.Shooter.AUTO_SHOOTER_MULT_HUB; 
+            return Constants.Shooter.AUTO_SHOOTER_MULT_HUB;
         } else {
             return Constants.Shooter.AUTO_SHOOTER_MULT_SHUTTLE;
         }
