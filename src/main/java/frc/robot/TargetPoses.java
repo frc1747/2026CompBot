@@ -17,14 +17,17 @@ public class TargetPoses {
     public static Translation2d targetLocPrime;
     public static Translation2d totalTurretVelocity;
     public static Translation2d turretLoc;
+    public static boolean scoringMode;
 
     public TargetPoses() {
+        // actual location the fuel should hit
         currentTarget = new Pose2d();
         lockPid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
         // location to aim the turret at
         targetLocPrime = currentTarget.getTranslation();
         totalTurretVelocity = new Translation2d();
         turretLoc = new Translation2d();
+        scoringMode = false;
         updateTurretVelAndLoc();
     }
 
@@ -104,11 +107,13 @@ public class TargetPoses {
         RobotContainer.field.getObject("target").setPoses(new Pose2d(targetLocPrime, new Rotation2d()));
     }
 
+    // rename to be accurate and refactor
     public static Pose2d getTargetPose() {
         return new Pose2d(targetLocPrime, new Rotation2d());
     }
 
     public static void setScoring() {
+        scoringMode = false;
         currentTarget = Constants.TargetPosesConstants.BLUE_HUB_CENTER_POSE2D;
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             currentTarget = Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D;
@@ -118,6 +123,7 @@ public class TargetPoses {
     }
 
     public static void setShuttling() {
+        scoringMode = true;
         currentTarget = blueShuttling();
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
             currentTarget = redshuttling();
@@ -159,6 +165,11 @@ public class TargetPoses {
         double xPart = distance * Math.cos(theta);
         double yPart = distance * Math.sin(theta);
         currentTarget = new Pose2d(currentTarget.getX() + xPart, currentTarget.getY() + yPart, new Rotation2d());
+    }
+
+    // schedule it properly
+    public static void periodic() {
+
     }
 
 }
