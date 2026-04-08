@@ -81,6 +81,9 @@ public class IntakePivot extends SubsystemBase implements Logged{
     public Command moveOutCommand(){ // move the intake to the pos to fix up fuel
         return run( () -> intakePivot(Constants.IntakePivot.OUT));
     }
+    public Command moveToEncoder() {
+        return run ( () -> intakePivot(Constants.IntakePivot.ENCODER_DEPOT));
+    }
 
     public Command moveHomeCommand(){ // move home
         return run( () -> intakePivot(Constants.IntakePivot.HOME));

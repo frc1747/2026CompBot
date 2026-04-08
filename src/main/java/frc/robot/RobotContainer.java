@@ -201,7 +201,7 @@ public class RobotContainer implements Logged {
 
         // intake put up
         driver.rightTrigger()
-            .whileTrue(new GrabFuel( intakePivot))
+            .whileTrue(new GrabFuel(intakePivot))
             .onFalse(new IntakeGoToDefault(intakePivot));
 
         driver.rightTrigger()
@@ -213,10 +213,13 @@ public class RobotContainer implements Logged {
             .whileTrue(intake.spin(false))
             .onFalse(intake.StopCommand());
 
+        driver.povLeft()
+            .whileTrue(intakePivot.moveToEncoder())
+            .onFalse(new IntakeGoToDefault(intakePivot));
+
         drivetrain.registerTelemetry(logger::telemeterize);
 
         // operater
-
         // intake hopper
         tmJoystickPovUp
             .whileTrue(hopper.run(false)
@@ -230,7 +233,7 @@ public class RobotContainer implements Logged {
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
-        tmJoystickFaceButtonRight
+       tmJoystickFaceButtonRight
             .toggleOnTrue(new AprilLock(turret)
             .alongWith(Commands.run( () -> TargetPoses.setScoring())));
 

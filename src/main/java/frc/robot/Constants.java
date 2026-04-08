@@ -209,7 +209,6 @@ public final class Constants {
 
     public static final double TURRET_SLIDER_VALUE = 2;
     public static final double TURRET_BASE_VALUE = .001;
-
     public static final double BLUE_DEADZONE_MIN = 3;
     public static final double BLUE_DEADZONE_MAX = 5;
 
