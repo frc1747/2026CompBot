@@ -43,8 +43,8 @@ public final class Constants {
 
         // AprilLock2 rotation compensation pid values
         public static final double APRIL_LOCK_P = 1.0;
-        public static final double APRIL_LOCK_I = 0.003;
-        public static final double APRIL_LOCK_D = 0.003;
+        public static final double APRIL_LOCK_I = 0.005; // was 0.003
+        public static final double APRIL_LOCK_D = 0.005; // was 0.003
         // maximum magnitude of PID output
         public static final double APRIL_LOCK_PID_CLAMP = 0.5; // was .5
 
