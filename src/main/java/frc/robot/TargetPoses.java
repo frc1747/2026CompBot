@@ -182,7 +182,8 @@ public class TargetPoses extends SubsystemBase {
             reinitTargetLocPrime();
             RobotContainer.field.getObject("target").setPoses(this.getTargetPose());
         }
-        SmartDashboard.putString("debug", "ran periodic");
+        // SmartDashboard.putString("debug", "ran periodic");
+        // System.out.println("running targetPoses periodic");
     }
 
 }

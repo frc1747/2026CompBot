@@ -37,6 +37,7 @@ public class TeleopSwerve extends Command {
             .withVelocityY(strafeSup.getAsDouble() * -Constants.Drivetrain.MAX_SPEED)
             .withRotationalRate(rotationSup.getAsDouble() * -Constants.Drivetrain.MAX_ANGULAR_VELOCITY * Constants.Drivetrain.DRIVER_SLOW_DOWN)
         );
+        System.out.println(drivetrain.getState().Pose);
     }
 
     @Override

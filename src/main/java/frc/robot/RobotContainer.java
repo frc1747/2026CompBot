@@ -207,7 +207,7 @@ public class RobotContainer implements Logged {
 
         tmJoystickFaceButtonRight
             .toggleOnTrue(new AprilLock(turret)
-            .alongWith(Commands.runOnce( () -> targetPoses.setScoring())));
+            .alongWith(Commands.run( () -> targetPoses.setScoring())));
 
         tmJoystickFaceButtonRight
             .toggleOnTrue(Commands.run( () -> targetPoses.shootOnTheMove()));
