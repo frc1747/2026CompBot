@@ -7,9 +7,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Turret;
 
-public class TargetPoses {
+public class TargetPoses extends SubsystemBase {
 
     // actual location the fuel should hit
     public static Pose2d currentTarget;
@@ -19,7 +23,7 @@ public class TargetPoses {
     public static Translation2d turretLoc;
     public static boolean scoringMode;
 
-    public TargetPoses() {
+    public static void init() {
         // actual location the fuel should hit
         currentTarget = new Pose2d();
         lockPid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
@@ -29,6 +33,10 @@ public class TargetPoses {
         turretLoc = new Translation2d();
         scoringMode = false;
         updateTurretVelAndLoc();
+
+        // schedule periodic (may not function, currently unnecessary as this is now a subsystem)
+        // CommandScheduler.getInstance().schedule(Commands.run(TargetPoses::periodic));
+        // SmartDashboard.putString("debug", "scheduled periodic");
     }
 
     public static void reinitTargetLocPrime() {
@@ -113,23 +121,11 @@ public class TargetPoses {
     }
 
     public static void setScoring() {
-        scoringMode = false;
-        currentTarget = Constants.TargetPosesConstants.BLUE_HUB_CENTER_POSE2D;
-        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            currentTarget = Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D;
-        }
-        reinitTargetLocPrime();
-        RobotContainer.field.getObject("target").setPoses(TargetPoses.getTargetPose());
+        scoringMode = true;
     }
 
     public static void setShuttling() {
-        scoringMode = true;
-        currentTarget = blueShuttling();
-        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-            currentTarget = redshuttling();
-        }
-        reinitTargetLocPrime();
-        RobotContainer.field.getObject("target").setPoses(TargetPoses.getTargetPose());
+        scoringMode = false;
     }
 
     private static Pose2d blueShuttling() {
@@ -167,9 +163,25 @@ public class TargetPoses {
         currentTarget = new Pose2d(currentTarget.getX() + xPart, currentTarget.getY() + yPart, new Rotation2d());
     }
 
-    // schedule it properly
+    // checks current mode and adjusts target accordingly
     public static void periodic() {
-
+        if (!scoringMode) {
+            currentTarget = blueShuttling();
+            if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+                currentTarget = redshuttling();
+            }
+            reinitTargetLocPrime();
+            RobotContainer.field.getObject("target").setPoses(TargetPoses.getTargetPose());
+        } else {
+            scoringMode = true;
+            currentTarget = Constants.TargetPosesConstants.BLUE_HUB_CENTER_POSE2D;
+            if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+                currentTarget = Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D;
+            }
+            reinitTargetLocPrime();
+            RobotContainer.field.getObject("target").setPoses(TargetPoses.getTargetPose());
+        }
+        SmartDashboard.putString("debug", "ran periodic");
     }
 
 }

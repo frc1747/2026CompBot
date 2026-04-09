@@ -4,13 +4,16 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -98,7 +101,6 @@ public class RobotContainer implements Logged {
     public double turretFudgeFactor;
 
     public RobotContainer() {
-
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
         NamedCommands.registerCommand("IntakeOut", new GrabFuel( intakePivot));
         NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
@@ -114,18 +116,18 @@ public class RobotContainer implements Logged {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
-
-
-
-
         // Warmup PathPlanner to avoid Java pauses
         CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
 
+        SmartDashboard.putString("debug", "initializing targetposes");
+        // initialize TargetPoses
+        TargetPoses.init();
+
         // booo I don't like this
         // thrustmaster controls
-
         this.shooterFudgeFactor = 0;
         this.turretFudgeFactor = 0;
+        
         configureBindings();
     }
 
