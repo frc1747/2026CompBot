@@ -7,38 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Trench Half Middle Unload A"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Hopper"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Kicker"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Trench Half Middle B"
+            "pathName": "First Cycle Right Trench Full Unload A"
           }
         },
         {
@@ -60,7 +29,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left Trench Half Middle C"
+                  "pathName": "First Cycle Right Trench Full Unload B"
                 }
               }
             ]
@@ -75,23 +44,29 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Trench Half Middle D"
+            "pathName": "First Cycle Right Trench Full Unload C"
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
+          "data": {
+            "pathName": "First Cycle Right Trench Full Unload D"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "Hopper"
+                  "name": "Kicker"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Kicker"
+                  "name": "Hopper"
                 }
               },
               {

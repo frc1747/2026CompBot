@@ -48,15 +48,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "IntakeCollect"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right Trench Full Middle Unload C"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCollect"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right Trench Full Middle Unload C"
+                }
+              }
+            ]
           }
         },
         {

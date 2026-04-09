@@ -38,6 +38,6 @@ public class AutoIntakeSpin extends Command{
     @Override
     public boolean isFinished() {
         //This Should 
-        return timer.hasElapsed(3.0);
+        return timer.hasElapsed(5);
     }
 }

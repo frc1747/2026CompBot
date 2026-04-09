@@ -11,21 +11,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Kicker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCollect"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Kicker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Hopper"
+                }
+              }
+            ]
           }
         }
       ]

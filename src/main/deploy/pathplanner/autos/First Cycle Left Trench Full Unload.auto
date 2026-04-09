@@ -7,38 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Trench Half Middle Unload A"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Hopper"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Kicker"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Trench Half Middle B"
+            "pathName": "First Cycle Left Trench Full Unload A"
           }
         },
         {
@@ -60,7 +29,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left Trench Half Middle C"
+                  "pathName": "First Cycle Left Trench Full Unload B"
                 }
               }
             ]
@@ -75,17 +44,17 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Trench Half Middle D"
+            "pathName": "First Cycle Left Trench Full Unload C"
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "Hopper"
+                  "name": "Shoot"
                 }
               },
               {
@@ -97,7 +66,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot"
+                  "name": "Hopper"
                 }
               }
             ]
