@@ -154,7 +154,7 @@ public class Shooter extends SubsystemBase implements Logged{
         // better search needed
         double currentAngle = RobotContainer.hood.getCurrentAngle();
         double wantedPower = getPowerNeededFromDistanceAndAngle(Distance, currentAngle);
-        double[] array = {-1,Constants.Shooter.MAX_AUTOSHOOT_POWER};
+        double[] array = {currentAngle, Constants.Shooter.MAX_AUTOSHOOT_POWER};
         // this could be refactor
         if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
             double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};
