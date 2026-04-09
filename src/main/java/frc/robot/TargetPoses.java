@@ -13,17 +13,18 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Turret;
 
+// may want to make all static and manually schedule periodic to avoid making subsystem
 public class TargetPoses extends SubsystemBase {
 
     // actual location the fuel should hit
-    public static Pose2d currentTarget;
-    public static PIDController lockPid;
-    public static Translation2d targetLocPrime;
-    public static Translation2d totalTurretVelocity;
-    public static Translation2d turretLoc;
-    public static boolean scoringMode;
+    public Pose2d currentTarget;
+    public PIDController lockPid;
+    public Translation2d targetLocPrime;
+    public Translation2d totalTurretVelocity;
+    public Translation2d turretLoc;
+    public boolean scoringMode;
 
-    public static void init() {
+    public TargetPoses() {
         // actual location the fuel should hit
         currentTarget = new Pose2d();
         lockPid = new PIDController(Constants.Vision.APRIL_LOCK_P, Constants.Vision.APRIL_LOCK_I, Constants.Vision.APRIL_LOCK_D);
@@ -39,11 +40,11 @@ public class TargetPoses extends SubsystemBase {
         // SmartDashboard.putString("debug", "scheduled periodic");
     }
 
-    public static void reinitTargetLocPrime() {
+    public void reinitTargetLocPrime() {
         targetLocPrime = currentTarget.getTranslation();
     }
 
-    private static Pair<Translation2d, Double> getNextTargetApprox(Translation2d previousApproximation) {
+    private Pair<Translation2d, Double> getNextTargetApprox(Translation2d previousApproximation) {
         // distance from  turret to previous approximation
         double dist = turretLoc.getDistance(previousApproximation);
 
@@ -70,7 +71,7 @@ public class TargetPoses extends SubsystemBase {
     // travel times before the approximation is considered good,
     // then outputs a final approximation that should be reasonable
     // may need more or less iterations.
-    private static Translation2d getTargetApprox(Translation2d startApprox) {
+    private Translation2d getTargetApprox(Translation2d startApprox) {
         // may in choose to iterate the aproximation
         // several times in the future, using a travel
         // time tolerance to determine when to stop.
@@ -92,7 +93,7 @@ public class TargetPoses extends SubsystemBase {
     }
 
     // updates the stored velocity and location of the turret
-    private static void updateTurretVelAndLoc() {
+    private void updateTurretVelAndLoc() {
         // may need to find latency and predict future velocity
         // velocity of bot center relative to field
         Translation2d robotVel = RobotContainer.drivetrain.getVelocity();
@@ -107,7 +108,7 @@ public class TargetPoses extends SubsystemBase {
         turretLoc = RobotContainer.turret.getAbsTurretPose().getTranslation();
     }
 
-    public static void shootOnTheMove() {
+    public void shootOnTheMove() {
         // update turret velocity and location
         updateTurretVelAndLoc();
         // approximation of point to aim turret at
@@ -116,19 +117,19 @@ public class TargetPoses extends SubsystemBase {
     }
 
     // rename to be accurate and refactor
-    public static Pose2d getTargetPose() {
+    public Pose2d getTargetPose() {
         return new Pose2d(targetLocPrime, new Rotation2d());
     }
 
-    public static void setScoring() {
+    public void setScoring() {
         scoringMode = true;
     }
 
-    public static void setShuttling() {
+    public void setShuttling() {
         scoringMode = false;
     }
 
-    private static Pose2d blueShuttling() {
+    private Pose2d blueShuttling() {
         Pose2d turretPose = RobotContainer.turret.getAbsTurretPose();
         Pose2d targetPose = new Pose2d( Constants.Vision.BLUE_SHUTTLE_CENTER_X, turretPose.getY(), new Rotation2d());
         if (turretPose.getY() > Constants.TargetPosesConstants.BLUE_DEADZONE_MIN && turretPose.getY() < Constants.TargetPosesConstants.BLUE_DEADZONE_MAX ){
@@ -140,7 +141,7 @@ public class TargetPoses extends SubsystemBase {
         return targetPose;
     }
 
-    private static Pose2d redshuttling() {
+    private Pose2d redshuttling() {
         Pose2d turretPose = RobotContainer.turret.getAbsTurretPose();
         Pose2d targetPose = new Pose2d( Constants.Vision.RED_SHUTTLE_CENTER_X, turretPose.getY(), new Rotation2d());
         if (turretPose.getY() > Constants.TargetPosesConstants.RED_DEADZONE_MIN && turretPose.getY() < Constants.TargetPosesConstants.RED_DEADZONE_MAX ){
@@ -152,11 +153,11 @@ public class TargetPoses extends SubsystemBase {
         return targetPose;
     }
 
-    public static void fudgeTurretFactor(double radian) { // radians not dergees
+    public void fudgeTurretFactor(double radian) { // radians not dergees
         currentTarget = currentTarget.rotateAround(RobotContainer.drivetrain.getState().Pose.getTranslation(), new Rotation2d(radian));
     }
 
-    public static void fudgeShooterFactor(Pose2d botCurrentPose, double distance) { // distance in meters
+    public void fudgeShooterFactor(Pose2d botCurrentPose, double distance) { // distance in meters
         double theta = Math.atan2(currentTarget.getX() - botCurrentPose.getX(), currentTarget.getX()- botCurrentPose.getX() );
         double xPart = distance * Math.cos(theta);
         double yPart = distance * Math.sin(theta);
@@ -164,14 +165,14 @@ public class TargetPoses extends SubsystemBase {
     }
 
     // checks current mode and adjusts target accordingly
-    public static void periodic() {
+    public void periodic() {
         if (!scoringMode) {
             currentTarget = blueShuttling();
             if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
                 currentTarget = redshuttling();
             }
             reinitTargetLocPrime();
-            RobotContainer.field.getObject("target").setPoses(TargetPoses.getTargetPose());
+            RobotContainer.field.getObject("target").setPoses(this.getTargetPose());
         } else {
             scoringMode = true;
             currentTarget = Constants.TargetPosesConstants.BLUE_HUB_CENTER_POSE2D;
@@ -179,7 +180,7 @@ public class TargetPoses extends SubsystemBase {
                 currentTarget = Constants.TargetPosesConstants.RED_HUB_CENTER_POSE2D;
             }
             reinitTargetLocPrime();
-            RobotContainer.field.getObject("target").setPoses(TargetPoses.getTargetPose());
+            RobotContainer.field.getObject("target").setPoses(this.getTargetPose());
         }
         SmartDashboard.putString("debug", "ran periodic");
     }

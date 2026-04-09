@@ -84,7 +84,7 @@ public class RobotContainer implements Logged {
     public static final Field2d field = new Field2d();
     public static final Field2d  directionIndicator = new Field2d();
 
-    public static TargetPoses target = new TargetPoses();
+    public static TargetPoses targetPoses = new TargetPoses();
     public final JoystickButton tmJoystickFaceButtonRight = new JoystickButton(operator , 4);
     public final JoystickButton tmJoystickFaceButtonLeft = new JoystickButton(operator , 3);
     public final JoystickButton tmJoystickTrigger = new JoystickButton(operator , 1);
@@ -118,10 +118,6 @@ public class RobotContainer implements Logged {
 
         // Warmup PathPlanner to avoid Java pauses
         CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
-
-        SmartDashboard.putString("debug", "initializing targetposes");
-        // initialize TargetPoses
-        TargetPoses.init();
 
         // booo I don't like this
         // thrustmaster controls
@@ -211,21 +207,21 @@ public class RobotContainer implements Logged {
 
         tmJoystickFaceButtonRight
             .toggleOnTrue(new AprilLock(turret)
-            .alongWith(Commands.runOnce( () -> TargetPoses.setScoring())));
+            .alongWith(Commands.runOnce( () -> targetPoses.setScoring())));
 
         tmJoystickFaceButtonRight
-            .toggleOnTrue(Commands.run( () -> TargetPoses.shootOnTheMove()));
+            .toggleOnTrue(Commands.run( () -> targetPoses.shootOnTheMove()));
 
         tmJoystickFaceButtonLeft
             .toggleOnTrue(new AprilLock(turret)
-            .alongWith(Commands.run( () -> TargetPoses.setShuttling())));
+            .alongWith(Commands.run( () -> targetPoses.setShuttling())));
 
         tmJoystickTrigger
-            .toggleOnTrue(Commands.run( () -> TargetPoses.reinitTargetLocPrime()));
+            .toggleOnTrue(Commands.run( () -> targetPoses.reinitTargetLocPrime()));
 
         tmJoystickTrigger
             .whileTrue(new AutoAim(shooter, hood)
-            .alongWith(Commands.run( () -> TargetPoses.shootOnTheMove())))
+            .alongWith(Commands.run( () -> targetPoses.shootOnTheMove())))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 
@@ -274,9 +270,9 @@ public class RobotContainer implements Logged {
         // shooterFudgeFactor = Constants.TargetPosesConstants.SHOOTER_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.SHOOTER_BASE_VALUE;
         // turretFudgeFactor = Constants.TargetPosesConstants.TURRET_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.TURRET_BASE_VALUE;
 
-        field.getObject("target").setPoses(TargetPoses.currentTarget);
+        field.getObject("target").setPoses(targetPoses.currentTarget);
 
-        System.out.println(TargetPoses.getTargetPose().getX());
+        System.out.println(targetPoses.getTargetPose().getX());
 
 
     }

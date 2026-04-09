@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.TargetPoses;
 import frc.robot.subsystems.Turret;
 
@@ -36,7 +37,7 @@ public class AprilLock extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double yawOffset = turret.getYawOffset(TargetPoses.getTargetPose().getTranslation());
+        double yawOffset = turret.getYawOffset(RobotContainer.targetPoses.getTargetPose().getTranslation());
 
         // pid controlling rotation compensation
         double pidOutput = pid.calculate(yawOffset);

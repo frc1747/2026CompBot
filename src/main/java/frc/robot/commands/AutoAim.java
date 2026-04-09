@@ -28,7 +28,7 @@ public class AutoAim extends Command {
     @Override
     public void initialize() {
         // yes I am a hack
-        double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(TargetPoses.getTargetPose().getTranslation());
+        double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(RobotContainer.targetPoses.getTargetPose().getTranslation());
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
 
 
@@ -37,7 +37,7 @@ public class AutoAim extends Command {
 
     @Override
     public void execute() {
-        double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(TargetPoses.getTargetPose().getTranslation());
+        double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(RobotContainer.targetPoses.getTargetPose().getTranslation());
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
 
         hood.goToAngleCommand(hoodAngleAndShooterPower[0]);

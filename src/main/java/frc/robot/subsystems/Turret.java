@@ -208,7 +208,7 @@ public class Turret extends SubsystemBase implements Logged {
     }
 
     public Command aimAtPose(){
-        return run( () -> goToAngle(getYawOffset(TargetPoses.getTargetPose().getTranslation())));
+        return run( () -> goToAngle(getYawOffset(RobotContainer.targetPoses.getTargetPose().getTranslation())));
     }
 
     public Command stopCommand(){
