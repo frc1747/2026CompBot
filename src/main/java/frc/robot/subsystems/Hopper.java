@@ -74,6 +74,13 @@ public class Hopper extends SubsystemBase implements Logged{
         log("Hopper/isJammed", isJammed());
         log("hopper/is motor reversed", isReversed());
         log("hopper/velocity", motor.getVelocity().getValueAsDouble());
+
+        log("Supply Current", motor.getSupplyCurrent().getValueAsDouble());
+        log("Stator Current", motor.getStatorCurrent().getValueAsDouble());
+        log("Velocity", motor.getVelocity().getValueAsDouble());
+        log("Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
+        log("Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
+        log("Temperature", motor.getDeviceTemp().getValueAsDouble());
     }
 
 }
