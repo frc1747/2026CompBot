@@ -5,6 +5,7 @@
 package frc.robot;
 
 
+import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -33,6 +34,7 @@ public class Robot extends TimedRobot {
 
         Monologue.setupMonologue(m_robotContainer, "Robot", false, false);
 
+        CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
         gitInit();
         initTimer.stop();
         m_robotContainer.log("Timing/Robot init ms", initTimer.get() * 1000);
