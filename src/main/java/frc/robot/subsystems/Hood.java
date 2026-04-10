@@ -103,7 +103,7 @@ public class Hood extends SubsystemBase implements Logged {
         );
 
         double pidOutput = pid.calculate(getCurrentAngle(), targetDegrees);
-        dutyCycle.Output = MathUtil.clamp(pidOutput,
+        dutyCycle.Output = -MathUtil.clamp(pidOutput,
         -Constants.Hood.MAX_PID_OUTPUT,
         Constants.Hood.MAX_PID_OUTPUT
         );
