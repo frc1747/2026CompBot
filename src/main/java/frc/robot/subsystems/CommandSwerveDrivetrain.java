@@ -359,10 +359,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return super.samplePoseAt(Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
-    // TODO: finish this method
+    // TODO: finish this method, need to add proper angle offset
     public Translation2d getVelocityFieldCentric() {
-        Translation2d xVel = new Translation2d().times(getState().Speeds.vxMetersPerSecond);
-        Translation2d yVel = new Translation2d().times(getState().Speeds.vyMetersPerSecond);
+        // get the direction the robot is facing in field space in radians
+        double robotDirRad = getState().Pose.getRotation().getRadians();
+        // get the unit vectors in field space that match the x and y unit vectors in robot space
+        Translation2d robotDirXVec = new Translation2d(Math.cos(robotDirRad), Math.sin(robotDirRad));
+        Translation2d robotDirYVec = new Translation2d(Math.cos(robotDirRad - Math.PI / 2), Math.sin(robotDirRad - Math.PI / 2));
+        // multiply the field space unit vectors for robot space x and y by the
+        // robot space x and y velocity components to get robot space x and y 
+        // velocity components rotated to field space
+        Translation2d xVel = robotDirXVec.times(getState().Speeds.vxMetersPerSecond);
+        Translation2d yVel = robotDirYVec.times(getState().Speeds.vyMetersPerSecond);
+        // add the velocity components back together to get total field space velocity
         return xVel.plus(yVel);
     }
 
