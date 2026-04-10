@@ -32,7 +32,7 @@ public class TargetPoses extends SubsystemBase {
         targetLocPrime = currentTarget.getTranslation();
         totalTurretVelocity = new Translation2d();
         turretLoc = new Translation2d();
-        scoringMode = false;
+        scoringMode = true;
         updateTurretVelAndLoc();
 
         // schedule periodic (may not function, currently unnecessary as this is now a subsystem)
@@ -96,7 +96,7 @@ public class TargetPoses extends SubsystemBase {
     private void updateTurretVelAndLoc() {
         // may need to find latency and predict future velocity
         // velocity of bot center relative to field
-        Translation2d robotVel = RobotContainer.drivetrain.getVelocity();
+        Translation2d robotVel = RobotContainer.drivetrain.getV;
         // tangential velocity of turret relative to bot center, directed in field space
         Translation2d turretTangentialVel = RobotContainer.turret.getTangentialVelocity();
         // total velocity vector of turret relative to field
@@ -106,11 +106,10 @@ public class TargetPoses extends SubsystemBase {
         // robot will be in a very short time
         // current location of turret relative to field
         turretLoc = RobotContainer.turret.getAbsTurretPose().getTranslation();
+        System.out.println("robotVelocity" + robotVel.toString());
     }
 
     public void shootOnTheMove() {
-        // update turret velocity and location
-        updateTurretVelAndLoc();
         // approximation of point to aim turret at
         targetLocPrime = getTargetApprox(targetLocPrime);
         RobotContainer.field.getObject("target").setPoses(new Pose2d(targetLocPrime, new Rotation2d()));
@@ -182,8 +181,7 @@ public class TargetPoses extends SubsystemBase {
             reinitTargetLocPrime();
             RobotContainer.field.getObject("target").setPoses(this.getTargetPose());
         }
-        // SmartDashboard.putString("debug", "ran periodic");
-        // System.out.println("running targetPoses periodic");
+        updateTurretVelAndLoc();
     }
 
 }
