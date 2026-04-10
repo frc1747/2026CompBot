@@ -161,9 +161,9 @@ public class RobotContainer implements Logged {
         drivetrain.setDefaultCommand(
             new TeleopSwerve(
                 drivetrain,
-                () -> driver_hid.getLeftY(),
-                () -> driver_hid.getLeftX(),
-                () -> driver_hid.getRightX()
+                () -> driver_hid.getLeftY() * activeControllerCap,
+                () -> driver_hid.getLeftX() * activeControllerCap,
+                () -> driver_hid.getRightX() * activeControllerCap
             )
         );
 
