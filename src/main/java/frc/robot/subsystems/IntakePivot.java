@@ -3,6 +3,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -52,7 +53,7 @@ public class IntakePivot extends SubsystemBase implements Logged{
        // double currentCounts = encoder.get();
         double currentCounts = motor.getPosition().getValueAsDouble();
         dutyCycle.Output = pid.calculate(currentCounts, tick);
-
+        ArmFeedforward feedforward = new ArmFeedforward(currentCounts, tick, currentCounts);
         motor.setControl(dutyCycle);
     }
 
@@ -99,12 +100,5 @@ public class IntakePivot extends SubsystemBase implements Logged{
   public void periodic() {
     log("intake/intake encoder", motor.getPosition().getValueAsDouble());
     log("intake/Is intake out:", isDown());
-
-    log("Supply Current", motor.getSupplyCurrent().getValueAsDouble());
-    log("Stator Current", motor.getStatorCurrent().getValueAsDouble());
-    log("Velocity", motor.getVelocity().getValueAsDouble());
-    log("Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
-    log("Supply Voltage", motor.getSupplyVoltage().getValueAsDouble());
-    log("Temperature", motor.getDeviceTemp().getValueAsDouble());
   }
 }
