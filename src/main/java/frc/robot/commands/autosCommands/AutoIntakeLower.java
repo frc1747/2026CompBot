@@ -1,8 +1,8 @@
 package frc.robot.commands.autosCommands;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IntakePivot;
-import edu.wpi.first.wpilibj.Timer;
 
 
 public class AutoIntakeLower extends Command{
@@ -28,7 +28,7 @@ public class AutoIntakeLower extends Command{
         intakePivot.toggleDown();
     }
 
-    @Override 
+    @Override
     public void execute(){
 
     }
@@ -41,7 +41,7 @@ public class AutoIntakeLower extends Command{
 
     @Override
     public boolean isFinished() {
-        //This Should 
+        //This Should
         return timer.hasElapsed(3.0);
     }
 }

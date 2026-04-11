@@ -1,7 +1,7 @@
 package frc.robot.commands.autosCommands;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Kicker;
-import edu.wpi.first.wpilibj.Timer;
 
 
 public class AutoKickerRun extends Command{
@@ -23,19 +23,19 @@ public class AutoKickerRun extends Command{
         kicker.run(false);
     }
 
-    @Override 
+    @Override
     public void execute(){
 
     }
     @Override
     public void end(boolean interrupted){
-        kicker.stopCommand();
+        kicker.setPower(0.0);
         System.out.println("Kicker Has Been Stopped");
     }
 
     @Override
     public boolean isFinished() {
-        //This Should 
-        return timer.hasElapsed(3.0);
+        //This Should
+        return false;
     }
 }

@@ -1,7 +1,7 @@
 package frc.robot.commands.autosCommands;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
-import edu.wpi.first.wpilibj.Timer;
 
 
 public class AutoIntakeSpin extends Command{
@@ -25,7 +25,7 @@ public class AutoIntakeSpin extends Command{
         intake.spin(reversed);
     }
 
-    @Override 
+    @Override
     public void execute(){
 
     }
@@ -37,7 +37,7 @@ public class AutoIntakeSpin extends Command{
 
     @Override
     public boolean isFinished() {
-        //This Should 
+        //This Should
         return timer.hasElapsed(5);
     }
 }

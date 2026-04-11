@@ -1,10 +1,10 @@
 package frc.robot.commands.autosCommands;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.IntakePivot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.subsystems.IntakePivot;
 
 
 public class AutoIntakeStash extends Command{
@@ -31,7 +31,7 @@ public class AutoIntakeStash extends Command{
         intakePivot.setPower(clampedPid);
     }
 
-    @Override 
+    @Override
     public void execute(){
 
     }
