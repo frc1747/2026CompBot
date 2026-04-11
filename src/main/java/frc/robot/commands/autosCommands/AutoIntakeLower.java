@@ -20,12 +20,14 @@ public class AutoIntakeLower extends Command{
         //Resets and Starts a timer
         timer.reset();
         timer.start();
-          if (intakePivot.getDown()) {
-            intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_UP);
-        } else {
-            intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_READY);
-        }
-        intakePivot.toggleDown();
+        //    if (intakePivot.getDown()) {
+        //      intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_UP);
+        //  } else {
+        //      intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_READY);
+        //  }
+        // intakePivot.toggleDown();
+        intakePivot.setPower(0.35);
+        intakePivot.intakePivot(Constants.IntakePivot.OUT);
     }
 
     @Override
@@ -42,6 +44,6 @@ public class AutoIntakeLower extends Command{
     @Override
     public boolean isFinished() {
         //This Should
-        return timer.hasElapsed(3.0);
+        return timer.hasElapsed(2);
     }
 }

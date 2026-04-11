@@ -7,11 +7,9 @@ import frc.robot.subsystems.Intake;
 public class AutoIntakeSpin extends Command{
     private Intake intake;
     private Timer timer = new Timer();
-    private boolean reversed;
 
-    public AutoIntakeSpin(Intake intake , boolean reversed){
+    public AutoIntakeSpin(Intake intake){
         this.intake = intake;
-        this.reversed = reversed;
         addRequirements(intake);
 
     }
@@ -22,7 +20,7 @@ public class AutoIntakeSpin extends Command{
         //Resets and Starts a timer
         timer.reset();
         timer.start();
-        intake.spin(reversed);
+        intake.intakeSpin(0.85);
     }
 
     @Override
@@ -31,13 +29,13 @@ public class AutoIntakeSpin extends Command{
     }
     @Override
     public void end(boolean interrupted){
-        intake.setIntakePower(0.0);
+        intake.intakeSpin(0.0);
         System.out.println("Intake Spin has Been Stopped");
     }
 
     @Override
     public boolean isFinished() {
         //This Should
-        return timer.hasElapsed(5);
+        return timer.hasElapsed(3);
     }
 }

@@ -20,7 +20,7 @@ public class AutoHopperRun extends Command{
         //Resets and Starts a timer
         timer.reset();
         timer.start();
-        hopper.run(false);
+        hopper.setPower(0.6);
     }
 
     @Override

@@ -1,6 +1,4 @@
 package frc.robot.commands.autosCommands;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -10,13 +8,9 @@ import frc.robot.subsystems.IntakePivot;
 public class AutoIntakeStash extends Command{
     private IntakePivot intakePivot;
     private Timer timer = new Timer();
-    PIDController pid;
 
     public AutoIntakeStash(IntakePivot intakePivot){
         this.intakePivot = intakePivot;
-        this.pid = new PIDController(Constants.IntakePivot.SET_POINT_P,
-                                    Constants.IntakePivot.SET_POINT_I,
-                                    Constants.IntakePivot.SET_POINT_D);
         addRequirements(intakePivot);
     }
 
@@ -25,10 +19,14 @@ public class AutoIntakeStash extends Command{
     public void initialize(){
         timer.reset();
         timer.start();
-        double currentPos = intakePivot.getEncoderValue();
-        double pidOutput = pid.calculate(currentPos, intakePivot.getDefaultPosition());
-        double clampedPid = MathUtil.clamp(pidOutput, -Constants.IntakePivot.SET_POINT_PID_CLAMP, Constants.IntakePivot.SET_POINT_PID_CLAMP);
-        intakePivot.setPower(clampedPid);
+    //     if (intakePivot.getDown()) {
+    //         intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_UP);
+    //     } else {
+    //         intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_READY);
+    //     }
+    //    intakePivot.toggleDown();
+        intakePivot.setPower(0.35);
+        intakePivot.intakePivot(Constants.IntakePivot.HOME);
     }
 
     @Override
@@ -43,6 +41,6 @@ public class AutoIntakeStash extends Command{
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(3.0);
+        return timer.hasElapsed(0.5);
     }
 }

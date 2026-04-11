@@ -20,11 +20,15 @@ public class AutoKickerRun extends Command{
         //Resets and Starts a timer
         timer.reset();
         timer.start();
-        kicker.run(false);
+        kicker.setPower(0.35);
+
     }
 
     @Override
     public void execute(){
+        // if (timer.hasElapsed(5.0)){
+        //     kicker.setPower(0.0);
+        // }
 
     }
     @Override
@@ -36,6 +40,6 @@ public class AutoKickerRun extends Command{
     @Override
     public boolean isFinished() {
         //This Should
-        return false;
+        return timer.hasElapsed(3);
     }
 }
