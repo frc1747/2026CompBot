@@ -42,11 +42,11 @@ public final class Constants {
         public static final double FOV_HORIZONTAL = 62.5;
 
         // AprilLock2 rotation compensation pid values
-        public static final double APRIL_LOCK_P = 1.0;
-        public static final double APRIL_LOCK_I = 0.003;
-        public static final double APRIL_LOCK_D = 0.003;
+        public static final double APRIL_LOCK_P = .95;
+        public static final double APRIL_LOCK_I = 0.007; // was 0.003
+        public static final double APRIL_LOCK_D = 0.005; // was 0.003
         // maximum magnitude of PID output
-        public static final double APRIL_LOCK_PID_CLAMP = 0.5; // was .5
+        public static final double APRIL_LOCK_PID_CLAMP = 0.55; // was .5
 
         // VISION_STDDEVS allows us to control how much we trust the values coming from the Limelight(s).
         // The higher the value (distance standard deviations), the less we trust it.
@@ -67,11 +67,11 @@ public final class Constants {
         public static final double FIELD_CENTER_X = 8.7741252;
         public static final double FIELD_CENTER_Y = 4.0259508;
 
-        public static final double BLUE_HUB_CENTER_X = 4.611624;
+        public static final double BLUE_HUB_CENTER_X = 4.621;
         public static final double BLUE_HUB_CENTER_Y = FIELD_CENTER_Y;
         public static final double BLUE_SHUTTLE_CENTER_X = 1;
 
-        public static final double RED_HUB_CENTER_X = 16.5 - BLUE_HUB_CENTER_X;
+        public static final double RED_HUB_CENTER_X = 11.919;
         public static final double RED_HUB_CENTER_Y = FIELD_CENTER_Y;
         public static final double RED_SHUTTLE_CENTER_X = 16.5 - BLUE_SHUTTLE_CENTER_X;
 
@@ -160,8 +160,8 @@ public final class Constants {
         public static final double SURFACE_D = 12.4826; // needs tuning
         public static final double SURFACE_E = -10.8847; // needs tuning
         public static final double SURFACE_F = 2.9962; // needs tuning
-        public static final double MAX_AUTOSHOOT_POWER =4500;
         public static final double AUTO_SHOOTER_MULT = 1.04; // this should be remove when we get better auto shoot values
+        public static final double MAX_AUTOSHOOT_POWER = 6300;
         public static final double MAX_HOOD_ANGLE = 43;// degrees
         public static final double MIN_HOOD_ANGLE = 26;// degrees
         public static final double PID_P = .75;// they are half for the two motors
