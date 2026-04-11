@@ -164,9 +164,10 @@ public final class Constants {
         public static final double MAX_AUTOSHOOT_POWER = 6300;
         public static final double MAX_HOOD_ANGLE = 43;// degrees
         public static final double MIN_HOOD_ANGLE = 26;// degrees
-        public static final double PID_P = .75;// they are half for the two motors
-        public static final double PID_I = 0.3;
-        public static final double PID_D = 0.015;
+        public static final double PID_P = 0.7;
+        public static final double PID_I = 0.0;
+        public static final double PID_D = 0.0;
+        public static final double PID_KS = 4.8;
         public static final double TOLERANCE = .05; // percent tolerance
         public static final Pose2d RED_HUB_CENTER_POSE2D = new Pose2d(Vision.RED_HUB_CENTER_X, Vision.RED_HUB_CENTER_Y, new Rotation2d()); // cords hurt my brain
         public static final Pose2d BLUE_HUB_CENTER_POSE2D = new Pose2d(Vision.BLUE_HUB_CENTER_X, Vision.BLUE_HUB_CENTER_Y,new Rotation2d());

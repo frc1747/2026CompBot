@@ -37,7 +37,7 @@ public class Shooter extends SubsystemBase implements Logged{
     public double PID_P = Constants.Shooter.PID_P ;
     public double PID_I = Constants.Shooter.PID_I;
     public double PID_D = Constants.Shooter.PID_D;
-    public double PID_Ks = 20;
+    public double PID_KS = Constants.Shooter.PID_KS;
     private double shooterOffset = 0.0;
 
 
@@ -63,7 +63,7 @@ public class Shooter extends SubsystemBase implements Logged{
         configShooter.Slot0.kP = Constants.Shooter.PID_P;
         configShooter.Slot0.kI = Constants.Shooter.PID_I;
         configShooter.Slot0.kD = Constants.Shooter.PID_D;
-        configShooter.Slot0.kS = PID_Ks;
+        configShooter.Slot0.kS = Constants.Shooter.PID_KS;
 
         configShooter.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
 
@@ -88,7 +88,7 @@ public class Shooter extends SubsystemBase implements Logged{
         SmartDashboard.putNumber("Shooter/Shooter pid P", PID_P);
         SmartDashboard.putNumber("Shooter/Shooter pid I", PID_I);
         SmartDashboard.putNumber("Shooter/Shooter pid D", PID_D);
-        SmartDashboard.putNumber("Shooter/Shooter pid Ks", PID_Ks);
+        SmartDashboard.putNumber("Shooter/Shooter pid Ks", PID_KS);
     }
 
     public Command setPowerCommand(double power){
@@ -211,7 +211,7 @@ public class Shooter extends SubsystemBase implements Logged{
         PID_P = SmartDashboard.getNumber("Shooter/Shooter pid P", PID_P);
         PID_I = SmartDashboard.getNumber("Shooter/Shooter pid I", PID_I);
         PID_D = SmartDashboard.getNumber("Shooter/Shooter pid D", PID_D);
-        PID_Ks = SmartDashboard.getNumber("Shooter/Shooter pid Ks", PID_Ks);
+        PID_KS = SmartDashboard.getNumber("Shooter/Shooter pid KS", PID_KS);
         log("Shooter/Shooter true pid P",  configShooter.Slot0.kP);
 
         if(configShooter.Slot0.kP != PID_P)  {
@@ -229,8 +229,8 @@ public class Shooter extends SubsystemBase implements Logged{
             motorLeft.getConfigurator().apply(configShooter);
         }
 
-        if(configShooter.Slot0.kS != PID_Ks)  {
-            configShooter.Slot0.kS = PID_Ks;
+        if(configShooter.Slot0.kS != PID_KS)  {
+            configShooter.Slot0.kS = PID_KS;
             motorLeft.getConfigurator().apply(configShooter);
         }
 

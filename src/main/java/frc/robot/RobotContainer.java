@@ -252,7 +252,8 @@ public class RobotContainer implements Logged {
             .alongWith(Commands.run( () -> TargetPoses.setShuttling())));
 
         tmJoystickTrigger
-            .whileTrue(new AutoAim(shooter, hood))
+            .whileTrue(shooter.setSpeedToDesired())
+            //.whileTrue(new AutoAim(shooter, hood))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 
@@ -277,10 +278,10 @@ public class RobotContainer implements Logged {
             .onFalse(hood.stopCommand());
 
         // Shooter speed manual change
-        tmJoystickRightHandTopRight
-            .onTrue(shooter.offsetIncrement());
-        tmJoystickRightHandBottomRight
-            .onTrue(shooter.offsetDecrement());
+        // tmJoystickRightHandTopRight
+        //     .onTrue(shooter.offsetIncrement());
+        // tmJoystickRightHandBottomRight
+        //     .onTrue(shooter.offsetDecrement());
 
         tmJoystickLeftHandBottomLeft
             .whileTrue(shooter.setSpeedToDesired())
