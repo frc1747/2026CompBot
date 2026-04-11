@@ -216,6 +216,13 @@ public class RobotContainer implements Logged {
             .whileTrue(intake.spin(false))
             .onFalse(intake.StopCommand());
 
+        // Hood go down at trench code
+        driver.x()
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
+
+        driver.y()
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE));
+
         drivetrain.registerTelemetry(logger::telemeterize);
 
         // operater
