@@ -378,10 +378,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Translation2d getVelocityFieldCentric2() {
         // get the direction the robot is facing in field space in radians
         double robotDirRad = getState().Pose.getRotation().getRadians();
-        RobotContainer.directionIndicator.getObject("robotDirection").setPose(new Pose2d(new Translation2d(Math.cos(robotDirRad), Math.sin(robotDirRad)), new Rotation2d()));
         // get the unit vectors in field space that match the x and y unit vectors in robot space
         Translation2d robotDirXVec = new Translation2d(Math.cos(robotDirRad), Math.sin(robotDirRad));
-        Translation2d robotDirYVec = new Translation2d(Math.sin(robotDirRad), Math.cos(robotDirRad)); // may need to flip to be negative to be rotated pi/2 the other direction
+        Translation2d robotDirYVec = new Translation2d(Math.cos(robotDirRad + Math.PI / 2), Math.sin(robotDirRad + Math.PI / 2)); // may need to flip to be negative to be rotated pi/2 the other direction
         RobotContainer.directionIndicator.getObject("robotDirectionX").setPose(new Pose2d(robotDirXVec, new Rotation2d()));
         RobotContainer.directionIndicator.getObject("robotDirectionY").setPose(new Pose2d(robotDirYVec, new Rotation2d()));
         // multiply the field space unit vectors for robot space x and y by the

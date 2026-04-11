@@ -107,7 +107,7 @@ public class TargetPoses extends SubsystemBase {
         // current location of turret relative to field
         turretLoc = RobotContainer.turret.getAbsTurretPose().getTranslation();
         System.out.println("robotVelocity" + robotVel.toString());
-        // RobotContainer.directionIndicator.getObject("robotVelocity").setPoses(new Pose2d(robotVel.plus(new Translation2d(Constants.Vision.FIELD_CENTER_X, Constants.Vision.FIELD_CENTER_Y)), new Rotation2d()));
+        RobotContainer.directionIndicator.getObject("robotVelocity").setPoses(new Pose2d(robotVel.plus(new Translation2d(Constants.Vision.FIELD_CENTER_X, Constants.Vision.FIELD_CENTER_Y)), new Rotation2d()));
     }
 
     public void shootOnTheMove() {
