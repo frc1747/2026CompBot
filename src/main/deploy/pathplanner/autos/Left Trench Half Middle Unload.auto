@@ -54,7 +54,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -79,19 +79,13 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "IntakeIn"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Left Trench Half Middle D"
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
