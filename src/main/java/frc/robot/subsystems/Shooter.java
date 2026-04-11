@@ -12,6 +12,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -36,6 +37,7 @@ public class Shooter extends SubsystemBase implements Logged{
     public double PID_P = Constants.Shooter.PID_P ;
     public double PID_I = Constants.Shooter.PID_I;
     public double PID_D = Constants.Shooter.PID_D;
+    public double PID_Ks = 20;
     private double shooterOffset = 0.0;
 
 
@@ -56,9 +58,12 @@ public class Shooter extends SubsystemBase implements Logged{
             .withSupplyCurrentLowerLimit(40)
             .withSupplyCurrentLimitEnable(true);
 
+        configShooter.Slot0.withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign);
+
         configShooter.Slot0.kP = Constants.Shooter.PID_P;
         configShooter.Slot0.kI = Constants.Shooter.PID_I;
         configShooter.Slot0.kD = Constants.Shooter.PID_D;
+        configShooter.Slot0.kS = PID_Ks;
 
         configShooter.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
 
@@ -83,6 +88,7 @@ public class Shooter extends SubsystemBase implements Logged{
         SmartDashboard.putNumber("Shooter/Shooter pid P", PID_P);
         SmartDashboard.putNumber("Shooter/Shooter pid I", PID_I);
         SmartDashboard.putNumber("Shooter/Shooter pid D", PID_D);
+        SmartDashboard.putNumber("Shooter/Shooter pid Ks", PID_Ks);
     }
 
     public Command setPowerCommand(double power){
@@ -121,7 +127,7 @@ public class Shooter extends SubsystemBase implements Logged{
     }
 
     public double getRPM() {
-        return (motorLeft.getVelocity().getValueAsDouble() + follower.getVelocity().getValueAsDouble()) / 2 * 60;
+        return motorLeft.getVelocity().getValueAsDouble() * 60;
     }
 
     public double getPowerNeededFromDistanceAndAngle(double x, double y){
@@ -205,19 +211,31 @@ public class Shooter extends SubsystemBase implements Logged{
         PID_P = SmartDashboard.getNumber("Shooter/Shooter pid P", PID_P);
         PID_I = SmartDashboard.getNumber("Shooter/Shooter pid I", PID_I);
         PID_D = SmartDashboard.getNumber("Shooter/Shooter pid D", PID_D);
+        PID_Ks = SmartDashboard.getNumber("Shooter/Shooter pid Ks", PID_Ks);
         log("Shooter/Shooter true pid P",  configShooter.Slot0.kP);
 
         if(configShooter.Slot0.kP != PID_P)  {
             configShooter.Slot0.kP = PID_P;
+            motorLeft.getConfigurator().apply(configShooter);
         }
 
         if(configShooter.Slot0.kI != PID_I)  {
             configShooter.Slot0.kI = PID_I;
+            motorLeft.getConfigurator().apply(configShooter);
         }
 
         if(configShooter.Slot0.kD != PID_D)  {
             configShooter.Slot0.kD = PID_D;
+            motorLeft.getConfigurator().apply(configShooter);
         }
+
+        if(configShooter.Slot0.kS != PID_Ks)  {
+            configShooter.Slot0.kS = PID_Ks;
+            motorLeft.getConfigurator().apply(configShooter);
+        }
+
+
+
 
         log("Left Supply Current", motorLeft.getSupplyCurrent().getValueAsDouble());
         log("Right Supply Current", follower.getSupplyCurrent().getValueAsDouble());
