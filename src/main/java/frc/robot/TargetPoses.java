@@ -96,12 +96,13 @@ public class TargetPoses extends SubsystemBase {
     private void updateTurretVelAndLoc() {
         // may need to find latency and predict future velocity
         // velocity of bot center relative to field
-        Translation2d robotVel = RobotContainer.drivetrain.getVelocityFieldCentric2();
+        Translation2d robotVel = RobotContainer.drivetrain.getVelocityFieldCentric();
         // tangential velocity of turret relative to bot center, directed in field space
         Translation2d turretTangentialVel = RobotContainer.turret.getTangentialVelocity();
         // total velocity vector of turret relative to field
         // could instead be made into a turret subsysyem get method
         totalTurretVelocity = robotVel.plus(turretTangentialVel);
+        RobotContainer.directionIndicator.getObject("turretVel").setPose(new Pose2d(totalTurretVelocity.plus(new Translation2d(Constants.Vision.RED_HUB_CENTER_X, Constants.Vision.RED_HUB_CENTER_Y)), new Rotation2d()));
         // may need to take latency into account and find where the
         // robot will be in a very short time
         // current location of turret relative to field
