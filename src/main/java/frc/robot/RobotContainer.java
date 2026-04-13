@@ -220,7 +220,17 @@ public class RobotContainer implements Logged {
         // intake eject
         driver.leftTrigger()
             .whileTrue(intake.spin(false))
-            .onFalse(intake.StopCommand());
+            .whileTrue(hopper.run(true))
+            .onFalse(intake.StopCommand())
+            .onFalse(hopper.stop());
+
+
+        // Hood go down at trench code
+        driver.x()
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
+
+        driver.y()
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -248,7 +258,8 @@ public class RobotContainer implements Logged {
             .alongWith(Commands.run( () -> TargetPoses.setShuttling())));
 
         tmJoystickTrigger
-            .whileTrue(new AutoAim(shooter, hood))
+            .whileTrue(shooter.setSpeedToDesired())
+            //.whileTrue(new AutoAim(shooter, hood))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 
@@ -273,10 +284,10 @@ public class RobotContainer implements Logged {
             .onFalse(hood.stopCommand());
 
         // Shooter speed manual change
-        tmJoystickRightHandTopRight
-            .onTrue(shooter.offsetIncrement());
-        tmJoystickRightHandBottomRight
-            .onTrue(shooter.offsetDecrement());
+        // tmJoystickRightHandTopRight
+        //     .onTrue(shooter.offsetIncrement());
+        // tmJoystickRightHandBottomRight
+        //     .onTrue(shooter.offsetDecrement());
 
         tmJoystickLeftHandBottomLeft
             .whileTrue(shooter.setSpeedToDesired())
