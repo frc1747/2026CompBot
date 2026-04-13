@@ -108,11 +108,11 @@ public class Shooter extends SubsystemBase implements Logged{
     }
 
     public Command offsetDecrement() {
-        return run(() -> shooterOffset -= Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
+        return runOnce(() -> shooterOffset -= Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
     }
 
     public Command offsetIncrement() {
-        return run(() -> shooterOffset += Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
+        return runOnce(() -> shooterOffset += Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
     }
 
     public void setPower(double power) {
