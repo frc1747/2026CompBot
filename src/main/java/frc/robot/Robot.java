@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
 
         m_robotContainer = new RobotContainer();
 
-        Monologue.setupMonologue(m_robotContainer, "Robot", false, false);
+        Monologue.setupMonologue(m_robotContainer, "Robot", true, false);
 
         CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
         gitInit();

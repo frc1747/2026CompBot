@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import monologue.LogLevel;
 import monologue.Logged;
 
 public class Shooter extends SubsystemBase implements Logged{
@@ -189,20 +190,20 @@ public class Shooter extends SubsystemBase implements Logged{
 
     @Override
     public void periodic() {
-        log("Shooter/Average RPM", getRPM());
+        log("Shooter/Average RPM", getRPM(), LogLevel.OVERRIDE_FILE_ONLY);
         desiredRPM = SmartDashboard.getNumber("Shooter/Desired RPM", 0.0);
         //SmartDashboard.putNumber("Shooter/Desired RPM error", Math.abs((desiredRPM - getRPM()) / getRPM()));
         if (Math.abs((desiredRPM - getRPM()) / getRPM()) <= 0.01) {
-            log("Shooter/Desired RPM Reached", true);
+            log("Shooter/Desired RPM Reached", true, LogLevel.OVERRIDE_FILE_ONLY);
         } else{
-            log("Shooter/Desired RPM Reached", false);
+            log("Shooter/Desired RPM Reached", false, LogLevel.OVERRIDE_FILE_ONLY);
         }
         desiredPower = SmartDashboard.getNumber("Shooter/Desired Power", 0.0) ;
-        log("number I am putting on smartdashbard", desiredRPM);
+        log("number I am putting on smartdashbard", desiredRPM, LogLevel.OVERRIDE_FILE_ONLY);
 
         //setRPM(desiredRPM);
-        log("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity);
-        log("Shooter/Desired Power?", desiredPower) ;
+        log("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity, LogLevel.OVERRIDE_FILE_ONLY);
+        log("Shooter/Desired Power?", desiredPower, LogLevel.OVERRIDE_FILE_ONLY);
 
         // auto shoot
 
@@ -212,7 +213,7 @@ public class Shooter extends SubsystemBase implements Logged{
         PID_I = SmartDashboard.getNumber("Shooter/Shooter pid I", PID_I);
         PID_D = SmartDashboard.getNumber("Shooter/Shooter pid D", PID_D);
         PID_KS = SmartDashboard.getNumber("Shooter/Shooter pid KS", PID_KS);
-        log("Shooter/Shooter true pid P",  configShooter.Slot0.kP);
+        log("Shooter/Shooter true pid P",  configShooter.Slot0.kP, LogLevel.OVERRIDE_FILE_ONLY);
 
         if(configShooter.Slot0.kP != PID_P)  {
             configShooter.Slot0.kP = PID_P;
