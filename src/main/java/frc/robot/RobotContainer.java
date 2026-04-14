@@ -286,12 +286,12 @@ public class RobotContainer implements Logged {
 
         // Manual Hood movement code
         // Hood up
-        tmJoystickLeftHandTopRight
+        tmJoystickLeftHandBottomRight
             .whileTrue(hood.setPowerCommand(false))
             .onFalse(hood.stopCommand());
 
         // Hood down
-        tmJoystickLeftHandBottomRight
+        tmJoystickLeftHandTopRight
             .whileTrue(hood.setPowerCommand(true))
             .onFalse(hood.stopCommand());
 
@@ -306,38 +306,12 @@ public class RobotContainer implements Logged {
 
         // Auto hood buttons
         // Auto hood down
-        tmJoystickRightHandTopLeft
+        tmJoystickRightHandBottomLeft
             .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         // Auto hood up
-        tmJoystickRightHandBottomLeft
+        tmJoystickRightHandTopLeft
             .onTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE));
-
-        // tmJoystickLeftHandBottomLeft
-        //     .whileTrue(shooter.setSpeedToDesired())
-        //     .onFalse(shooter.stopCommand());
-
-        // tmJoystickBottomTop
-        //     .whileTrue(new driverShutdown(drivetrain));
-
-
-
-
-        // this needs to be refactors to the inline standerds
-
-        // Hub shot
-
-        // set to shuttling
-
-        //fudge it
-
-
-        // TargetPoses.fudgeShooterFactor(drivetrain.getState().Pose ,operator.getY() * shooterFudgeFactor);
-
-        // TargetPoses.fudgeTurretFactor(operator.getTwist()* turretFudgeFactor);
-
-        // shooterFudgeFactor = Constants.TargetPosesConstants.SHOOTER_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.SHOOTER_BASE_VALUE;
-        // turretFudgeFactor = Constants.TargetPosesConstants.TURRET_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.TURRET_BASE_VALUE;
 
         field.getObject("target").setPoses(TargetPoses.currentTarget);
 
