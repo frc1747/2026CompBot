@@ -90,13 +90,18 @@ public class RobotContainer implements Logged {
     public final JoystickButton tmJoystickTrigger = new JoystickButton(operator , 1);
     public final POVButton tmJoystickPovUp = new POVButton(operator, 0);
     public final POVButton tmJoystickPovDown = new POVButton(operator, 180);
-    public final JoystickButton tmJoystickRightHandBottomLeft = new JoystickButton(operator , 9);
-    public final JoystickButton tmJoystickRightHandBottomMiddle = new JoystickButton(operator , 10);
-    public final JoystickButton tmJoystickRightHandBottomRight = new JoystickButton(operator , 11);
-    public final JoystickButton tmJoystickRightHandTopLeft = new JoystickButton(operator , 8);
-    public final JoystickButton tmJoystickRightHandTopMiddle = new JoystickButton(operator , 7);
-    public final JoystickButton tmJoystickRightHandTopRight = new JoystickButton(operator , 6);
+    public final JoystickButton tmJoystickRightHandBottomLeft = new JoystickButton(operator , 8);
+    public final JoystickButton tmJoystickRightHandBottomMiddle = new JoystickButton(operator , 9);
+    public final JoystickButton tmJoystickRightHandBottomRight = new JoystickButton(operator , 10);
+    public final JoystickButton tmJoystickRightHandTopLeft = new JoystickButton(operator , 7);
+    public final JoystickButton tmJoystickRightHandTopMiddle = new JoystickButton(operator , 6);
+    public final JoystickButton tmJoystickRightHandTopRight = new JoystickButton(operator , 5);
     public final JoystickButton tmJoystickLeftHandBottomLeft = new JoystickButton(operator, 16);
+    public final JoystickButton tmJoystickLeftHandBottomMiddle = new JoystickButton(operator, 15);
+    public final JoystickButton tmJoystickLeftHandBottomRight = new JoystickButton(operator, 14);
+    public final JoystickButton tmJoystickLeftHandTopLeft = new JoystickButton(operator, 11);
+    public final JoystickButton tmJoystickLeftHandTopMiddle = new JoystickButton(operator, 12);
+    public final JoystickButton tmJoystickLeftHandTopRight = new JoystickButton(operator, 13);
     public final JoystickButton tmJoystickBottomTop = new JoystickButton(operator, 2);
     public double shooterFudgeFactor;
     public double turretFudgeFactor;
@@ -278,10 +283,10 @@ public class RobotContainer implements Logged {
             .onFalse(hood.stopCommand());
 
         // Shooter speed manual change
-        // tmJoystickRightHandTopRight
-        //     .onTrue(shooter.offsetIncrement());
-        // tmJoystickRightHandBottomRight
-        //     .onTrue(shooter.offsetDecrement());
+        tmJoystickRightHandTopRight
+            .onTrue(shooter.offsetIncrement());
+        tmJoystickRightHandBottomRight
+            .onTrue(shooter.offsetDecrement());
 
         tmJoystickLeftHandBottomLeft
             .whileTrue(shooter.setSpeedToDesired())

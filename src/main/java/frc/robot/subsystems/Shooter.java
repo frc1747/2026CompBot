@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import monologue.Annotations.Log;
 import monologue.Logged;
 
 public class Shooter extends SubsystemBase implements Logged{
@@ -38,6 +39,7 @@ public class Shooter extends SubsystemBase implements Logged{
     public double PID_I = Constants.Shooter.PID_I;
     public double PID_D = Constants.Shooter.PID_D;
     public double PID_KS = Constants.Shooter.PID_KS;
+    @Log.NT
     private double shooterOffset = 0.0;
 
 
