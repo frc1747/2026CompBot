@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -221,6 +222,8 @@ public class Turret extends SubsystemBase implements Logged{
         log("Turret/Left Limit Switch", getLeftLimitSwitchPressed());
         log("Turret/Right Limit Switch", getRightLimitSwitchPressed());
         log("Turret/speed", dutyCycle.Output);
+        SmartDashboard.putNumber("Turret/Distance to target", RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(TargetPoses.getTargetPose().getTranslation()));
+
 
         log("Applied Voltage", motor.getMotorVoltage().getValueAsDouble());
         log("Stator Current", motor.getStatorCurrent().getValueAsDouble());
