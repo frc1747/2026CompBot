@@ -12,6 +12,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import monologue.Annotations.Log;
+import monologue.LogLevel;
 import monologue.Logged;
 
 public class Shooter extends SubsystemBase implements Logged{
@@ -36,6 +39,8 @@ public class Shooter extends SubsystemBase implements Logged{
     public double PID_P = Constants.Shooter.PID_P ;
     public double PID_I = Constants.Shooter.PID_I;
     public double PID_D = Constants.Shooter.PID_D;
+    public double PID_KS = Constants.Shooter.PID_KS;
+    @Log.NT
     private double shooterOffset = 0.0;
 
 
@@ -56,9 +61,12 @@ public class Shooter extends SubsystemBase implements Logged{
             .withSupplyCurrentLowerLimit(40)
             .withSupplyCurrentLimitEnable(true);
 
+        configShooter.Slot0.withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign);
+
         configShooter.Slot0.kP = Constants.Shooter.PID_P;
         configShooter.Slot0.kI = Constants.Shooter.PID_I;
         configShooter.Slot0.kD = Constants.Shooter.PID_D;
+        configShooter.Slot0.kS = Constants.Shooter.PID_KS;
 
         configShooter.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
 
@@ -83,6 +91,7 @@ public class Shooter extends SubsystemBase implements Logged{
         SmartDashboard.putNumber("Shooter/Shooter pid P", PID_P);
         SmartDashboard.putNumber("Shooter/Shooter pid I", PID_I);
         SmartDashboard.putNumber("Shooter/Shooter pid D", PID_D);
+        SmartDashboard.putNumber("Shooter/Shooter pid Ks", PID_KS);
     }
 
     public Command setPowerCommand(double power){
@@ -102,11 +111,11 @@ public class Shooter extends SubsystemBase implements Logged{
     }
 
     public Command offsetDecrement() {
-        return run(() -> shooterOffset -= Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
+        return runOnce(() -> shooterOffset -= Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
     }
 
     public Command offsetIncrement() {
-        return run(() -> shooterOffset += Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
+        return runOnce(() -> shooterOffset += Constants.Shooter.AUTOSHOOT_OFFSET_INCREMENT);
     }
 
     public void setPower(double power) {
@@ -121,7 +130,7 @@ public class Shooter extends SubsystemBase implements Logged{
     }
 
     public double getRPM() {
-        return (motorLeft.getVelocity().getValueAsDouble() + follower.getVelocity().getValueAsDouble()) / 2 * 60;
+        return motorLeft.getVelocity().getValueAsDouble() * 60;
     }
 
     public double getPowerNeededFromDistanceAndAngle(double x, double y){
@@ -154,7 +163,7 @@ public class Shooter extends SubsystemBase implements Logged{
         // better search needed
         double currentAngle = RobotContainer.hood.getCurrentAngle();
         double wantedPower = getPowerNeededFromDistanceAndAngle(Distance, currentAngle);
-        double[] array = {-1,Constants.Shooter.MAX_AUTOSHOOT_POWER};
+        double[] array = {currentAngle, Constants.Shooter.MAX_AUTOSHOOT_POWER};
         // this could be refactor
         if (wantedPower <= Constants.Shooter.MAX_AUTOSHOOT_POWER) {
             double[] angleAndSpeed = {currentAngle, wantedPower*Constants.Shooter.AUTO_SHOOTER_MULT};
@@ -183,20 +192,20 @@ public class Shooter extends SubsystemBase implements Logged{
 
     @Override
     public void periodic() {
-        log("Shooter/Average RPM", getRPM());
+        log("Shooter/Average RPM", getRPM(), LogLevel.OVERRIDE_FILE_ONLY);
         desiredRPM = SmartDashboard.getNumber("Shooter/Desired RPM", 0.0);
         //SmartDashboard.putNumber("Shooter/Desired RPM error", Math.abs((desiredRPM - getRPM()) / getRPM()));
         if (Math.abs((desiredRPM - getRPM()) / getRPM()) <= 0.01) {
-            log("Shooter/Desired RPM Reached", true);
+            log("Shooter/Desired RPM Reached", true, LogLevel.OVERRIDE_FILE_ONLY);
         } else{
-            log("Shooter/Desired RPM Reached", false);
+            log("Shooter/Desired RPM Reached", false, LogLevel.OVERRIDE_FILE_ONLY);
         }
         desiredPower = SmartDashboard.getNumber("Shooter/Desired Power", 0.0) ;
-        log("number I am putting on smartdashbard", desiredRPM);
+        log("number I am putting on smartdashbard", desiredRPM, LogLevel.OVERRIDE_FILE_ONLY);
 
         //setRPM(desiredRPM);
-        log("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity);
-        log("Shooter/Desired Power?", desiredPower) ;
+        log("shooter/PID", velocityShooter.withVelocity(desiredRPM/60).Velocity, LogLevel.OVERRIDE_FILE_ONLY);
+        log("Shooter/Desired Power?", desiredPower, LogLevel.OVERRIDE_FILE_ONLY);
 
         // auto shoot
 
@@ -205,19 +214,31 @@ public class Shooter extends SubsystemBase implements Logged{
         PID_P = SmartDashboard.getNumber("Shooter/Shooter pid P", PID_P);
         PID_I = SmartDashboard.getNumber("Shooter/Shooter pid I", PID_I);
         PID_D = SmartDashboard.getNumber("Shooter/Shooter pid D", PID_D);
-        log("Shooter/Shooter true pid P",  configShooter.Slot0.kP);
+        PID_KS = SmartDashboard.getNumber("Shooter/Shooter pid KS", PID_KS);
+        log("Shooter/Shooter true pid P",  configShooter.Slot0.kP, LogLevel.OVERRIDE_FILE_ONLY);
 
         if(configShooter.Slot0.kP != PID_P)  {
             configShooter.Slot0.kP = PID_P;
+            motorLeft.getConfigurator().apply(configShooter);
         }
 
         if(configShooter.Slot0.kI != PID_I)  {
             configShooter.Slot0.kI = PID_I;
+            motorLeft.getConfigurator().apply(configShooter);
         }
 
         if(configShooter.Slot0.kD != PID_D)  {
             configShooter.Slot0.kD = PID_D;
+            motorLeft.getConfigurator().apply(configShooter);
         }
+
+        if(configShooter.Slot0.kS != PID_KS)  {
+            configShooter.Slot0.kS = PID_KS;
+            motorLeft.getConfigurator().apply(configShooter);
+        }
+
+
+
 
         log("Left Supply Current", motorLeft.getSupplyCurrent().getValueAsDouble());
         log("Right Supply Current", follower.getSupplyCurrent().getValueAsDouble());

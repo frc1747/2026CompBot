@@ -93,23 +93,19 @@ public class RobotContainer implements Logged {
 
     public final POVButton tmJoystickPovUp = new POVButton(operator, 0);
     public final POVButton tmJoystickPovDown = new POVButton(operator, 180);
-
     public final JoystickButton tmJoystickRightHandBottomLeft = new JoystickButton(operator , 8);
     public final JoystickButton tmJoystickRightHandBottomMiddle = new JoystickButton(operator , 9);
     public final JoystickButton tmJoystickRightHandBottomRight = new JoystickButton(operator , 10);
-
     public final JoystickButton tmJoystickRightHandTopLeft = new JoystickButton(operator , 7);
     public final JoystickButton tmJoystickRightHandTopMiddle = new JoystickButton(operator , 6);
     public final JoystickButton tmJoystickRightHandTopRight = new JoystickButton(operator , 5);
-
     public final JoystickButton tmJoystickLeftHandBottomLeft = new JoystickButton(operator, 16);
     public final JoystickButton tmJoystickLeftHandBottomMiddle = new JoystickButton(operator, 15);
     public final JoystickButton tmJoystickLeftHandBottomRight = new JoystickButton(operator, 14);
-
     public final JoystickButton tmJoystickLeftHandTopLeft = new JoystickButton(operator, 11);
     public final JoystickButton tmJoystickLeftHandTopMiddle = new JoystickButton(operator, 12);
     public final JoystickButton tmJoystickLeftHandTopRight = new JoystickButton(operator, 13);
-
+    public final JoystickButton tmJoystickBottomTop = new JoystickButton(operator, 2);
     public double shooterFudgeFactor;
     public double turretFudgeFactor;
 
@@ -226,7 +222,17 @@ public class RobotContainer implements Logged {
         // intake eject
         driver.leftTrigger()
             .whileTrue(intake.spin(false))
-            .onFalse(intake.StopCommand());
+            .whileTrue(hopper.run(true))
+            .onFalse(intake.StopCommand())
+            .onFalse(hopper.stop());
+
+
+        // Hood go down at trench code
+        driver.x()
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
+
+        driver.y()
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -258,7 +264,8 @@ public class RobotContainer implements Logged {
 
         // Shooting
         tmJoystickTrigger
-            .whileTrue(new AutoAim(shooter, hood))
+            .whileTrue(shooter.setSpeedToDesired())
+            //.whileTrue(new AutoAim(shooter, hood))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 
