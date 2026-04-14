@@ -53,16 +53,18 @@ public class TargetPoses extends SubsystemBase {
         double dist = turretLoc.getDistance(previousApproximation);
 
         // gets current hood angle in radians
+        // TODO: needs to be changed to use proper hood angle pairing based on current aiming method
+        // Also need to figure out discrepancy between the hood angle and fuel output angle, from horizontal
         double hoodAngleRad = RobotContainer.hood.getCurrentAngle() * Math.PI / 180;
 
         // predicted amount of time between when the fuel leaves the
         // turret and when it reaches the height of the fuel hub
-        // on its way down. should return null if the fuel
+        // on its way down. should return NaN if the fuel
         // is predicted not to ever surpass the height of the top of
         // the hub
-        // must check for null before use in final code
-        Double travelTime = RobotContainer.turret.getFuelTravelTime(hoodAngleRad, dist); // when this returns NaN, logic fails TODO: fix
-        if (travelTime == null) return null;
+        // must check for NaN before use in final codes                V - placeholder hood angle / shoot angle
+        Double travelTime = RobotContainer.turret.getFuelTravelTime(10 * Math.PI / 180, dist); // when this returns NaN, logic fails TODO: fix
+        if (Double.isNaN(travelTime)) return null;
 
         // next iteration adjusted targetting location
         Translation2d nextApprox = totalTurretVelocity.times(-1 * travelTime).plus(currentTarget.getTranslation());
@@ -87,8 +89,8 @@ public class TargetPoses extends SubsystemBase {
         for (int i = 0; i < 6; i++) {
             approxA = approxB;
             approxB = getNextTargetApprox(approxA).getFirst();
-            // return most recent valid approx if calculated approximation is null
-            if (approxB == null) return approxA;
+            // return null approx if calculated approximation is null
+            if (approxB == null) return null;
         }
         // RobotContainer.field.getObject("approxB").setPoses(new Pose2d(approxB, new Rotation2d()));
         // System.out.println("Getting target approx");
@@ -118,6 +120,7 @@ public class TargetPoses extends SubsystemBase {
     public void shootOnTheMove() {
         // approximation of point to aim turret at
         targetLocPrime = getTargetApprox(targetLocPrime);
+        if (targetLocPrime == null) scoreValid = false;
         RobotContainer.field.getObject("target").setPoses(new Pose2d(targetLocPrime, new Rotation2d()));
     }
 
