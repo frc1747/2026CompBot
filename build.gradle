@@ -76,6 +76,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'com.github.shueja:Monologue:v1.0.0-beta6'
+    implementation 'com.github.javaparser:javaparser-core:3.25.10'
 }
 
 test {
@@ -171,4 +172,12 @@ spotless {
         indentWithSpaces(2)
         endWithNewline()
     }
+}
+
+tasks.register("checkButtons", JavaExec) {
+    group = "verification"
+    description = "Checks for duplicate controller bindings"
+
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = "frc.util.ButtonBindingsChecker"
 }

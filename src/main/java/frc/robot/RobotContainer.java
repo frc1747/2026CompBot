@@ -209,12 +209,10 @@ public class RobotContainer implements Logged {
 
         // intake put up
         driver.rightTrigger()
-            .whileTrue(new GrabFuel( intakePivot))
-            .onFalse(new IntakeGoToDefault(intakePivot));
-
-        driver.rightTrigger()
-            .whileTrue(intake.spin(true))
-            .onFalse(intake.StopCommand());
+            .whileTrue(new GrabFuel(intakePivot)
+                .alongWith(intake.spin(true)))
+            .onFalse(new IntakeGoToDefault(intakePivot)
+                .alongWith(intake.StopCommand()));
 
         // intake eject
         driver.leftTrigger()
