@@ -14,7 +14,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -289,8 +288,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putData("Field2d ", RobotContainer.field);
         addLimelightMeasurement();
         log("Pose", getState().Pose);
-        SmartDashboard.putNumber("Distance To Hub", distanceToPose(
-            new Pose2d(new Translation2d(Constants.Vision.FIELD_CENTER_X, Constants.Vision.FIELD_CENTER_Y), new Rotation2d(0.0))));
 
         log("Mod0/Supply Current", this.getModule(0).getDriveMotor().getSupplyCurrent().getValueAsDouble());
         log("Mod0/Stator Current", this.getModule(0).getDriveMotor().getStatorCurrent().getValueAsDouble());
