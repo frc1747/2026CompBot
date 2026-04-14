@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import monologue.LogLevel;
 import monologue.Logged;
 
 public class Hood extends SubsystemBase implements Logged {
@@ -133,17 +134,17 @@ public class Hood extends SubsystemBase implements Logged {
         // Allow an input from Elastic
         desiredAngle = SmartDashboard.getNumber("hood/Desired Angle", Constants.Hood.MIN_ANGLE);
 
-        log("hood/encoder ticks", degreesToCounts(getCurrentAngle()));
-        log("hood/hood angle", getCurrentAngle());
-        log("hood/PID", pid.calculate(getCurrentAngle(), desiredAngle));
-        log("hood/DutyCycle", dutyCycle.Output);
-        log("hood/hood down", isDown());
+        log("hood/encoder ticks", degreesToCounts(getCurrentAngle()), LogLevel.OVERRIDE_FILE_ONLY);
+        log("hood/hood angle", getCurrentAngle(), LogLevel.OVERRIDE_FILE_ONLY);
+        log("hood/PID", pid.calculate(getCurrentAngle(), desiredAngle), LogLevel.OVERRIDE_FILE_ONLY);
+        log("hood/DutyCycle", dutyCycle.Output, LogLevel.OVERRIDE_FILE_ONLY);
+        log("hood/hood down", isDown(), LogLevel.OVERRIDE_FILE_ONLY);
         //SmartDashboard.getNumber("hood/Hood Desired Angle")
 
         if (Math.abs((desiredAngle - getCurrentAngle()) / getCurrentAngle()) <= Constants.Hood.ANGLE_TOLERANCE) {
-            log("hood/hood angle Reached", true);
+            log("hood/hood angle Reached", true, LogLevel.OVERRIDE_FILE_ONLY);
         } else {
-            log("hood/hood angle Reached", false);
+            log("hood/hood angle Reached", false, LogLevel.OVERRIDE_FILE_ONLY);
         }
 
         log("Supply Current", motor.getSupplyCurrent().getValueAsDouble());
