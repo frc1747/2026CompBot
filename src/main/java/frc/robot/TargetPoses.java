@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -22,7 +23,8 @@ public class TargetPoses extends SubsystemBase {
     public Translation2d targetLocPrime;
     public Translation2d totalTurretVelocity;
     public Translation2d turretLoc;
-    public boolean scoringMode;
+    private boolean scoringMode;
+    private boolean scoreValid;
 
     public TargetPoses() {
         // actual location the fuel should hit
@@ -33,6 +35,7 @@ public class TargetPoses extends SubsystemBase {
         totalTurretVelocity = new Translation2d();
         turretLoc = new Translation2d();
         scoringMode = true;
+        scoreValid = false;
         updateTurretVelAndLoc();
 
         // schedule periodic (may not function, currently unnecessary as this is now a subsystem)
@@ -40,6 +43,7 @@ public class TargetPoses extends SubsystemBase {
         // SmartDashboard.putString("debug", "scheduled periodic");
     }
 
+    // must be run each time target location is changed
     public void reinitTargetLocPrime() {
         targetLocPrime = currentTarget.getTranslation();
     }
@@ -57,7 +61,7 @@ public class TargetPoses extends SubsystemBase {
         // is predicted not to ever surpass the height of the top of
         // the hub
         // must check for null before use in final code
-        Double travelTime = RobotContainer.turret.getFuelTravelTime(hoodAngleRad, dist);
+        Double travelTime = RobotContainer.turret.getFuelTravelTime(hoodAngleRad, dist); // when this returns NaN, logic fails TODO: fix
         if (travelTime == null) return null;
 
         // next iteration adjusted targetting location
@@ -134,10 +138,13 @@ public class TargetPoses extends SubsystemBase {
         Pose2d turretPose = RobotContainer.turret.getAbsTurretPose();
         Pose2d targetPose = new Pose2d( Constants.Vision.BLUE_SHUTTLE_CENTER_X, turretPose.getY(), new Rotation2d());
         if (turretPose.getY() > Constants.TargetPosesConstants.BLUE_DEADZONE_MIN && turretPose.getY() < Constants.TargetPosesConstants.BLUE_DEADZONE_MAX ){
-            if (turretPose.getY() - Constants.TargetPosesConstants.BLUE_DEADZONE_MIN > Math.abs(turretPose.getY() - Constants.TargetPosesConstants.BLUE_DEADZONE_MAX) ) {
+            double yDistToMin = turretPose.getY() - Constants.TargetPosesConstants.BLUE_DEADZONE_MIN;
+            double yDistToMax = Math.abs(turretPose.getY() - Constants.TargetPosesConstants.BLUE_DEADZONE_MAX);
+            if (yDistToMin > yDistToMax) {
                 targetPose = Constants.TargetPosesConstants.BLUE_LEFT_SHUTTLE_POSE2D;
+            } else {
+                targetPose = Constants.TargetPosesConstants.BLUE_RIGHT_SHUTTLE_POSE2D;
             }
-            targetPose = Constants.TargetPosesConstants.BLUE_RIGHT_SHUTTLE_POSE2D;
         }
         return targetPose;
     }
@@ -146,12 +153,19 @@ public class TargetPoses extends SubsystemBase {
         Pose2d turretPose = RobotContainer.turret.getAbsTurretPose();
         Pose2d targetPose = new Pose2d( Constants.Vision.RED_SHUTTLE_CENTER_X, turretPose.getY(), new Rotation2d());
         if (turretPose.getY() > Constants.TargetPosesConstants.RED_DEADZONE_MIN && turretPose.getY() < Constants.TargetPosesConstants.RED_DEADZONE_MAX ){
-            if (turretPose.getY() - Constants.TargetPosesConstants.RED_DEADZONE_MIN > Math.abs(turretPose.getY() - Constants.TargetPosesConstants.RED_DEADZONE_MAX) ) {
+            double yDistToMin = turretPose.getY() - Constants.TargetPosesConstants.RED_DEADZONE_MIN;
+            double yDistToMax = Math.abs(turretPose.getY() - Constants.TargetPosesConstants.RED_DEADZONE_MAX);
+            if (yDistToMin > yDistToMax) {
                 targetPose = Constants.TargetPosesConstants.RED_LEFT_SHUTTLE_POSE2D;
+            } else {
+                targetPose = Constants.TargetPosesConstants.RED_RIGHT_SHUTTLE_POSE2D;
             }
-            targetPose = Constants.TargetPosesConstants.RED_RIGHT_SHUTTLE_POSE2D;
         }
         return targetPose;
+    }
+
+    public boolean getScoreValid() {
+        return scoreValid;
     }
 
     public void fudgeTurretFactor(double radian) { // radians not dergees
@@ -165,9 +179,9 @@ public class TargetPoses extends SubsystemBase {
         currentTarget = new Pose2d(currentTarget.getX() + xPart, currentTarget.getY() + yPart, new Rotation2d());
     }
 
-    // checks current mode and adjusts target accordingly
     public void periodic() {
-        if (!scoringMode) {
+        // checks current mode and adjusts target accordingly
+        if (!scoringMode || !scoreValid) {
             currentTarget = blueShuttling();
             if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
                 currentTarget = redshuttling();
@@ -183,6 +197,28 @@ public class TargetPoses extends SubsystemBase {
             reinitTargetLocPrime();
             RobotContainer.field.getObject("target").setPoses(this.getTargetPose());
         }
+
+        // checks if shot is valid 
+        double robotLocX = RobotContainer.drivetrain.getState().Pose.getX();
+        if  (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) { // Maybe try storing alliance in robotcontainer for cleanliness 
+            if (robotLocX < Constants.Vision.RED_HUB_CENTER_X) {
+                scoreValid = false;
+            } else {
+                scoreValid = true;
+            }
+        } else {
+            if (robotLocX > Constants.Vision.BLUE_HUB_CENTER_X) {
+                scoreValid = false;
+            } else {
+                scoreValid = true;
+            }
+        }  
+        SmartDashboard.putBoolean("shotValid", scoreValid);
+
+        // perform periodic moving shoot logic
+        shootOnTheMove();
+
+        // performs routine updates
         updateTurretVelAndLoc();
         SmartDashboard.putData("directionIndicator", RobotContainer.directionIndicator);
     }

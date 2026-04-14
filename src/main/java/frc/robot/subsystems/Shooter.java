@@ -182,7 +182,7 @@ public class Shooter extends SubsystemBase implements Logged{
         //SmartDashboard.putNumber("Shooter/Desired RPM error", Math.abs((desiredRPM - getRPM()) / getRPM()));
         if (Math.abs((desiredRPM - getRPM()) / getRPM()) <= 0.01) {
             log("Shooter/Desired RPM Reached", true);
-        } else{
+        } else {
             log("Shooter/Desired RPM Reached", false);
         }
         desiredPower = SmartDashboard.getNumber("Shooter/Desired Power", 0.0) ;
