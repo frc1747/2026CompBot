@@ -59,7 +59,7 @@ public class Hood extends SubsystemBase implements Logged {
     }
 
     public Command goToAngleCommand(double angle) {
-        return run(() -> goToAngle(angle));
+        return runOnce(() -> goToAngle(angle));
     }
 
     public Command goToDesiredAngleCommand() {

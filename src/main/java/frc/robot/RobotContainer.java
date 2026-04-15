@@ -292,27 +292,14 @@ public class RobotContainer implements Logged {
             .whileTrue(shooter.setSpeedToDesired())
             .onFalse(shooter.stopCommand());
 
-        // tmJoystickBottomTop
-        //     .whileTrue(new driverShutdown(drivetrain));
+        // Hood presets
+        // Standard preset
+        tmJoystickRightHandTopMiddle
+            .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_STANDARD_SET));
 
-
-
-
-        // this needs to be refactors to the inline standerds
-
-        // Hub shot
-
-        // set to shuttling
-
-        //fudge it
-
-
-        // TargetPoses.fudgeShooterFactor(drivetrain.getState().Pose ,operator.getY() * shooterFudgeFactor);
-
-        // TargetPoses.fudgeTurretFactor(operator.getTwist()* turretFudgeFactor);
-
-        // shooterFudgeFactor = Constants.TargetPosesConstants.SHOOTER_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.SHOOTER_BASE_VALUE;
-        // turretFudgeFactor = Constants.TargetPosesConstants.TURRET_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.TURRET_BASE_VALUE;
+        // Preset for if being defended against
+        tmJoystickRightHandBottomMiddle
+            .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_DEFENSE_SET));
 
         field.getObject("target").setPoses(TargetPoses.currentTarget);
 
