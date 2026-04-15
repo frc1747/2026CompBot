@@ -3,6 +3,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -53,7 +54,6 @@ public class IntakePivot extends SubsystemBase implements Logged{
        // double currentCounts = encoder.get();
         double currentCounts = motor.getPosition().getValueAsDouble();
         dutyCycle.Output = pid.calculate(currentCounts, tick);
-
         motor.setControl(dutyCycle);
     }
 
