@@ -264,8 +264,7 @@ public class RobotContainer implements Logged {
 
         // Shooting
         tmJoystickTrigger
-            .whileTrue(shooter.setSpeedToDesired())
-            //.whileTrue(new AutoAim(shooter, hood))
+            .whileTrue(new AutoAim(shooter, hood))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 
