@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.TargetPoses;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 
@@ -29,15 +31,15 @@ public class AutoAutoAim extends Command {
     public void initialize() {
         timer.reset();
         timer.start();
-        // if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-        //     this.target = Constants.Shooter.RED_HUB_CENTER_POSE2D;
-        // }
         // // yes I am a hack
-        // double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
-        // double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
+        double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(target.getTranslation());
+        double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
 
-
-        shooter.setPower(0.5);
+        hood.goToAngleCommand(hoodAngleAndShooterPower[0]);
+        if (hood.atAngle(hoodAngleAndShooterPower[0])){
+            shooter.setRPM(hoodAngleAndShooterPower[1]);
+        }
+       // shooter.setPower(0.3);
     }
 
     @Override
@@ -66,6 +68,6 @@ public class AutoAutoAim extends Command {
     @Override
     public boolean isFinished() {
         // better way of doing this idk
-        return timer.hasElapsed(5.0);
+        return timer.hasElapsed(6.0);
     }
 }

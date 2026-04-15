@@ -20,7 +20,7 @@ public class AutoIntakeSpin extends Command{
         //Resets and Starts a timer
         timer.reset();
         timer.start();
-        intake.intakeSpin(0.85);
+        intake.intakeSpin(-0.85);
     }
 
     @Override
@@ -36,6 +36,6 @@ public class AutoIntakeSpin extends Command{
     @Override
     public boolean isFinished() {
         //This Should
-        return timer.hasElapsed(3);
+        return timer.hasElapsed(5);
     }
 }
