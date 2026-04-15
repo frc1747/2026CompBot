@@ -92,16 +92,24 @@ public class RobotContainer implements Logged {
     public static TargetPoses target = new TargetPoses();
     public final JoystickButton tmJoystickFaceButtonRight = new JoystickButton(operator , 4);
     public final JoystickButton tmJoystickFaceButtonLeft = new JoystickButton(operator , 3);
+    public final JoystickButton tmJoystickFaceBottom = new JoystickButton(operator, 2);
+
     public final JoystickButton tmJoystickTrigger = new JoystickButton(operator , 1);
+
     public final POVButton tmJoystickPovUp = new POVButton(operator, 0);
     public final POVButton tmJoystickPovDown = new POVButton(operator, 180);
-    public final JoystickButton tmJoystickRightHandBottomLeft = new JoystickButton(operator , 9);
-    public final JoystickButton tmJoystickRightHandBottomMiddle = new JoystickButton(operator , 10);
-    public final JoystickButton tmJoystickRightHandBottomRight = new JoystickButton(operator , 11);
-    public final JoystickButton tmJoystickRightHandTopLeft = new JoystickButton(operator , 8);
-    public final JoystickButton tmJoystickRightHandTopMiddle = new JoystickButton(operator , 7);
-    public final JoystickButton tmJoystickRightHandTopRight = new JoystickButton(operator , 6);
+    public final JoystickButton tmJoystickRightHandBottomLeft = new JoystickButton(operator , 8);
+    public final JoystickButton tmJoystickRightHandBottomMiddle = new JoystickButton(operator , 9);
+    public final JoystickButton tmJoystickRightHandBottomRight = new JoystickButton(operator , 10);
+    public final JoystickButton tmJoystickRightHandTopLeft = new JoystickButton(operator , 7);
+    public final JoystickButton tmJoystickRightHandTopMiddle = new JoystickButton(operator , 6);
+    public final JoystickButton tmJoystickRightHandTopRight = new JoystickButton(operator , 5);
     public final JoystickButton tmJoystickLeftHandBottomLeft = new JoystickButton(operator, 16);
+    public final JoystickButton tmJoystickLeftHandBottomMiddle = new JoystickButton(operator, 15);
+    public final JoystickButton tmJoystickLeftHandBottomRight = new JoystickButton(operator, 14);
+    public final JoystickButton tmJoystickLeftHandTopLeft = new JoystickButton(operator, 11);
+    public final JoystickButton tmJoystickLeftHandTopMiddle = new JoystickButton(operator, 12);
+    public final JoystickButton tmJoystickLeftHandTopRight = new JoystickButton(operator, 13);
     public final JoystickButton tmJoystickBottomTop = new JoystickButton(operator, 2);
     public double shooterFudgeFactor;
     public double turretFudgeFactor;
@@ -243,23 +251,26 @@ public class RobotContainer implements Logged {
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
+        // eject for kicker and hopper
         tmJoystickPovDown
             .whileTrue(hopper.run(true)
             .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
+        // Turns on scoring april lock
         tmJoystickFaceButtonRight
             .toggleOnTrue(new AprilLock(turret)
             .alongWith(Commands.run( () -> TargetPoses.setScoring())));
 
+        // Turns on shuttling april lock
         tmJoystickFaceButtonLeft
             .toggleOnTrue(new AprilLock(turret)
             .alongWith(Commands.run( () -> TargetPoses.setShuttling())));
 
+        // Shooting
         tmJoystickTrigger
-            .whileTrue(shooter.setSpeedToDesired())
-            //.whileTrue(new AutoAim(shooter, hood))
+            .whileTrue(new AutoAim(shooter, hood))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 
@@ -268,52 +279,44 @@ public class RobotContainer implements Logged {
             .onFalse(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_REGULAR));
 
         // Manual Turret movement code
-        tmJoystickRightHandBottomLeft
+        // Turret rotate left
+        tmJoystickLeftHandTopLeft
             .whileTrue(turret.spin(true))
             .onFalse(turret.stopCommand());
-        tmJoystickRightHandBottomMiddle
+
+        // Turret rotate right
+        tmJoystickLeftHandBottomLeft
             .whileTrue(turret.spin(false))
             .onFalse(turret.stopCommand());
 
-        // Manual Hood movement 3
-        tmJoystickRightHandTopLeft
+        // Manual Hood movement code
+        // Hood up
+        tmJoystickLeftHandBottomRight
             .whileTrue(hood.setPowerCommand(false))
             .onFalse(hood.stopCommand());
-        tmJoystickRightHandTopMiddle
+
+        // Hood down
+        tmJoystickLeftHandTopRight
             .whileTrue(hood.setPowerCommand(true))
             .onFalse(hood.stopCommand());
 
         // Shooter speed manual change
-        // tmJoystickRightHandTopRight
-        //     .onTrue(shooter.offsetIncrement());
-        // tmJoystickRightHandBottomRight
-        //     .onTrue(shooter.offsetDecrement());
+        // Faster shooting
+        tmJoystickLeftHandTopMiddle
+            .onTrue(shooter.offsetIncrement());
 
-        tmJoystickLeftHandBottomLeft
-            .whileTrue(shooter.setSpeedToDesired())
-            .onFalse(shooter.stopCommand());
+        // Slower shooting
+        tmJoystickLeftHandBottomMiddle
+            .onTrue(shooter.offsetDecrement());
 
-        // tmJoystickBottomTop
-        //     .whileTrue(new driverShutdown(drivetrain));
+        // Auto hood buttons
+        // Auto hood down
+        tmJoystickRightHandBottomLeft
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
-
-
-
-        // this needs to be refactors to the inline standerds
-
-        // Hub shot
-
-        // set to shuttling
-
-        //fudge it
-
-
-        // TargetPoses.fudgeShooterFactor(drivetrain.getState().Pose ,operator.getY() * shooterFudgeFactor);
-
-        // TargetPoses.fudgeTurretFactor(operator.getTwist()* turretFudgeFactor);
-
-        // shooterFudgeFactor = Constants.TargetPosesConstants.SHOOTER_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.SHOOTER_BASE_VALUE;
-        // turretFudgeFactor = Constants.TargetPosesConstants.TURRET_SLIDER_VALUE * operator.getThrottle()+.01 * Constants.TargetPosesConstants.TURRET_BASE_VALUE;
+        // Auto hood up
+        tmJoystickRightHandTopLeft
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE));
 
         field.getObject("target").setPoses(TargetPoses.currentTarget);
 

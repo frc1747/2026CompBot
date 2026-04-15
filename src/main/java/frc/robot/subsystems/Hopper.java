@@ -11,6 +11,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import monologue.LogLevel;
 import monologue.Logged;
 
 
@@ -71,9 +72,9 @@ public class Hopper extends SubsystemBase implements Logged{
 
     @Override
     public void periodic() {
-        log("Hopper/isJammed", isJammed());
-        log("hopper/is motor reversed", isReversed());
-        log("hopper/velocity", motor.getVelocity().getValueAsDouble());
+        log("Hopper/isJammed", isJammed(), LogLevel.OVERRIDE_FILE_ONLY);
+        log("hopper/is motor reversed", isReversed(), LogLevel.OVERRIDE_FILE_ONLY);
+        log("hopper/velocity", motor.getVelocity().getValueAsDouble(), LogLevel.OVERRIDE_FILE_ONLY);
 
         log("Supply Current", motor.getSupplyCurrent().getValueAsDouble());
         log("Stator Current", motor.getStatorCurrent().getValueAsDouble());

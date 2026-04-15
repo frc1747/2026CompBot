@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import monologue.LogLevel;
 import monologue.Logged;
 
 // TODO: Fix indentation inconsistencies
@@ -52,7 +53,6 @@ public class IntakePivot extends SubsystemBase implements Logged{
        // double currentCounts = encoder.get();
         double currentCounts = motor.getPosition().getValueAsDouble();
         dutyCycle.Output = pid.calculate(currentCounts, tick);
-
         motor.setControl(dutyCycle);
     }
 
@@ -97,8 +97,8 @@ public class IntakePivot extends SubsystemBase implements Logged{
 
   @Override
   public void periodic() {
-    log("intake/intake encoder", motor.getPosition().getValueAsDouble());
-    log("intake/Is intake out:", isDown());
+    log("intake/intake encoder", motor.getPosition().getValueAsDouble(), LogLevel.OVERRIDE_FILE_ONLY);
+    log("intake/Is intake out:", isDown(), LogLevel.OVERRIDE_FILE_ONLY);
 
     log("Supply Current", motor.getSupplyCurrent().getValueAsDouble());
     log("Stator Current", motor.getStatorCurrent().getValueAsDouble());
