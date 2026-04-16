@@ -87,7 +87,10 @@ public class RobotContainer implements Logged {
     public static TargetPoses target = new TargetPoses();
     public final JoystickButton tmJoystickFaceButtonRight = new JoystickButton(operator , 4);
     public final JoystickButton tmJoystickFaceButtonLeft = new JoystickButton(operator , 3);
+    public final JoystickButton tmJoystickFaceBottom = new JoystickButton(operator, 2);
+
     public final JoystickButton tmJoystickTrigger = new JoystickButton(operator , 1);
+
     public final POVButton tmJoystickPovUp = new POVButton(operator, 0);
     public final POVButton tmJoystickPovDown = new POVButton(operator, 180);
     public final JoystickButton tmJoystickRightHandBottomLeft = new JoystickButton(operator , 8);
@@ -242,23 +245,26 @@ public class RobotContainer implements Logged {
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
+        // eject for kicker and hopper
         tmJoystickPovDown
             .whileTrue(hopper.run(true)
             .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
+        // Turns on scoring april lock
         tmJoystickFaceButtonRight
             .toggleOnTrue(new AprilLock(turret)
             .alongWith(Commands.run( () -> TargetPoses.setScoring())));
 
+        // Turns on shuttling april lock
         tmJoystickFaceButtonLeft
             .toggleOnTrue(new AprilLock(turret)
             .alongWith(Commands.run( () -> TargetPoses.setShuttling())));
 
+        // Shooting
         tmJoystickTrigger
-            .whileTrue(shooter.setSpeedToDesired())
-            //.whileTrue(new AutoAim(shooter, hood))
+            .whileTrue(new AutoAim(shooter, hood))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 
@@ -267,40 +273,44 @@ public class RobotContainer implements Logged {
             .onFalse(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_REGULAR));
 
         // Manual Turret movement code
-        tmJoystickRightHandBottomMiddle
+        // Turret rotate left
+        tmJoystickLeftHandTopLeft
             .whileTrue(turret.spin(true))
             .onFalse(turret.stopCommand());
-        tmJoystickRightHandBottomRight
+
+        // Turret rotate right
+        tmJoystickLeftHandBottomLeft
             .whileTrue(turret.spin(false))
             .onFalse(turret.stopCommand());
 
         // Manual Hood movement code
-        tmJoystickRightHandBottomLeft
+        // Hood up
+        tmJoystickLeftHandBottomRight
             .whileTrue(hood.setPowerCommand(false))
             .onFalse(hood.stopCommand());
-        tmJoystickRightHandTopLeft
+
+        // Hood down
+        tmJoystickLeftHandTopRight
             .whileTrue(hood.setPowerCommand(true))
             .onFalse(hood.stopCommand());
 
         // Shooter speed manual change
-        tmJoystickLeftHandTopLeft
+        // Faster shooting
+        tmJoystickLeftHandTopMiddle
             .onTrue(shooter.offsetIncrement());
-        tmJoystickLeftHandBottomLeft
+
+        // Slower shooting
+        tmJoystickLeftHandBottomMiddle
             .onTrue(shooter.offsetDecrement());
 
-        tmJoystickLeftHandTopRight
-            .onTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE));
-        tmJoystickLeftHandBottomRight
+        // Auto hood buttons
+        // Auto hood down
+        tmJoystickRightHandBottomLeft
             .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
-        // Hood presets
-        // Standard preset
-        tmJoystickRightHandTopMiddle
-            .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_STANDARD_SET));
-
-        // Preset for if being defended against
-        tmJoystickRightHandTopRight
-            .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_DEFENSE_SET));
+        // Auto hood up
+        tmJoystickRightHandTopLeft
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE));
 
         field.getObject("target").setPoses(TargetPoses.currentTarget);
 
