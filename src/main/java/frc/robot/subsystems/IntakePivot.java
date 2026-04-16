@@ -53,7 +53,6 @@ public class IntakePivot extends SubsystemBase implements Logged{
        // double currentCounts = encoder.get();
         double currentCounts = motor.getPosition().getValueAsDouble();
         dutyCycle.Output = pid.calculate(currentCounts, tick);
-
         motor.setControl(dutyCycle);
     }
 
