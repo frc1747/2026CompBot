@@ -267,30 +267,31 @@ public class RobotContainer implements Logged {
             .onFalse(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_REGULAR));
 
         // Manual Turret movement code
-        tmJoystickRightHandBottomLeft
+        tmJoystickRightHandBottomMiddle
             .whileTrue(turret.spin(true))
             .onFalse(turret.stopCommand());
-        tmJoystickRightHandBottomMiddle
+        tmJoystickRightHandBottomRight
             .whileTrue(turret.spin(false))
             .onFalse(turret.stopCommand());
 
         // Manual Hood movement code
-        tmJoystickRightHandTopLeft
+        tmJoystickRightHandBottomLeft
             .whileTrue(hood.setPowerCommand(false))
             .onFalse(hood.stopCommand());
-        tmJoystickRightHandTopMiddle
+        tmJoystickRightHandTopLeft
             .whileTrue(hood.setPowerCommand(true))
             .onFalse(hood.stopCommand());
 
         // Shooter speed manual change
-        tmJoystickRightHandTopRight
+        tmJoystickLeftHandTopLeft
             .onTrue(shooter.offsetIncrement());
-        tmJoystickRightHandBottomRight
+        tmJoystickLeftHandBottomLeft
             .onTrue(shooter.offsetDecrement());
 
-        tmJoystickLeftHandBottomLeft
-            .whileTrue(shooter.setSpeedToDesired())
-            .onFalse(shooter.stopCommand());
+        tmJoystickLeftHandTopRight
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE));
+        tmJoystickLeftHandBottomRight
+            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         // Hood presets
         // Standard preset
@@ -298,7 +299,7 @@ public class RobotContainer implements Logged {
             .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_STANDARD_SET));
 
         // Preset for if being defended against
-        tmJoystickRightHandBottomMiddle
+        tmJoystickRightHandTopRight
             .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_DEFENSE_SET));
 
         field.getObject("target").setPoses(TargetPoses.currentTarget);
