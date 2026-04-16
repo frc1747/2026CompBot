@@ -112,6 +112,8 @@ public final class Constants {
         public static final double MAX_HEIGHT = 1800;
         public static final double MIN_ANGLE = 25.4;
         public static final double MAX_ANGLE = MIN_ANGLE + TOTAL_HOOD_DEGREES;
+        public static final double HOOD_STANDARD_SET = 31.5;
+        public static final double HOOD_DEFENSE_SET = 35.0;
 
         public static final double SIM_COUNTS_PER_SECOND = COUNTS_PER_HOOD_SWEEP / 2.0;
 
@@ -154,12 +156,12 @@ public final class Constants {
         public static final int MOTOR_RIGHT_PORT = 42;
         public static final int ENCODER_PORT = 1; // needs to be set
         public static final double ENCODER_OFFSET = .2; // needs to be set o7
-        public static final double SURFACE_A = 3863.2518; // needs tuning
-        public static final double SURFACE_B = 617.2701; // needs tuning
-        public static final double SURFACE_C = -176.2434; // needs tuning
-        public static final double SURFACE_D = 12.4826; // needs tuning
-        public static final double SURFACE_E = -10.8847; // needs tuning
-        public static final double SURFACE_F = 2.9962; // needs tuning
+        public static final double SURFACE_A = 712.3352;
+        public static final double SURFACE_B = 643.4435;
+        public static final double SURFACE_C = -16.8713;
+        public static final double SURFACE_D = 48.7174;
+        public static final double SURFACE_E = -22.0958;
+        public static final double SURFACE_F = 1.3911;
         public static final double AUTO_SHOOTER_MULT = 1.04; // this should be remove when we get better auto shoot values
         public static final double MAX_AUTOSHOOT_POWER = 6300;
         public static final double MAX_HOOD_ANGLE = 43;// degrees
