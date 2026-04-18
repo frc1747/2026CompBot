@@ -85,7 +85,9 @@ public final class Constants {
         public static final int OPERATOR_PORT = 1;
         public static final double CONTROLLER_CAP_SHOOTING = 0.5;
         public static final double CONTROLLER_CAP_REGULAR = 1;
+        public static final double STICK_DEADBAND = 0.05;
     }
+
 
     public static final class Drivetrain {
         public static final double DRIVER_SLOW_DOWN = 1.0;

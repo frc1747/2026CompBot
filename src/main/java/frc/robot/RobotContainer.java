@@ -31,6 +31,7 @@ import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
 import frc.robot.commands.autosCommands.AutoAutoAim;
 import frc.robot.commands.teleop.AprilLock;
+import frc.robot.commands.teleop.CompAprilLock;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.ToggleIntakeReady;
@@ -254,13 +255,25 @@ public class RobotContainer implements Logged {
 
         // Turns on scoring april lock
         tmJoystickFaceButtonRight
-            .toggleOnTrue(new AprilLock(turret)
+            .toggleOnTrue(
+                new CompAprilLock(
+                    drivetrain,
+                    () -> driver_hid.getLeftY() * activeControllerCap,
+                    () -> driver_hid.getLeftX() * activeControllerCap,
+                    () -> driver_hid.getRightX() * activeControllerCap
+                )
             .alongWith(Commands.run( () -> TargetPoses.setScoring())));
 
         // Turns on shuttling april lock
         tmJoystickFaceButtonLeft
-            .toggleOnTrue(new AprilLock(turret)
-            .alongWith(Commands.run( () -> TargetPoses.setShuttling())));
+            .toggleOnTrue(
+                new CompAprilLock(
+                    drivetrain,
+                    () -> driver_hid.getLeftY() * activeControllerCap,
+                    () -> driver_hid.getLeftX() * activeControllerCap,
+                    () -> driver_hid.getRightX() * activeControllerCap
+                )
+            .alongWith(Commands.run( () -> TargetPoses.setScoring())));
 
         // Shooting
         tmJoystickTrigger
