@@ -77,9 +77,9 @@ public class CompAprilLock extends Command {
       double phi = Math.atan2(diff.getY(), diff.getX());
       double yawOffset = phi - robotPose.getRotation().getRadians() - Math.PI;
       double wrappedYaw = Math.atan2(Math.sin(yawOffset), Math.cos(yawOffset));
-      System.out.println("robotPose: " + robotPose);
+      // System.out.println("robotPose: " + robotPose);
       // System.out.println("yawOffset: " + yawOffset);
-      System.out.println("wrappedyaw: " + wrappedYaw);
+      // System.out.println("wrappedyaw: " + wrappedYaw);
 
       // pid controlling rotation compensation
       double pidOutput = -1 * pid.calculate(wrappedYaw); // not sure why it needs to be multiplied by -1
