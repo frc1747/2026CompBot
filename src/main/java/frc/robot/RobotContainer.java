@@ -80,7 +80,7 @@ public class RobotContainer implements Logged {
     public static final Shooter shooter = new Shooter();
     public static final Hopper hopper = new Hopper();
     public static final Turret turret = new Turret();
-    public static final AutoAim autoAim = new AutoAim(shooter, hood);
+    public static final AutoAim autoAim = new AutoAim(shooter);
 
     public static final Field2d field = new Field2d();
 
@@ -264,9 +264,8 @@ public class RobotContainer implements Logged {
 
         // Shooting
         tmJoystickTrigger
-            .whileTrue(new AutoAim(shooter, hood))
-            .onFalse(shooter.stopCommand()
-            .alongWith(hood.stopCommand()));
+            .whileTrue(new AutoAim(shooter))
+            .onFalse(shooter.stopCommand());
 
         tmJoystickTrigger
             .whileTrue(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_SHOOTING))
