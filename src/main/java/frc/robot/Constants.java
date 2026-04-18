@@ -112,8 +112,8 @@ public final class Constants {
         public static final double MAX_HEIGHT = 1800;
         public static final double MIN_ANGLE = 25.4;
         public static final double MAX_ANGLE = MIN_ANGLE + TOTAL_HOOD_DEGREES;
-        public static final double HOOD_STANDARD_SET = 31.5;
-        public static final double HOOD_DEFENSE_SET = 35.0;
+        public static final double HOOD_STANDARD_SET = 29.0;
+        public static final double HOOD_DEFENSE_SET = 33.0;
 
         public static final double SIM_COUNTS_PER_SECOND = COUNTS_PER_HOOD_SWEEP / 2.0;
 
@@ -122,7 +122,7 @@ public final class Constants {
         public static final double kD = 0.0;
 
         public static final double MAX_PID_OUTPUT = 0.875;
-        public static final double MANUAL_MOTOR_POWER = 0.2;
+        public static final double MANUAL_MOTOR_POWER = 0.35;
 
     }
 
@@ -163,7 +163,7 @@ public final class Constants {
         public static final double SURFACE_E = -22.0958;
         public static final double SURFACE_F = 1.3911;
         public static final double AUTO_SHOOTER_MULT = 1.04; // this should be remove when we get better auto shoot values
-        public static final double MAX_AUTOSHOOT_POWER = 6300;
+        public static final double MAX_AUTOSHOOT_POWER = 4300;
         public static final double MAX_HOOD_ANGLE = 43;// degrees
         public static final double MIN_HOOD_ANGLE = 26;// degrees
         public static final double PID_P = 0.7;
