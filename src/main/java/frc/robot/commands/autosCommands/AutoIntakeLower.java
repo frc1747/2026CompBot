@@ -30,8 +30,8 @@ public class AutoIntakeLower extends Command{
         double pidOutput = pid.calculate(currentPos, Constants.IntakePivot.ENCODER_DOWN);
         double clampedPid = MathUtil.clamp(pidOutput, -Constants.IntakePivot.SET_POINT_PID_CLAMP, Constants.IntakePivot.SET_POINT_PID_CLAMP);
         intakePivot.setPower(clampedPid);
-    
-        
+
+
     }
 
     @Override
