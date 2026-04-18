@@ -1,4 +1,6 @@
 package frc.robot.commands.autosCommands;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -6,12 +8,16 @@ import frc.robot.subsystems.IntakePivot;
 
 
 public class AutoIntakeLower extends Command{
-    private IntakePivot intakePivot;
+    IntakePivot intakePivot;
+    PIDController pid;
     private Timer timer = new Timer();
 
     public AutoIntakeLower(IntakePivot intakePivot){
         this.intakePivot = intakePivot;
-        addRequirements(intakePivot);
+        this.pid = new PIDController(Constants.IntakePivot.SET_POINT_P,
+                                    Constants.IntakePivot.SET_POINT_I,
+                                    Constants.IntakePivot.SET_POINT_D);
+        addRequirements( intakePivot);
     }
 
 
@@ -20,14 +26,12 @@ public class AutoIntakeLower extends Command{
         //Resets and Starts a timer
         timer.reset();
         timer.start();
-        //    if (intakePivot.getDown()) {
-        //      intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_UP);
-        //  } else {
-        //      intakePivot.setDefaultPosition(Constants.IntakePivot.ENCODER_READY);
-        //  }
-        // intakePivot.toggleDown();
-        intakePivot.setPower(0.35);
-        intakePivot.intakePivot(Constants.IntakePivot.OUT);
+        double currentPos = intakePivot.getEncoderValue();
+        double pidOutput = pid.calculate(currentPos, Constants.IntakePivot.ENCODER_DOWN);
+        double clampedPid = MathUtil.clamp(pidOutput, -Constants.IntakePivot.SET_POINT_PID_CLAMP, Constants.IntakePivot.SET_POINT_PID_CLAMP);
+        intakePivot.setPower(clampedPid);
+    
+        
     }
 
     @Override

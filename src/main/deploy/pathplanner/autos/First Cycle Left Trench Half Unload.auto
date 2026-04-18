@@ -7,38 +7,39 @@
         {
           "type": "path",
           "data": {
-            "pathName": "First Cycle Left Trench Half Unload A "
+            "pathName": "First Cycle Left Trench Full Unload A"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "IntakeOut"
-          }
-        },
-        {
-          "type": "race",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeCollect"
+                  "name": "IntakeOut"
                 }
               },
               {
-                "type": "path",
+                "type": "parallel",
                 "data": {
-                  "pathName": "First Cycle Left Trench Half Unload B"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "IntakeCollect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "First Cycle Left Trench Half Unload B"
+                      }
+                    }
+                  ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeIn"
           }
         },
         {
@@ -48,7 +49,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -58,15 +59,35 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Kicker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Hopper"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Hopper"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Kicker"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
               }
             ]

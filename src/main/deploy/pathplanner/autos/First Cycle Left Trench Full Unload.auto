@@ -11,65 +11,47 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "IntakeOut"
-          }
-        },
-        {
-          "type": "race",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeCollect"
+                  "name": "IntakeOut"
                 }
               },
               {
-                "type": "path",
+                "type": "race",
                 "data": {
-                  "pathName": "First Cycle Left Trench Full Unload B"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "IntakeCollect"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": null
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeIn"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeIn"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "First Cycle Left Trench Full Unload C"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Kicker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Hopper"
-                }
-              }
-            ]
           }
         }
       ]
