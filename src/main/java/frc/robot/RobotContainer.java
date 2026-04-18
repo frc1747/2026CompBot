@@ -296,11 +296,11 @@ public class RobotContainer implements Logged {
 
         // Shooter speed manual change
         // Faster shooting
-        tmJoystickRightHandTopLeft
+        tmJoystickLeftHandTopLeft
             .onTrue(shooter.offsetIncrement());
 
         // Slower shooting
-        tmJoystickRightHandBottomLeft
+        tmJoystickLeftHandBottomLeft
             .onTrue(shooter.offsetDecrement());
 
         // Auto hood buttons
