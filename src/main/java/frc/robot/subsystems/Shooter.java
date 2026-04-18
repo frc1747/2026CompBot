@@ -237,9 +237,6 @@ public class Shooter extends SubsystemBase implements Logged{
             motorLeft.getConfigurator().apply(configShooter);
         }
 
-
-
-
         log("Left Supply Current", motorLeft.getSupplyCurrent().getValueAsDouble());
         log("Right Supply Current", follower.getSupplyCurrent().getValueAsDouble());
         log("Left Stator Current", motorLeft.getStatorCurrent().getValueAsDouble());

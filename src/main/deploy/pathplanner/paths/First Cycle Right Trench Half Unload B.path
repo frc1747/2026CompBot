@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4697574893009984,
-        "y": 5.865820256776035
+        "x": 7.789180722891565,
+        "y": 0.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.745192582025677,
-        "y": 4.804850213980028
+        "x": 7.767325301204821,
+        "y": 3.077602409638555
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.732253922967189,
-        "y": 4.817788873038516
+        "x": 7.789180722891565,
+        "y": 3.2
       },
       "prevControl": {
-        "x": 3.4826961483594863,
-        "y": 5.878758915834522
+        "x": 7.756397590361445,
+        "y": 0.8723975903614449
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 152.98733465206132
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "First Cycle Right Trench Half",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 179.25594079711124
+    "rotation": 90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

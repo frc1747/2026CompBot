@@ -6,12 +6,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IntakePivot;
 
-public class AutoIntakeOut extends Command {
+
+public class AutoIntakeLower extends Command{
     IntakePivot intakePivot;
     PIDController pid;
     private Timer timer = new Timer();
 
-    public AutoIntakeOut(IntakePivot intakePivot) {
+    public AutoIntakeLower(IntakePivot intakePivot){
         this.intakePivot = intakePivot;
         this.pid = new PIDController(Constants.IntakePivot.SET_POINT_P,
                                     Constants.IntakePivot.SET_POINT_I,
@@ -19,26 +20,34 @@ public class AutoIntakeOut extends Command {
         addRequirements( intakePivot);
     }
 
+
     @Override
-    public void initialize() {
+    public void initialize(){
+        //Resets and Starts a timer
         timer.reset();
         timer.start();
         double currentPos = intakePivot.getEncoderValue();
         double pidOutput = pid.calculate(currentPos, Constants.IntakePivot.ENCODER_DOWN);
         double clampedPid = MathUtil.clamp(pidOutput, -Constants.IntakePivot.SET_POINT_PID_CLAMP, Constants.IntakePivot.SET_POINT_PID_CLAMP);
-        intakePivot.setPower(clampedPid); // may need to be negati
+        intakePivot.setPower(clampedPid);
+
+
     }
 
     @Override
-    public void execute() {}
+    public void execute(){
 
-    @Override
-    public void end(boolean interrupted) {
-        intakePivot.intakePivot(0);
-        System.out.println("IntakeOut Has Been Ended");
     }
+    @Override
+    public void end(boolean interrupted){
+        //IntakePivot does not have a stop Command method. Would like to see if e vould add one
+        intakePivot.setPower(0.0);
+        System.out.println("IntakeLower Has Been Ended");
+    }
+
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(0.5); // run for 1 second
+        //This Should
+        return timer.hasElapsed(0.5);
     }
 }

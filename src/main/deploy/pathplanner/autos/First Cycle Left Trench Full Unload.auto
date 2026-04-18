@@ -7,80 +7,42 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Bump Double Unload A"
+            "pathName": "First Cycle Left Trench Full Unload A"
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot"
+                  "name": "IntakeOut"
                 }
               },
               {
-                "type": "sequential",
+                "type": "race",
                 "data": {
                   "commands": [
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 1.0
+                        "name": "IntakeCollect"
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "path",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Hopper"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Kicker"
-                            }
-                          }
-                        ]
+                        "pathName": "First Cycle Left Trench Full Unload B"
                       }
                     }
                   ]
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right Bump Double Unload B"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeOut"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeCollect"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Right Bump Double Unload C"
+                  "name": "IntakeIn"
                 }
               }
             ]
@@ -89,11 +51,11 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Bump Double Unload D"
+            "pathName": "First Cycle Left Trench Full Unload C"
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {

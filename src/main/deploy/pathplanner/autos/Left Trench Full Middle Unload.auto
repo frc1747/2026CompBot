@@ -11,20 +11,13 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Shoot"
-                      }
-                    }
-                  ]
+                  "name": "Shoot"
                 }
               },
               {
@@ -34,43 +27,32 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 2.0
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "parallel",
                       "data": {
-                        "name": "Hopper"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Kicker"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Kicker"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Hopper"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopKicker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopHopper"
           }
         },
         {
@@ -86,9 +68,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "Left Trench Full MIddle Unload C"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeCollect"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Trench Full MIddle Unload C"
+                }
+              }
+            ]
           }
         },
         {
@@ -104,20 +99,13 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Shoot"
-                      }
-                    }
-                  ]
+                  "name": "Shoot"
                 }
               },
               {
@@ -127,49 +115,32 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 2.0
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "parallel",
                       "data": {
-                        "name": "Hopper"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Kicker"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Kicker"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Hopper"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopHopper"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopKicker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShooter"
           }
         }
       ]

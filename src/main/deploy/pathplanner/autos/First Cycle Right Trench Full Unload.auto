@@ -7,38 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Trench Half Middle Unload A"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Hopper"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Kicker"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Trench Half Middle B"
+            "pathName": "First Cycle Right Trench Unload A"
           }
         },
         {
@@ -48,13 +17,7 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -66,22 +29,22 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left Trench Half Middle C"
+                  "pathName": "First Cycle Right Trench Full Unload B"
                 }
               }
             ]
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 4.0
+            "name": "IntakeIn"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left Trench Half Middle D"
+            "pathName": "First Cycle Right Trench Full Unload C"
           }
         },
         {
@@ -91,13 +54,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Hopper"
+                  "name": "Kicker"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Kicker"
+                  "name": "Hopper"
                 }
               },
               {

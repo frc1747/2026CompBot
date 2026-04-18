@@ -3,57 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.52,
-        "y": 4.818
+        "x": 7.789,
+        "y": 5.947
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.5197432239657629,
-        "y": 7.10793152639087
+        "x": 7.739514978601996,
+        "y": 0.71623395149786
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.52,
-        "y": 7.0691155492154065
+        "x": 4.576,
+        "y": 0.6474096385609629
       },
       "prevControl": {
-        "x": 0.5185835704497992,
-        "y": 6.81911956179295
+        "x": 6.47164768445584,
+        "y": 0.6437962624666184
       },
       "nextControl": {
-        "x": 0.5214164295502008,
-        "y": 7.319111536637863
+        "x": 2.4087874465049923,
+        "y": 0.65154065620542
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.4254493580666867,
-        "y": 7.0691155492154065
+        "x": 3.0815977175463622,
+        "y": 1.8418972895863055
       },
       "prevControl": {
-        "x": 1.3136459591920195,
-        "y": 7.292722346965546
-      },
-      "nextControl": {
-        "x": 2.512296718979668,
-        "y": 4.89542082738161
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.5122967189728955,
-        "y": 4.818
-      },
-      "prevControl": {
-        "x": 1.4772039942938668,
-        "y": 7.107931526383036
+        "x": 2.8812071395424788,
+        "y": 1.425794690895837
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,12 +46,12 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 88.83018949505531
+      "waypointRelativePos": 0.7270788912579923,
+      "rotationDegrees": 178.58618331266442
     },
     {
-      "waypointRelativePos": 2,
-      "rotationDegrees": -89.99815228555546
+      "waypointRelativePos": 1.194029850746273,
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
@@ -83,10 +67,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 142.9216741677975
+    "rotation": -130.10090754621206
   },
   "reversed": false,
-  "folder": null,
+  "folder": "First Cycle Right Trench Full",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

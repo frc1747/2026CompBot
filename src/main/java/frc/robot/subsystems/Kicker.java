@@ -35,9 +35,9 @@ public class Kicker extends SubsystemBase implements Logged{
 
         config.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
         config.CurrentLimits
-            .withStatorCurrentLimit(60)
+            .withStatorCurrentLimit(120)
             .withStatorCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(50)
+            .withSupplyCurrentLimit(60)
             .withSupplyCurrentLowerLimit(40)
             .withSupplyCurrentLimitEnable(true);
 

@@ -1,37 +1,41 @@
 package frc.robot.commands.autosCommands;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
-public class AutoIntakeCollect extends Command {
+
+public class AutoIntakeSpin extends Command{
     private Intake intake;
-    private double power;
     private Timer timer = new Timer();
 
-    public AutoIntakeCollect(Intake intake, double power) {
+    public AutoIntakeSpin(Intake intake){
         this.intake = intake;
-        this.power = power;
         addRequirements(intake);
+
     }
 
+
     @Override
-    public void initialize() {
+    public void initialize(){
+        //Resets and Starts a timer
         timer.reset();
         timer.start();
-        intake.intakeSpin(power);
+        intake.intakeSpin(-0.85);
     }
 
     @Override
-    public void execute() {
-    }
+    public void execute(){
 
+    }
     @Override
-    public void end(boolean interrupted) {
+    public void end(boolean interrupted){
         intake.intakeSpin(0.0);
+        System.out.println("Intake Spin has Been Stopped");
     }
 
+    @Override
     public boolean isFinished() {
-        return timer.hasElapsed(3.0); // run for 1 second
+        //This Should
+        return timer.hasElapsed(5);
     }
 }

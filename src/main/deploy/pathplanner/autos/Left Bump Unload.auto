@@ -11,20 +11,13 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Shoot"
-                      }
-                    }
-                  ]
+                  "name": "Shoot"
                 }
               },
               {
@@ -38,45 +31,28 @@
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "parallel",
                       "data": {
-                        "name": "Hopper"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Hopper"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Kicker"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Kicker"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 15.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopHopper"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopKicker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShooter"
           }
         }
       ]

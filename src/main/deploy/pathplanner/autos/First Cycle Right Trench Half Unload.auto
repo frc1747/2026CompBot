@@ -7,46 +7,33 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Bump Double Unload A"
+            "pathName": "First Cycle Right Trench Unload A"
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot"
+                  "name": "IntakeOut"
                 }
               },
               {
-                "type": "sequential",
+                "type": "parallel",
                 "data": {
                   "commands": [
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 1.0
+                        "name": "IntakeCollect"
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "path",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Hopper"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Kicker"
-                            }
-                          }
-                        ]
+                        "pathName": "First Cycle Right Trench Half Unload B"
                       }
                     }
                   ]
@@ -58,44 +45,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Bump Double Unload B"
+            "pathName": "First Cycle Right Trench Half Unload C"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "IntakeOut"
-          }
-        },
-        {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeCollect"
+                  "name": "SetTargetHub"
                 }
               },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Right Bump Double Unload C"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right Bump Double Unload D"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
               {
                 "type": "named",
                 "data": {
@@ -119,13 +81,13 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "Hopper"
+                              "name": "Kicker"
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "Kicker"
+                              "name": "Hopper"
                             }
                           }
                         ]

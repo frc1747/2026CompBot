@@ -24,10 +24,10 @@ public class Hopper extends SubsystemBase implements Logged{
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.withNeutralMode(NeutralModeValue.Coast);
         config.CurrentLimits
-            .withStatorCurrentLimit(100)
+            .withStatorCurrentLimit(180)
             .withStatorCurrentLimitEnable(true)
             .withSupplyCurrentLimit(90)
-            .withSupplyCurrentLowerLimit(40)
+//            .withSupplyCurrentLowerLimit(40)
             .withSupplyCurrentLimitEnable(true);
 
         motor.getConfigurator().apply(config);
