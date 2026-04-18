@@ -69,7 +69,7 @@ public final class Constants {
 
         public static final double BLUE_HUB_CENTER_X = 4.621;
         public static final double BLUE_HUB_CENTER_Y = FIELD_CENTER_Y;
-        public static final double BLUE_SHUTTLE_CENTER_X = 1;
+        public static final double BLUE_SHUTTLE_CENTER_X = 3.0;
 
         public static final double RED_HUB_CENTER_X = 11.919;
         public static final double RED_HUB_CENTER_Y = FIELD_CENTER_Y;
@@ -163,7 +163,7 @@ public final class Constants {
         public static final double SURFACE_E = -22.0958;
         public static final double SURFACE_F = 1.3911;
         public static final double AUTO_SHOOTER_MULT = 1.04; // this should be remove when we get better auto shoot values
-        public static final double MAX_AUTOSHOOT_POWER = 4300;
+        public static final double MAX_AUTOSHOOT_POWER = 3500;
         public static final double MAX_HOOD_ANGLE = 43;// degrees
         public static final double MIN_HOOD_ANGLE = 26;// degrees
         public static final double PID_P = 0.7;
