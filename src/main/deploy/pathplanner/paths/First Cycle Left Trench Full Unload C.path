@@ -46,8 +46,12 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 90.0
+      "waypointRelativePos": 0.8742004264392329,
+      "rotationDegrees": 179.7601549454183
+    },
+    {
+      "waypointRelativePos": 1.590618336886988,
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
@@ -66,7 +70,7 @@
     "rotation": 127.11686068327025
   },
   "reversed": false,
-  "folder": null,
+  "folder": "First Cycle Left Trench Full",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -90.0

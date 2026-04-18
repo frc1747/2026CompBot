@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Right Bump Double Unload",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -124.36732263769233

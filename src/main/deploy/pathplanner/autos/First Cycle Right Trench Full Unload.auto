@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "First Cycle Right Trench Full Unload A"
+            "pathName": "First Cycle Right Trench Unload A"
           }
         },
         {
@@ -45,12 +45,6 @@
           "type": "path",
           "data": {
             "pathName": "First Cycle Right Trench Full Unload C"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "First Cycle Right Trench Full Unload D"
           }
         },
         {

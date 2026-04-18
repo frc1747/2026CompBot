@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.7125060241026,
-        "y": 3.5210481927778314
+        "x": 7.739514978601996,
+        "y": 0.71623395149786
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,24 @@
         "y": 0.6474096385609629
       },
       "prevControl": {
-        "x": 7.920313253012047,
-        "y": 0.6474096385542167
+        "x": 6.47164768445584,
+        "y": 0.6437962624666184
+      },
+      "nextControl": {
+        "x": 2.4087874465049923,
+        "y": 0.65154065620542
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.0815977175463622,
+        "y": 1.8418972895863055
+      },
+      "prevControl": {
+        "x": 2.8812071395424788,
+        "y": 1.425794690895837
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +47,11 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.7270788912579923,
-      "rotationDegrees": -152.4217156111265
+      "rotationDegrees": 178.58618331266442
+    },
+    {
+      "waypointRelativePos": 1.194029850746273,
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
@@ -47,10 +67,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.0247396424651
+    "rotation": -130.10090754621206
   },
   "reversed": false,
-  "folder": null,
+  "folder": "First Cycle Right Trench Full",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0
