@@ -55,6 +55,12 @@
               {
                 "type": "named",
                 "data": {
+                  "name": "SetTargetHub"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
                   "name": "Shoot"
                 }
               },

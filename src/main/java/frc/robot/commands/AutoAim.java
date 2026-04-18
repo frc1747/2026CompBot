@@ -17,11 +17,10 @@ public class AutoAim extends Command {
     private Hood hood;
     private double[] hoodAngleAndShooterPower = {-1,-1};
 
-    public AutoAim(Shooter shooter, Hood hood) {
+    public AutoAim(Shooter shooter) {
         this.shooter = shooter;
-        this.hood = hood;
          // we default to blue like the cordnet system.
-        addRequirements(shooter, hood);
+        addRequirements(shooter);
     }
 
     @Override
@@ -41,8 +40,8 @@ public class AutoAim extends Command {
         double distance = RobotContainer.turret.getAbsTurretPose().getTranslation().getDistance(TargetPoses.getTargetPose().getTranslation());
         double[] hoodAngleAndShooterPower = shooter.findSpeedAndAngleFromDistance(distance);
 
-        hood.goToAngleCommand(hoodAngleAndShooterPower[0]);
-        if (hood.atAngle(hoodAngleAndShooterPower[0])){
+        //hood.goToAngleCommand(hoodAngleAndShooterPower[0]);
+        if (RobotContainer.hood.atAngle(hoodAngleAndShooterPower[0])){
             shooter.setRPM(hoodAngleAndShooterPower[1]);
         }
         SmartDashboard.putNumber("Shooter/distance from hub from autoAim", distance);

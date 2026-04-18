@@ -8,20 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.0667047075606275,
-        "y": 0.4703994293865925
+        "x": 7.830085592011411,
+        "y": 0.289258202567761
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.215,
-        "y": 1.402
+        "x": 4.466034236804564,
+        "y": 0.5997860199714706
       },
       "prevControl": {
-        "x": 4.116690442225392,
-        "y": -0.20241084165477763
+        "x": 6.820870185449357,
+        "y": 0.6774179743223976
+      },
+      "nextControl": {
+        "x": 2.5733795479180936,
+        "y": 0.5373908104477412
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.628744650499286,
+        "y": 1.6736947218259637
+      },
+      "prevControl": {
+        "x": 1.8912410841654772,
+        "y": 0.8714978601997164
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,22 +46,22 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3688699360341146,
-      "rotationDegrees": -176.92124152572623
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": 3.203
     },
     {
-      "waypointRelativePos": 0.8166311300639615,
-      "rotationDegrees": 180.0
+      "waypointRelativePos": 1.3688699360341112,
+      "rotationDegrees": -1.817646674755425
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.08102633355840647,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0.8238213399503651,
+      "maxWaypointRelativePos": 1.1930521091811361,
       "constraints": {
-        "maxVelocity": 4.0,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 2.0,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -56,8 +72,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -73,5 +89,5 @@
     "velocity": 0,
     "rotation": 90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

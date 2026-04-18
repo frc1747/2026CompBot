@@ -85,7 +85,7 @@ public class RobotContainer implements Logged {
     public static final Shooter shooter = new Shooter();
     public static final Hopper hopper = new Hopper();
     public static final Turret turret = new Turret();
-    public static final AutoAim autoAim = new AutoAim(shooter, hood);
+    public static final AutoAim autoAim = new AutoAim(shooter);
 
     public static final Field2d field = new Field2d();
 
@@ -144,13 +144,14 @@ public class RobotContainer implements Logged {
         NamedCommands.registerCommand("Hopper", new AutoHopperRun(hopper).withTimeout(5));
         //NamedCommands.registerCommand("Hopper", hopper.run(false).withTimeout(5.0));
         //NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
-        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter, hood).withTimeout(5));
+        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter).withTimeout(5));
 
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         NamedCommands.registerCommand("StopIntake", intake.StopCommand());
         NamedCommands.registerCommand("StopKicker", kicker.stopCommand());
         NamedCommands.registerCommand("StopHopper", hopper.stop());
         NamedCommands.registerCommand("StopShooter", Commands.run(() -> shooter.stopCommand()));
+        NamedCommands.registerCommand("SetTargetHub", Commands.run( () -> TargetPoses.setScoring()));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -270,7 +271,7 @@ public class RobotContainer implements Logged {
 
         // Shooting
         tmJoystickTrigger
-            .whileTrue(new AutoAim(shooter, hood))
+            .whileTrue(new AutoAim(shooter))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.stopCommand()));
 
@@ -302,11 +303,11 @@ public class RobotContainer implements Logged {
 
         // Shooter speed manual change
         // Faster shooting
-        tmJoystickRightHandTopLeft
+        tmJoystickLeftHandTopLeft
             .onTrue(shooter.offsetIncrement());
 
         // Slower shooting
-        tmJoystickRightHandBottomLeft
+        tmJoystickLeftHandBottomLeft
             .onTrue(shooter.offsetDecrement());
 
         // Auto hood buttons

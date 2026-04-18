@@ -63,21 +63,21 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.9978678038379527,
-      "rotationDegrees": 178.9656042755219
+      "rotationDegrees": -1.710782014397038
     },
     {
       "waypointRelativePos": 1.9829424307036243,
-      "rotationDegrees": 180.0
+      "rotationDegrees": 1.6456467940585322
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.6266036461850081,
-      "maxWaypointRelativePos": 1.6,
+      "minWaypointRelativePos": 1.0689826302729573,
+      "maxWaypointRelativePos": 1.6526054590570611,
       "constraints": {
-        "maxVelocity": 4.0,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 2.0,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -88,8 +88,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -97,7 +97,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 121.18497465873848
+    "rotation": 129.63059735584451
   },
   "reversed": false,
   "folder": "First Cycle Left Trench Half",
@@ -105,5 +105,5 @@
     "velocity": 0,
     "rotation": -90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

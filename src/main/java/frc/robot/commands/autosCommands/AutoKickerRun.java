@@ -40,6 +40,6 @@ public class AutoKickerRun extends Command{
     @Override
     public boolean isFinished() {
         //This Should
-        return timer.hasElapsed(5.0);
+        return timer.hasElapsed(10.0);
     }
 }

@@ -48,6 +48,6 @@ public class AutoIntakeLower extends Command{
     @Override
     public boolean isFinished() {
         //This Should
-        return timer.hasElapsed(2);
+        return timer.hasElapsed(0.5);
     }
 }

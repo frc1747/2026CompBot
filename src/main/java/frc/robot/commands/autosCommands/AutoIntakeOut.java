@@ -39,6 +39,6 @@ public class AutoIntakeOut extends Command {
     }
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(1.0); // run for 1 second
+        return timer.hasElapsed(0.5); // run for 1 second
     }
 }

@@ -122,9 +122,7 @@ public final class Constants {
         public static final double kD = 0.0;
 
         public static final double MAX_PID_OUTPUT = 0.875;
-        public static final double MANUAL_MOTOR_POWER = 0.35;
-
-    }
+        public static final double MANUAL_MOTOR_POWER = 0.52;    }
 
     public static final class Turret {
         public static final int MOTOR_PORT = 59;
@@ -163,7 +161,7 @@ public final class Constants {
         public static final double SURFACE_E = -22.0958;
         public static final double SURFACE_F = 1.3911;
         public static final double AUTO_SHOOTER_MULT = 1.04; // this should be remove when we get better auto shoot values
-        public static final double MAX_AUTOSHOOT_POWER = 3500;
+        public static final double MAX_AUTOSHOOT_POWER = 4000;
         public static final double MAX_HOOD_ANGLE = 43;// degrees
         public static final double MIN_HOOD_ANGLE = 26;// degrees
         public static final double PID_P = 0.7;
