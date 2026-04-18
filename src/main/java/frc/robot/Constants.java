@@ -69,7 +69,7 @@ public final class Constants {
 
         public static final double BLUE_HUB_CENTER_X = 4.621;
         public static final double BLUE_HUB_CENTER_Y = FIELD_CENTER_Y;
-        public static final double BLUE_SHUTTLE_CENTER_X = 2;
+        public static final double BLUE_SHUTTLE_CENTER_X = 3.0;
 
         public static final double RED_HUB_CENTER_X = 11.919;
         public static final double RED_HUB_CENTER_Y = FIELD_CENTER_Y;
@@ -105,7 +105,7 @@ public final class Constants {
         public static final int ENCODER_PORT_B = 5;
         public static final int COUNTS_PER_REV = 2048;
         public static final double GEAR_RATIO = 1.7;  // 17 tooth rack / 10 tooth pinion
-        public static final double TOTAL_HOOD_DEGREES = 17.5;  // 17.5 degrees of hood rotation
+        public static final double TOTAL_HOOD_DEGREES = 17.5;  // 19.25 degrees of hood rotation
         public static final double COUNTS_PER_HOOD_SWEEP = COUNTS_PER_REV * GEAR_RATIO;
         public static final double COUNTS_PER_DEGREE = COUNTS_PER_HOOD_SWEEP / TOTAL_HOOD_DEGREES;
         public static final double ANGLE_TOLERANCE = 0.25;
@@ -163,7 +163,7 @@ public final class Constants {
         public static final double SURFACE_E = -22.0958;
         public static final double SURFACE_F = 1.3911;
         public static final double AUTO_SHOOTER_MULT = 1.04; // this should be remove when we get better auto shoot values
-        public static final double MAX_AUTOSHOOT_POWER = 4300;
+        public static final double MAX_AUTOSHOOT_POWER = 3500;
         public static final double MAX_HOOD_ANGLE = 43;// degrees
         public static final double MIN_HOOD_ANGLE = 26;// degrees
         public static final double PID_P = 0.7;
