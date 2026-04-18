@@ -280,43 +280,51 @@ public class RobotContainer implements Logged {
 
         // Manual Turret movement code
         // Turret rotate left
-        tmJoystickLeftHandTopLeft
+        tmJoystickRightHandBottomMiddle
             .whileTrue(turret.spin(true))
             .onFalse(turret.stopCommand());
 
         // Turret rotate right
-        tmJoystickLeftHandBottomLeft
+        tmJoystickRightHandBottomRight
             .whileTrue(turret.spin(false))
             .onFalse(turret.stopCommand());
 
         // Manual Hood movement code
         // Hood up
-        tmJoystickLeftHandBottomRight
+        tmJoystickRightHandBottomLeft
             .whileTrue(hood.setPowerCommand(false))
             .onFalse(hood.stopCommand());
 
         // Hood down
-        tmJoystickLeftHandTopRight
+        tmJoystickRightHandTopLeft
             .whileTrue(hood.setPowerCommand(true))
             .onFalse(hood.stopCommand());
 
         // Shooter speed manual change
         // Faster shooting
-        tmJoystickLeftHandTopMiddle
+        tmJoystickRightHandTopLeft
             .onTrue(shooter.offsetIncrement());
 
         // Slower shooting
-        tmJoystickLeftHandBottomMiddle
+        tmJoystickRightHandBottomLeft
             .onTrue(shooter.offsetDecrement());
 
         // Auto hood buttons
         // Auto hood down
-        tmJoystickRightHandBottomLeft
+        tmJoystickLeftHandBottomRight
             .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         // Auto hood up
-        tmJoystickRightHandTopLeft
+        tmJoystickLeftHandTopRight
             .onTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE));
+
+        // Auto hood standard preset
+        tmJoystickRightHandTopMiddle
+            .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_STANDARD_SET));
+
+        // Auto hood defense present
+        tmJoystickRightHandTopRight
+            .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_DEFENSE_SET));
 
         field.getObject("target").setPoses(TargetPoses.currentTarget);
 
