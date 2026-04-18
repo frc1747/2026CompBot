@@ -28,9 +28,10 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
-import frc.robot.commands.autosCommands.AutoAprilLock;
+// import frc.robot.commands.autosCommands.AutoAprilLock;
 import frc.robot.commands.autosCommands.AutoAutoAim;
-import frc.robot.commands.teleop.AprilLock;
+// import frc.robot.commands.teleop.AprilLock;
+import frc.robot.commands.teleop.CompAprilLock;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.teleop.TeleopSwerve;
 import frc.robot.commands.teleop.ToggleIntakeReady;
@@ -140,7 +141,10 @@ public class RobotContainer implements Logged {
         //NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
         NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter, hood));
 
-        NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
+        NamedCommands.registerCommand("AutoLock" , new CompAprilLock(drivetrain, 
+            () -> driver_hid.getLeftY() * activeControllerCap, 
+            () -> driver_hid.getLeftX() * activeControllerCap, 
+            () -> driver_hid.getRightX() * activeControllerCap));
         NamedCommands.registerCommand("StopIntake", intake.StopCommand());
         NamedCommands.registerCommand("StopKicker", kicker.stopCommand());
         NamedCommands.registerCommand("StopHopper", hopper.stop());
@@ -254,13 +258,25 @@ public class RobotContainer implements Logged {
 
         // Turns on scoring april lock
         tmJoystickFaceButtonRight
-            .toggleOnTrue(new AprilLock(turret)
+            .toggleOnTrue(
+                new CompAprilLock(
+                    drivetrain,
+                    () -> driver_hid.getLeftY() * activeControllerCap,
+                    () -> driver_hid.getLeftX() * activeControllerCap,
+                    () -> driver_hid.getRightX() * activeControllerCap
+                )
             .alongWith(Commands.run( () -> TargetPoses.setScoring())));
 
         // Turns on shuttling april lock
         tmJoystickFaceButtonLeft
-            .toggleOnTrue(new AprilLock(turret)
-            .alongWith(Commands.run( () -> TargetPoses.setShuttling())));
+            .toggleOnTrue(
+                new CompAprilLock(
+                    drivetrain,
+                    () -> driver_hid.getLeftY() * activeControllerCap,
+                    () -> driver_hid.getLeftX() * activeControllerCap,
+                    () -> driver_hid.getRightX() * activeControllerCap
+                )
+            .alongWith(Commands.run( () -> TargetPoses.setScoring())));
 
         // Shooting
         tmJoystickTrigger
@@ -274,14 +290,14 @@ public class RobotContainer implements Logged {
 
         // Manual Turret movement code
         // Turret rotate left
-        tmJoystickRightHandBottomMiddle
-            .whileTrue(turret.spin(true))
-            .onFalse(turret.stopCommand());
+        // tmJoystickRightHandBottomMiddle
+        //     .whileTrue(turret.spin(true))
+        //     .onFalse(turret.stopCommand());
 
         // Turret rotate right
-        tmJoystickRightHandBottomRight
-            .whileTrue(turret.spin(false))
-            .onFalse(turret.stopCommand());
+        // tmJoystickRightHandBottomRight
+        //     .whileTrue(turret.spin(false))
+        //     .onFalse(turret.stopCommand());
 
         // Manual Hood movement code
         // Hood up
@@ -323,8 +339,6 @@ public class RobotContainer implements Logged {
         field.getObject("target").setPoses(TargetPoses.currentTarget);
 
         System.out.println(TargetPoses.getTargetPose().getX());
-
-
     }
 
     public Command getAutonomousCommand() {
