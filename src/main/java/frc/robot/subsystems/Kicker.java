@@ -38,7 +38,6 @@ public class Kicker extends SubsystemBase implements Logged{
             .withStatorCurrentLimit(120)
             .withStatorCurrentLimitEnable(true)
             .withSupplyCurrentLimit(60)
-            .withSupplyCurrentLowerLimit(40)
             .withSupplyCurrentLimitEnable(true);
 
         config.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);

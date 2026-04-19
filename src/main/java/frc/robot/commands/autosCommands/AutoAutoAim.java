@@ -28,7 +28,7 @@ public class AutoAutoAim extends Command {
         timer.reset();
         timer.start();
         // // yes I am a hack
-        shooter.setPower(0.30);
+        shooter.setPower(.38);
       // shooter.setPower(0.3);
     }
 

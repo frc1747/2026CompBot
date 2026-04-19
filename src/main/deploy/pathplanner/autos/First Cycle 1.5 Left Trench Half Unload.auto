@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "First Cycle Right Trench Unload A"
+            "pathName": "First Cycle Left Trench Full Unload A"
           }
         },
         {
@@ -33,7 +33,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "First Cycle Right Trench Half Unload B"
+                        "pathName": "First Cycle Left Trench Half Unload B"
                       }
                     }
                   ]
@@ -45,7 +45,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "First Cycle Right Trench Half Unload C"
+            "pathName": "First Cycle Left Trench Half Unload C"
           }
         },
         {
@@ -70,7 +70,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0
+            "waitTime": 0.75
           }
         },
         {
@@ -106,13 +106,13 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "Kicker"
+                              "name": "Hopper"
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "Hopper"
+                              "name": "Kicker"
                             }
                           }
                         ]
@@ -122,6 +122,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "First Cycle 1.5 Left Trench Half Unload C"
           }
         }
       ]

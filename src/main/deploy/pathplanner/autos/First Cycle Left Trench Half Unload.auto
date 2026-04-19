@@ -55,6 +55,31 @@
               {
                 "type": "named",
                 "data": {
+                  "name": "IntakeReverseCollect"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ReverseHopper"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
                   "name": "SetTargetHub"
                 }
               },

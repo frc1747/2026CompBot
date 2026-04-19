@@ -1,16 +1,16 @@
 package frc.robot.commands.autosCommands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Kicker;
+import frc.robot.subsystems.Hopper;
 
 
-public class AutoKickerRun extends Command{
-    private Kicker kicker;
+public class AutoHopperReverse extends Command{
+    private Hopper hopper;
     private Timer timer = new Timer();
 
-    public AutoKickerRun(Kicker kicker){
-        this.kicker = kicker;
-        addRequirements(kicker);
+    public AutoHopperReverse(Hopper hopper){
+        this.hopper = hopper;
+        addRequirements(hopper);
 
     }
 
@@ -20,26 +20,22 @@ public class AutoKickerRun extends Command{
         //Resets and Starts a timer
         timer.reset();
         timer.start();
-        kicker.setPower(0.30);
-
+        hopper.setPower(-0.6);
     }
 
     @Override
     public void execute(){
-        // if (timer.hasElapsed(5.0)){
-        //     kicker.setPower(0.0);
-        // }
 
     }
     @Override
     public void end(boolean interrupted){
-        kicker.setPower(0.0);
-        System.out.println("Kicker Has Been Stopped");
+        hopper.setPower(0.0);
+        System.out.println("The Hopper Has Been Stopped");
     }
 
     @Override
     public boolean isFinished() {
         //This Should
-        return timer.hasElapsed(10.0);
+        return timer.hasElapsed(0.4);
     }
 }

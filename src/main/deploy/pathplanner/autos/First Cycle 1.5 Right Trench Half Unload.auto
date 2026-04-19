@@ -123,6 +123,12 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "First Cycle 1.5 Right Trench Half Unload C"
+          }
         }
       ]
     }

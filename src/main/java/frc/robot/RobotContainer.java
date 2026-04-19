@@ -30,8 +30,10 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
 import frc.robot.commands.autosCommands.AutoAutoAim;
+import frc.robot.commands.autosCommands.AutoHopperReverse;
 import frc.robot.commands.autosCommands.AutoHopperRun;
 import frc.robot.commands.autosCommands.AutoIntakeLower;
+import frc.robot.commands.autosCommands.AutoIntakeReverseSpin;
 import frc.robot.commands.autosCommands.AutoIntakeSpin;
 import frc.robot.commands.autosCommands.AutoIntakeStash;
 import frc.robot.commands.autosCommands.AutoKickerRun;
@@ -135,13 +137,14 @@ public class RobotContainer implements Logged {
         NamedCommands.registerCommand("IntakeIn", new AutoIntakeStash(intakePivot));
         //NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
         NamedCommands.registerCommand("IntakeCollect", new AutoIntakeSpin(intake).withTimeout(3));
-        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeSpin(intake).withTimeout(5));
+        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseSpin(intake).withTimeout(0.4));
 
         //NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
 
         NamedCommands.registerCommand("Kicker", new AutoKickerRun(kicker));
         //NamedCommands.registerCommand("Kicker", kicker.run(false).withTimeout(5.0));
         NamedCommands.registerCommand("Hopper", new AutoHopperRun(hopper).withTimeout(5));
+        NamedCommands.registerCommand("ReverseHopper", new AutoHopperReverse(hopper).withTimeout(0.4));
         //NamedCommands.registerCommand("Hopper", hopper.run(false).withTimeout(5.0));
         //NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
         NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter).withTimeout(5));
