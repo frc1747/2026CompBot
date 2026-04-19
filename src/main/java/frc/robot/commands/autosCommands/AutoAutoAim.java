@@ -58,6 +58,6 @@ public class AutoAutoAim extends Command {
     @Override
     public boolean isFinished() {
         // better way of doing this idk
-        return timer.hasElapsed(12.0);
+        return timer.hasElapsed(11.0);
     }
 }

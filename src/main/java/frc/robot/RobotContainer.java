@@ -141,7 +141,7 @@ public class RobotContainer implements Logged {
 
         //NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
 
-        NamedCommands.registerCommand("Kicker", new AutoKickerRun(kicker));
+        NamedCommands.registerCommand("Kicker", new AutoKickerRun(kicker).withTimeout(10));
         //NamedCommands.registerCommand("Kicker", kicker.run(false).withTimeout(5.0));
         NamedCommands.registerCommand("Hopper", new AutoHopperRun(hopper).withTimeout(5));
         NamedCommands.registerCommand("ReverseHopper", new AutoHopperReverse(hopper).withTimeout(0.4));
@@ -236,6 +236,9 @@ public class RobotContainer implements Logged {
             .onFalse(intake.StopCommand())
             .onFalse(hopper.stop());
 
+        driver.leftBumper()
+            .onTrue(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_SHOOTING))
+            .whileFalse(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_REGULAR));
 
         // Hood go down at trench code
         driver.x()
@@ -276,11 +279,11 @@ public class RobotContainer implements Logged {
         tmJoystickTrigger
             .whileTrue(new AutoAim(shooter))
             .onFalse(shooter.stopCommand()
-            .alongWith(hood.stopCommand()));
+            .alongWith(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE)));
 
-        tmJoystickTrigger
-            .whileTrue(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_SHOOTING))
-            .onFalse(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_REGULAR));
+        // tmJoystickTrigger
+        //     .whileTrue(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_SHOOTING))
+        //     .onFalse(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_REGULAR)));
 
         // Manual Turret movement code
         // Turret rotate left
@@ -320,15 +323,18 @@ public class RobotContainer implements Logged {
 
         // Auto hood up
         tmJoystickLeftHandTopRight
-            .onTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE));
+            .whileTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE))
+            .onFalse(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         // Auto hood standard preset
         tmJoystickRightHandTopMiddle
             .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_STANDARD_SET));
 
+
         // Auto hood defense present
         tmJoystickRightHandTopRight
             .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_DEFENSE_SET));
+
 
         field.getObject("target").setPoses(TargetPoses.currentTarget);
 
