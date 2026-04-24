@@ -2,7 +2,25 @@
   "robotWidth": 0.9,
   "robotLength": 0.9,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "First Cycle Left Trench Full",
+    "First Cycle Left Trench Half",
+    "First Cycle Right Trench Full",
+    "First Cycle Right Trench Half",
+    "Left Bump Double Unload",
+    "Left Bump First Cycle",
+    "Left Half Bump Ver",
+    "Left Trench Full Middle",
+    "Left Trench Half Middle",
+    "Misc.",
+    "Dual Cycle Left Trench",
+    "Right Bump Double Unload",
+    "Right Bump First Cycle",
+    "Right Half Bump Ver",
+    "Right Trench Full Middle",
+    "Right Trench Half Middle",
+    "Single Unloads"
+  ],
   "autoFolders": [],
   "defaultMaxVel": 2.0,
   "defaultMaxAccel": 1.5,
@@ -28,5 +46,7 @@
   "brModuleY": -0.3175,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.0,\"y\":0.0},\"size\":{\"width\":0.2,\"length\":0.2},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}"
+  ]
 }

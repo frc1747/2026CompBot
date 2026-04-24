@@ -30,6 +30,13 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.IntakeGoToDefault;
 import frc.robot.commands.autosCommands.AutoAprilLock;
 import frc.robot.commands.autosCommands.AutoAutoAim;
+import frc.robot.commands.autosCommands.AutoHopperReverse;
+import frc.robot.commands.autosCommands.AutoHopperRun;
+import frc.robot.commands.autosCommands.AutoIntakeLower;
+import frc.robot.commands.autosCommands.AutoIntakeReverseSpin;
+import frc.robot.commands.autosCommands.AutoIntakeSpin;
+import frc.robot.commands.autosCommands.AutoIntakeStash;
+import frc.robot.commands.autosCommands.AutoKickerRun;
 import frc.robot.commands.teleop.AprilLock;
 import frc.robot.commands.teleop.GrabFuel;
 import frc.robot.commands.teleop.TeleopSwerve;
@@ -80,7 +87,7 @@ public class RobotContainer implements Logged {
     public static final Shooter shooter = new Shooter();
     public static final Hopper hopper = new Hopper();
     public static final Turret turret = new Turret();
-    public static final AutoAim autoAim = new AutoAim(shooter, hood);
+    public static final AutoAim autoAim = new AutoAim(shooter);
 
     public static final Field2d field = new Field2d();
 
@@ -112,39 +119,42 @@ public class RobotContainer implements Logged {
     public RobotContainer() {
         NamedCommands.registerCommand("Print", new InstantCommand(() -> System.out.println("test")));
         //Commands here are purely for testing when other commands run
-        NamedCommands.registerCommand("TestCommand", new InstantCommand(() -> System.out.println("Test Command Has Run")));
-        NamedCommands.registerCommand("ShooterTest" , new InstantCommand(() -> System.out.println("Shooter Command Has Run")));
-        NamedCommands.registerCommand("HopperTest" , new InstantCommand(() -> System.out.println("Hopper Command Has Run")));
-        NamedCommands.registerCommand("KickerTest" , new InstantCommand(() -> System.out.println("Kicker Command Has Run")));
-        NamedCommands.registerCommand("ShooterStopTest", new InstantCommand(() -> System.out.println("Shooter Stop Command Has Run")));
-        NamedCommands.registerCommand("HopperStopTest", new InstantCommand(() -> System.out.println("Hopper Stop Command Has Run")));
-        NamedCommands.registerCommand("KickerStopTest", new InstantCommand(() -> System.out.println("Kicker Stop Command Has Run")));
+        //NamedCommands.registerCommand("TestCommand", new InstantCommand(() -> System.out.println("Test Command Has Run")));
+        //NamedCommands.registerCommand("ShooterTest" , new InstantCommand(() -> System.out.println("Shooter Command Has Run")));
+        //NamedCommands.registerCommand("HopperTest" , new InstantCommand(() -> System.out.println("Hopper Command Has Run")));
+        //NamedCommands.registerCommand("KickerTest" , new InstantCommand(() -> System.out.println("Kicker Command Has Run")));
+        //NamedCommands.registerCommand("ShooterStopTest", new InstantCommand(() -> System.out.println("Shooter Stop Command Has Run")));
+        //NamedCommands.registerCommand("HopperStopTest", new InstantCommand(() -> System.out.println("Hopper Stop Command Has Run")));
+        //NamedCommands.registerCommand("KickerStopTest", new InstantCommand(() -> System.out.println("Kicker Stop Command Has Run")));
 
-        NamedCommands.registerCommand("IntakeReverseTest", new InstantCommand(() -> System.out.println("Intake Reverse Collect Command Has Run")));
-        NamedCommands.registerCommand("IntakeSpinTest" , new InstantCommand(() -> System.out.println("Intake Collect Command Has Run")));
-        NamedCommands.registerCommand("IntakeOutTest", new InstantCommand(() -> System.out.println("Intake Out Command Has Run")));
-        NamedCommands.registerCommand("IntakeInTest", new InstantCommand(() -> System.out.println("Intake In Command Has Run")));
-        NamedCommands.registerCommand("IntakeStopTest", new InstantCommand(() -> System.out.println("Intake Stop Has Been Run")));
+        //NamedCommands.registerCommand("IntakeReverseTest", new InstantCommand(() -> System.out.println("Intake Reverse Collect Command Has Run")));
+        //NamedCommands.registerCommand("IntakeSpinTest" , new InstantCommand(() -> System.out.println("Intake Collect Command Has Run")));
+        //NamedCommands.registerCommand("IntakeOutTest", new InstantCommand(() -> System.out.println("Intake Out Command Has Run")));
+        //NamedCommands.registerCommand("IntakeInTest", new InstantCommand(() -> System.out.println("Intake In Command Has Run")));
+        //NamedCommands.registerCommand("IntakeStopTest", new InstantCommand(() -> System.out.println("Intake Stop Has Been Run")));
 
-        NamedCommands.registerCommand("IntakeOut", intakePivot.moveOutCommand());
-        NamedCommands.registerCommand("IntakeIn", intakePivot.moveHomeCommand());
+        NamedCommands.registerCommand("IntakeOut", new AutoIntakeLower(intakePivot));
+        NamedCommands.registerCommand("IntakeIn", new AutoIntakeStash(intakePivot));
         //NamedCommands.registerCommand("IntakeCollect", intake.spin(false));
-        NamedCommands.registerCommand("IntakeCollect", intake.spin(false).withTimeout(4.0));
-        NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true).withTimeout(0.5));
+        NamedCommands.registerCommand("IntakeCollect", new AutoIntakeSpin(intake).withTimeout(3));
+        NamedCommands.registerCommand("IntakeReverseCollect", new AutoIntakeReverseSpin(intake).withTimeout(0.4));
+
         //NamedCommands.registerCommand("IntakeReverseCollect", intake.spin(true));
 
-        NamedCommands.registerCommand("Kicker", kicker.run(false));
+        NamedCommands.registerCommand("Kicker", new AutoKickerRun(kicker).withTimeout(10));
         //NamedCommands.registerCommand("Kicker", kicker.run(false).withTimeout(5.0));
-        NamedCommands.registerCommand("Hopper", hopper.run(false));
+        NamedCommands.registerCommand("Hopper", new AutoHopperRun(hopper).withTimeout(5));
+        NamedCommands.registerCommand("ReverseHopper", new AutoHopperReverse(hopper).withTimeout(0.4));
         //NamedCommands.registerCommand("Hopper", hopper.run(false).withTimeout(5.0));
         //NamedCommands.registerCommand("Shoot", new AutoAim(shooter, hood));
-        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter, hood));
+        NamedCommands.registerCommand("Shoot", new AutoAutoAim(shooter).withTimeout(5));
 
         NamedCommands.registerCommand("AutoLock" , new AutoAprilLock(turret));
         NamedCommands.registerCommand("StopIntake", intake.StopCommand());
         NamedCommands.registerCommand("StopKicker", kicker.stopCommand());
         NamedCommands.registerCommand("StopHopper", hopper.stop());
         NamedCommands.registerCommand("StopShooter", Commands.run(() -> shooter.stopCommand()));
+        NamedCommands.registerCommand("SetTargetHub", Commands.run( () -> TargetPoses.setScoring()));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -226,6 +236,9 @@ public class RobotContainer implements Logged {
             .onFalse(intake.StopCommand())
             .onFalse(hopper.stop());
 
+        driver.leftBumper()
+            .onTrue(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_SHOOTING))
+            .whileFalse(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_REGULAR));
 
         // Hood go down at trench code
         driver.x()
@@ -264,13 +277,13 @@ public class RobotContainer implements Logged {
 
         // Shooting
         tmJoystickTrigger
-            .whileTrue(new AutoAim(shooter, hood))
+            .whileTrue(new AutoAim(shooter))
             .onFalse(shooter.stopCommand()
-            .alongWith(hood.stopCommand()));
+            .alongWith(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE)));
 
-        tmJoystickTrigger
-            .whileTrue(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_SHOOTING))
-            .onFalse(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_REGULAR));
+        // tmJoystickTrigger
+        //     .whileTrue(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_SHOOTING))
+        //     .onFalse(Commands.run( () -> activeControllerCap = Constants.Controller.CONTROLLER_CAP_REGULAR)));
 
         // Manual Turret movement code
         // Turret rotate left
@@ -296,11 +309,11 @@ public class RobotContainer implements Logged {
 
         // Shooter speed manual change
         // Faster shooting
-        tmJoystickRightHandTopLeft
+        tmJoystickLeftHandTopLeft
             .onTrue(shooter.offsetIncrement());
 
         // Slower shooting
-        tmJoystickRightHandBottomLeft
+        tmJoystickLeftHandBottomLeft
             .onTrue(shooter.offsetDecrement());
 
         // Auto hood buttons
@@ -310,15 +323,18 @@ public class RobotContainer implements Logged {
 
         // Auto hood up
         tmJoystickLeftHandTopRight
-            .onTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE));
+            .whileTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE))
+            .onFalse(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         // Auto hood standard preset
         tmJoystickRightHandTopMiddle
             .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_STANDARD_SET));
 
+
         // Auto hood defense present
         tmJoystickRightHandTopRight
             .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_DEFENSE_SET));
+
 
         field.getObject("target").setPoses(TargetPoses.currentTarget);
 

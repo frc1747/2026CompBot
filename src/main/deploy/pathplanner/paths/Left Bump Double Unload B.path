@@ -59,7 +59,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Left Bump Double Unload",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 136.8426185751565
