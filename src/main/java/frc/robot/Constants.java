@@ -89,8 +89,8 @@ public final class Constants {
 
     public static final class Drivetrain {
         public static final double DRIVER_SLOW_DOWN = 1.0;
-        public static final double MAX_SPEED = 4.1;  // Max speed in m/s
-        public static final double MAX_ACCEL = 4.1;  // Max acceleration in m/s
+        public static final double MAX_SPEED = 3.5;  // Max speed in m/s
+        public static final double MAX_ACCEL = 3.5;  // Max acceleration in m/s
         public static final double MAX_ANGULAR_VELOCITY = 10.0;  // Rad/s
     }
     public static final class Hopper {
@@ -145,7 +145,7 @@ public final class Constants {
         public static final double DIST_TO_BOT_CENTER = 0.1529842; // meters
         public static final double TURRET_YAW_LIMIT_UPPER = 95; // deg
         public static final double TURRET_YAW_LIMIT_LOWER = -150;
-        public static final double TURRET_POWER = .025;
+        public static final double TURRET_POWER = .0125;
     }
 
     public static final class Shooter {
