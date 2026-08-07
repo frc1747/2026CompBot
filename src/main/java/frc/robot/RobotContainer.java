@@ -12,7 +12,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -68,7 +66,9 @@ public class RobotContainer implements Logged {
     // Control
     private final CommandXboxController driver = new CommandXboxController(Constants.Controller.DRIVER_PORT);
     private final XboxController driver_hid = driver.getHID();
-    private final Joystick operator = new Joystick(Constants.Controller.OPERATOR_PORT);
+    private final CommandXboxController operator = new CommandXboxController(Constants.Controller.OPERATOR_PORT);
+    private final XboxController operator_hid = operator.getHID();
+    // private final Joystick operator = new Joystick(Constants.Controller.OPERATOR_PORT);
 
     // This value can either be one or .5 (the constant value) and is for driving regularly and for slowed driving (while shooting)
     private double activeControllerCap = 1;
@@ -92,27 +92,33 @@ public class RobotContainer implements Logged {
     public static final Field2d field = new Field2d();
 
     public static TargetPoses target = new TargetPoses();
-    public final JoystickButton tmJoystickFaceButtonRight = new JoystickButton(operator , 4);
-    public final JoystickButton tmJoystickFaceButtonLeft = new JoystickButton(operator , 3);
-    public final JoystickButton tmJoystickFaceBottom = new JoystickButton(operator, 2);
+    // public final JoystickButton tmJoystickFaceButtonRight = new JoystickButton(operator , 4);
+    // public final JoystickButton tmJoystickFaceButtonLeft = new JoystickButton(operator , 3);
+    // public final JoystickButton tmJoystickFaceBottom = new JoystickButton(operator, 2);
 
-    public final JoystickButton tmJoystickTrigger = new JoystickButton(operator , 1);
+    // public final JoystickButton tmJoystickTrigger = new JoystickButton(operator , 1);
 
-    public final POVButton tmJoystickPovUp = new POVButton(operator, 0);
-    public final POVButton tmJoystickPovDown = new POVButton(operator, 180);
-    public final JoystickButton tmJoystickRightHandBottomLeft = new JoystickButton(operator , 8);
-    public final JoystickButton tmJoystickRightHandBottomMiddle = new JoystickButton(operator , 9);
-    public final JoystickButton tmJoystickRightHandBottomRight = new JoystickButton(operator , 10);
-    public final JoystickButton tmJoystickRightHandTopLeft = new JoystickButton(operator , 7);
-    public final JoystickButton tmJoystickRightHandTopMiddle = new JoystickButton(operator , 6);
-    public final JoystickButton tmJoystickRightHandTopRight = new JoystickButton(operator , 5);
-    public final JoystickButton tmJoystickLeftHandBottomLeft = new JoystickButton(operator, 16);
-    public final JoystickButton tmJoystickLeftHandBottomMiddle = new JoystickButton(operator, 15);
-    public final JoystickButton tmJoystickLeftHandBottomRight = new JoystickButton(operator, 14);
-    public final JoystickButton tmJoystickLeftHandTopLeft = new JoystickButton(operator, 11);
-    public final JoystickButton tmJoystickLeftHandTopMiddle = new JoystickButton(operator, 12);
-    public final JoystickButton tmJoystickLeftHandTopRight = new JoystickButton(operator, 13);
-    public final JoystickButton tmJoystickBottomTop = new JoystickButton(operator, 2);
+    // public final POVButton tmJoystickPovUp = new POVButton(operator, 0);
+    // public final POVButton tmJoystickPovDown = new POVButton(operator, 180);
+    // public final JoystickButton tmJoystickRightHandBottomLeft = new JoystickButton(operator , 8);
+    // public final JoystickButton tmJoystickRightHandBottomMiddle = new JoystickButton(operator , 9);
+    // public final JoystickButton tmJoystickRightHandBottomRight = new JoystickButton(operator , 10);
+    // public final JoystickButton tmJoystickRightHandTopLeft = new JoystickButton(operator , 7);
+    // public final JoystickButton tmJoystickRightHandTopMiddle = new JoystickButton(operator , 6);
+    // public final JoystickButton tmJoystickRightHandTopRight = new JoystickButton(operator , 5);
+    // public final JoystickButton tmJoystickLeftHandBottomLeft = new JoystickButton(operator, 16);
+    // public final JoystickButton tmJoystickLeftHandBottomMiddle = new JoystickButton(operator, 15);
+    // public final JoystickButton tmJoystickLeftHandBottomRight = new JoystickButton(operator, 14);
+    // public final JoystickButton tmJoystickLeftHandTopLeft = new JoystickButton(operator, 11);
+    // public final JoystickButton tmJoystickLeftHandTopMiddle = new JoystickButton(operator, 12);
+    // public final JoystickButton tmJoystickLeftHandTopRight = new JoystickButton(operator, 13);
+    // public final JoystickButton tmJoystickBottomTop = new JoystickButton(operator, 2);
+
+    public final POVButton controllerDPadUp = new POVButton(operator_hid, 0);
+    public final POVButton controllerDPadDown = new POVButton(operator_hid, 180);
+    public final POVButton controllerDPadLeft = new POVButton(operator_hid, 270);
+    public final POVButton controllerDPadRight = new POVButton(operator_hid, 90);
+
     public double shooterFudgeFactor;
     public double turretFudgeFactor;
 
@@ -249,34 +255,39 @@ public class RobotContainer implements Logged {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        // operater
+        // operator
 
         // intake hopper
-        tmJoystickPovUp
+        //tmJoystickPovUp
+        operator.rightTrigger()
             .whileTrue(hopper.run(false)
             .alongWith(kicker.setRPMCommand()))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
         // eject for kicker and hopper
-        tmJoystickPovDown
+        // tmJoystickPovDown
+        operator.leftTrigger()
             .whileTrue(hopper.run(true)
             .alongWith(kicker.run(true)))
             .onFalse(hopper.stop()
             .alongWith(kicker.stopCommand()));
 
         // Turns on scoring april lock
-        tmJoystickFaceButtonRight
+        //tmJoystickFaceButtonRight
+        operator.rightBumper()
             .toggleOnTrue(new AprilLock(turret)
             .alongWith(Commands.run( () -> TargetPoses.setScoring())));
 
         // Turns on shuttling april lock
-        tmJoystickFaceButtonLeft
+        //tmJoystickFaceButtonLeft
+        operator.leftBumper()
             .toggleOnTrue(new AprilLock(turret)
             .alongWith(Commands.run( () -> TargetPoses.setShuttling())));
 
         // Shooting
-        tmJoystickTrigger
+        //tmJoystickTrigger
+        operator.a()
             .whileTrue(new AutoAim(shooter))
             .onFalse(shooter.stopCommand()
             .alongWith(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE)));
@@ -287,52 +298,62 @@ public class RobotContainer implements Logged {
 
         // Manual Turret movement code
         // Turret rotate left
-        tmJoystickRightHandBottomMiddle
+        //tmJoystickRightHandBottomMiddle
+        controllerDPadLeft
             .whileTrue(turret.spin(true))
             .onFalse(turret.stopCommand());
 
         // Turret rotate right
-        tmJoystickRightHandBottomRight
+        //tmJoystickRightHandBottomRight
+        controllerDPadRight
             .whileTrue(turret.spin(false))
             .onFalse(turret.stopCommand());
 
         // Manual Hood movement code
         // Hood up
-        tmJoystickRightHandBottomLeft
+        //tmJoystickRightHandBottomLeft
+        controllerDPadDown
             .whileTrue(hood.setPowerCommand(false))
             .onFalse(hood.stopCommand());
 
         // Hood down
-        tmJoystickRightHandTopLeft
+        //tmJoystickRightHandTopLeft
+        controllerDPadUp
             .whileTrue(hood.setPowerCommand(true))
             .onFalse(hood.stopCommand());
 
         // Shooter speed manual change
         // Faster shooting
-        tmJoystickLeftHandTopLeft
+        //tmJoystickLeftHandTopLeft
+        operator.start()
             .onTrue(shooter.offsetIncrement());
 
         // Slower shooting
-        tmJoystickLeftHandBottomLeft
+        //tmJoystickLeftHandBottomLeft
+        operator.back()
             .onTrue(shooter.offsetDecrement());
 
         // Auto hood buttons
         // Auto hood down
-        tmJoystickLeftHandBottomRight
+        //tmJoystickLeftHandBottomRight
+        operator.leftStick()
             .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         // Auto hood up
-        tmJoystickLeftHandTopRight
+        //tmJoystickLeftHandTopRight
+        operator.rightStick()
             .whileTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE))
             .onFalse(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
 
         // Auto hood standard preset
-        tmJoystickRightHandTopMiddle
+        //tmJoystickRightHandTopMiddle
+        operator.y()
             .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_STANDARD_SET));
 
 
         // Auto hood defense present
-        tmJoystickRightHandTopRight
+        //tmJoystickRightHandTopRight
+        operator.x()
             .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_DEFENSE_SET));
 
 
