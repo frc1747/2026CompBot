@@ -143,9 +143,9 @@ public final class Constants {
         public static final double UPPER_LIMIT = 90;
         public static final double LOWER_LIMIT = -90;
         public static final double DIST_TO_BOT_CENTER = 0.1529842; // meters
-        public static final double TURRET_YAW_LIMIT_UPPER = 95; // deg
-        public static final double TURRET_YAW_LIMIT_LOWER = -150;
-        public static final double TURRET_POWER = .025;
+        public static final double TURRET_YAW_LIMIT_UPPER = 73; // deg
+        public static final double TURRET_YAW_LIMIT_LOWER = -105;
+        public static final double TURRET_POWER = .55;
     }
 
     public static final class Shooter {

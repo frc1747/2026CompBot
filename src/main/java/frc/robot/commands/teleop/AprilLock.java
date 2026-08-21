@@ -51,6 +51,8 @@ public class AprilLock extends Command {
         SmartDashboard.putNumber("clampPid", clampPid);
         SmartDashboard.putNumber("yawOffset", yawOffset);
         // double clampPid = MathUtil.clamp(pidOutput, -Constants.Vision.APRIL_LOCK_PID_CLAMP, Constants.Vision.APRIL_LOCK_PID_CLAMP);
+
+
         turret.basicSpin(clampPid);
     }
 
