@@ -120,8 +120,8 @@ public class Hood extends SubsystemBase implements Logged {
 
         // Global kill. If any method is at or disobeying the bounds,
         // SHUT IT DOWN!
-        if ((currentAngle <= Constants.Hood.MIN_ANGLE && dutyCycle.Output < 0) ||
-            (currentAngle >= Constants.Hood.MAX_ANGLE && dutyCycle.Output > 0)) {
+        if ((currentAngle <= Constants.Hood.HOOD_HARD_LIMIT_MIN && dutyCycle.Output > 0) ||
+            (currentAngle >= Constants.Hood.HOOD_DEFENSE_SET && dutyCycle.Output < 0)) {
         dutyCycle.Output = 0.0;
         motor.setControl(dutyCycle);
         }
@@ -146,6 +146,7 @@ public class Hood extends SubsystemBase implements Logged {
         } else {
             log("hood/hood angle Reached", false, LogLevel.OVERRIDE_FILE_ONLY);
         }
+
 
         log("Supply Current", motor.getSupplyCurrent().getValueAsDouble());
         log("Stator Current", motor.getStatorCurrent().getValueAsDouble());
