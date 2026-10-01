@@ -248,10 +248,10 @@ public class RobotContainer implements Logged {
 
         // Hood go down at trench code
         driver.x()
-            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
+            .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_HARD_LIMIT_MIN));
 
         driver.y()
-            .onTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE));
+            .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_DEFENSE_SET));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -337,13 +337,12 @@ public class RobotContainer implements Logged {
         // Auto hood down
         //tmJoystickLeftHandBottomRight
         operator.leftStick()
-            .onTrue(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
+            .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_HARD_LIMIT_MIN));
 
         // Auto hood up
         //tmJoystickLeftHandTopRight
         operator.rightStick()
-            .whileTrue(hood.goToAngleCommand(Constants.Hood.MAX_ANGLE))
-            .onFalse(hood.goToAngleCommand(Constants.Hood.MIN_ANGLE));
+            .onTrue(hood.goToAngleCommand(Constants.Hood.HOOD_DEFENSE_SET));
 
         // Auto hood standard preset
         //tmJoystickRightHandTopMiddle
